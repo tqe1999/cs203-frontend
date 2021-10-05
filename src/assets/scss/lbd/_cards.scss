@@ -94,6 +94,14 @@
 
         .legend{
             padding: 5px 0;
+
+            .text-purple {
+                color: $purple;
+            }
+
+            .text-light-green {
+                color: $my-green;
+            }
         }
 
         hr{
@@ -251,4 +259,18 @@
     .card-header{
         background-color: transparent !important;
     }
+}
+
+.card-my {
+    border-radius: $none;
+    border-color: transparent !important;
+    background-color: transparent !important;
+    margin-bottom: 30px;
+}
+
+.card-my-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }

@@ -23,6 +23,7 @@ import Icons from "views/Icons.js";
 import Maps from "views/Maps.js";
 import Notifications from "views/Notifications.js";
 import Upgrade from "views/Upgrade.js";
+import FootfallData from "views/FootfallData.js"
 
 const dashboardRoutes = [
   {
@@ -82,6 +83,13 @@ const dashboardRoutes = [
     component: Notifications,
     layout: "/admin",
   },
+  {
+    path: "/footfallData",
+    name: "Footfall Data",
+    icon: "nc-icon nc-chart-pie-35",
+    component: FootfallData,
+    layout: "/admin",
+  }
 ];
 
 export default dashboardRoutes;
