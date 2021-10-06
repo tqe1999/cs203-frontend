@@ -15,12 +15,13 @@ import {
 } from "react-bootstrap";
 
 
-import { baseURL } from "../assets/constants/apiConstants";
+import { API_BASE_URL } from "../assets/constants/apiConstants";
 
 function Supervisor() {
   const [company, setCompany] = useState(null);
   const [companyTableData, setCompanyTableData] = useState(null);
 
+  const baseURL = API_BASE_URL.concat("/users/")
 //   useEffect(() => {
 //     axios
 //     .get(`http://localhost:8080/users/${company}`, {
@@ -40,7 +41,7 @@ function Supervisor() {
       const value = e.target[0].value;
         axios
           // .get(`http://localhost:8080/users/${value}`, {
-          .get(baseURL + "/users/" + value, {
+          .get(baseURL + value, {
              headers: {
                 "Access-Control-Allow-Origin": "*"
              },
