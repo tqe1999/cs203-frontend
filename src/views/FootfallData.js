@@ -18,7 +18,7 @@ import {
   Dropdown,
 } from "react-bootstrap";
 
-import { baseURL } from "../assets/constants/apiConstants";
+import { API_BASE_URL } from "../assets/constants/apiConstants";
 // const baseURL = "http://localhost:8080/footfallData"
 // const baseURL = "https://api.covfeed.link/footfallData"
 // const baseURL = "http://jartest-env.eba-v2nmznvw.ap-southeast-1.elasticbeanstalk.com/footfallData"
@@ -30,6 +30,8 @@ function FootfallData() {
     const [lastUpdateDate, setLastUpdateDate] = useState("")
     const [isChanged, setChanged] = useState(true)
     const [year, setYear] = useState("1 year")
+
+    const baseURL = API_BASE_URL.concat("/footfallData")
 
     let months = []
     let totals = []
