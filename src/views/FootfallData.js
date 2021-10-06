@@ -18,8 +18,8 @@ import {
   Dropdown,
 } from "react-bootstrap";
 
-// const baseURL = "http://localhost:8080/footfallData"
-const baseURL = "http://jartest-env.eba-v2nmznvw.ap-southeast-1.elasticbeanstalk.com/footfallData"
+const baseURL = "http://localhost:8080/footfallData"
+// const baseURL = "http://jartest-env.eba-v2nmznvw.ap-southeast-1.elasticbeanstalk.com/footfallData"
 
 function FootfallData() {
 
@@ -49,7 +49,7 @@ function FootfallData() {
         const length = footfallData.length
 
         for (let i = 0; i < length; i++) {
-            if (length > 24 && i%5==0) {
+            if (length > 24 && i%10==0) {
                 months.push(footfallData[i].month)
             } else if (length <= 24 && length > 12 && i%2==0) {
                 months.push(footfallData[i].month)
@@ -87,6 +87,7 @@ function FootfallData() {
             setFootfallData(response.data.list.slice(48, 60));
             setLastUpdateDate(response.data.lastUpdated);
             setChanged(response.data.isChanged);
+            setYear("1 year")
             console.log("inside " + isChanged)
         });
         console.log("outside " + isChanged)
