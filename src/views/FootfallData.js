@@ -18,8 +18,10 @@ import {
   Dropdown,
 } from "react-bootstrap";
 
+import { baseURL } from "../assets/constants/apiConstants";
 // const baseURL = "http://localhost:8080/footfallData"
-const baseURL = "http://jartest-env.eba-v2nmznvw.ap-southeast-1.elasticbeanstalk.com/footfallData"
+// const baseURL = "https://api.covfeed.link/footfallData"
+// const baseURL = "http://jartest-env.eba-v2nmznvw.ap-southeast-1.elasticbeanstalk.com/footfallData"
 
 function FootfallData() {
 
