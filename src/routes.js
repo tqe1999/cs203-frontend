@@ -24,6 +24,7 @@ import Maps from "views/Maps.js";
 import Notifications from "views/Notifications.js";
 import Upgrade from "views/Upgrade.js";
 import FootfallData from "views/FootfallData.js"
+import Supervisor from "views/Supervisor.js"
 
 const dashboardRoutes = [
   {
@@ -88,6 +89,13 @@ const dashboardRoutes = [
     name: "Footfall Data",
     icon: "nc-icon nc-chart-pie-35",
     component: FootfallData,
+    layout: "/admin",
+  },
+  {
+    path: "/supervisor",
+    name: "Supervisor",
+    icon: "nc-icon nc-chart-pie-35",
+    component: Supervisor,
     layout: "/admin",
   }
 ];

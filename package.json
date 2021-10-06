@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.2",
+    "aws-amplify": "^4.3.1",
     "axios": "^0.22.0",
     "bootstrap": "4.6.0",
     "chartist": "0.10.1",
@@ -16,7 +17,7 @@
     "react-notification-alert": "0.0.13",
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
-    "react-scripts": "4.0.1"
+    "react-scripts": "^4.0.1"
   },
   "optionalDependencies": {
     "jquery": "3.5.1",
@@ -45,5 +46,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.27"
   }
 }
