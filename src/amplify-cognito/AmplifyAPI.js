@@ -1,25 +1,7 @@
 import Amplify, { Auth, Hub, API } from 'aws-amplify'
+import * as AmplifyAuth from "./AmplifyAuth";
 
-/** AmplifyAPI is a collection of API functions using AWS Amplify library */
-
-/** federatedSignIn() directs the user to Cognito Hosted UI sign-in */
-export async function federatedSignIn() {
-    console.log("AmplifyAPI: federatedSignIn()");
-    Auth.federatedSignIn();
-}
-
-/** signOut() signs the user out */
-export async function signOut() {
-    console.log("AmplifyAPI: signOut()");
-    Auth.signOut();
-}
-
-/** returnIdToken() returns the AWS Cognito idToken */
-export async function returnIdToken() {
-    console.log("AmplifyAPI: returnIdToken()");
-    const idToken = (await Auth.currentSession()).getIdToken().getJwtToken();
-    return idToken;
-}
+/** AmplifyAPI contains API functions using AWS Amplify library */
 
 /** testAPI() calls backend API endpoint that does not require authentication */
 export function testAPI() {
@@ -40,7 +22,7 @@ export async function testAuthenticatedAPI() {
     const path = '/cognito/only-authenticated';
     const myInit = { 
       headers: { 
-        Authorization: `Bearer ${await returnIdToken()}`,
+        Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
       },
     };
 

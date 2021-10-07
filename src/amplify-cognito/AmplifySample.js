@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as AmplifyAPI from "./AmplifyAPI";
+import * as AmplifyAuth from "./AmplifyAuth";
 import { Auth } from 'aws-amplify'
 import './css/Amplify.css';
 
@@ -8,10 +9,10 @@ class AmplifySample extends Component {
     render() {
         return (
             <div>
-                <button onClick={() => Auth.federatedSignIn()}>Login with Cognito Hosted UI</button>
+                <button onClick={() => AmplifyAuth.federatedSignIn()}>Login with Cognito Hosted UI</button>
                 <button onClick={() => AmplifyAPI.testAPI()}>Always Works</button>
                 <button onClick={() => AmplifyAPI.testAuthenticatedAPI()}>Authenticated Works</button>
-                <button onClick={() => AmplifyAPI.returnIdToken().then(token => {
+                <button onClick={() => AmplifyAuth.returnIdToken().then(token => {
                     console.log(token);
                 })}>Print Info</button>
             </div>
