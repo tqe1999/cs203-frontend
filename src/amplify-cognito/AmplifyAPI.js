@@ -24,7 +24,7 @@ export async function returnIdToken() {
 /** testAPI() calls backend API endpoint that does not require authentication */
 export function testAPI() {
     console.log("AmplifyAPI: testAPI()");
-    const apiName = 'backend';
+    const apiName = 'backend-api';
     const path = '/cognito/all-allow';
     API.get(apiName, path).then(response => {
         console.log(response);
@@ -36,7 +36,7 @@ export function testAPI() {
 /** testAPI() calls backend API endpoint that requires authentication */
 export async function testAuthenticatedAPI() {
     console.log("AmplifyAPI: testAuthenticatedAPI()");
-    const apiName = 'backend';
+    const apiName = 'backend-api';
     const path = '/cognito/only-authenticated';
     const myInit = { 
       headers: { 
