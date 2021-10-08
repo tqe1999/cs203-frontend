@@ -3,21 +3,13 @@
         "region": "ap-southeast-1",
         "userPoolId": "ap-southeast-1_jVulnk9is",
         "userPoolWebClientId": "8j1q4ijrph64bv64vn5or3ch7",
-        "mandatorySignIn": false,
-        "cookieStorage": {
-            "domain": "localhost",
-            "path": "/",
-            "expires": 365,
-            "secure": true
-        },
-        "redirectSignIn": "http://localhost:3000",
-        "redirectSignOut": "http://localhost:3000"
+        "mandatorySignIn": false
     },
     "API": {
         "endpoints": [
             {
-                "name": "backend",
-                "endpoint": "http://localhost:8080"
+                "name": "backend-api",
+                "endpoint": "https://api.covfeed.link"
             }
         ]
     }

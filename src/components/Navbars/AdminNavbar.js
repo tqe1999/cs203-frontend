@@ -20,6 +20,7 @@ import { useLocation } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 import { Auth } from 'aws-amplify';
 import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI.js";
+import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth.js";
 
 import routes from "routes.js";
 
@@ -216,7 +217,7 @@ function Header() {
               <Nav.Link
                 className="m-0"
                 href="#pablo"
-                onClick={(e) => AmplifyAPI.federatedSignIn()}
+                onClick={(e) => AmplifyAuth.federatedSignIn()}
               >
                 <span className="no-icon"><b>Login</b></span>
               </Nav.Link>
@@ -225,7 +226,7 @@ function Header() {
               <Nav.Link
                 className="m-0"
                 href="#pablo"
-                onClick={(e) => AmplifyAPI.signOut()}
+                onClick={(e) => AmplifyAuth.signOut()}
               >
                 <span className="no-icon"><b>Logout</b></span>
               </Nav.Link>
