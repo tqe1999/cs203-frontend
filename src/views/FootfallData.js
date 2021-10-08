@@ -19,9 +19,8 @@ import {
 } from "react-bootstrap";
 
 import { API_BASE_URL } from "../assets/constants/apiConstants";
-// const baseURL = "http://localhost:8080/footfallData"
-// const baseURL = "https://api.covfeed.link/footfallData"
-// const baseURL = "http://jartest-env.eba-v2nmznvw.ap-southeast-1.elasticbeanstalk.com/footfallData"
+import { testAPI, testAuthenticatedAPI } from "../amplify-cognito/AmplifyAPI.js"
+
 
 function FootfallData() {
 
@@ -30,21 +29,22 @@ function FootfallData() {
     const [lastUpdateDate, setLastUpdateDate] = useState("")
     const [isChanged, setChanged] = useState(true)
     const [year, setYear] = useState("1 year")
+    const [averages, setAverages] = useState([])
+    //0=restaurants, 1=fastfoodoutlets, 2=caterer, 3=other
 
     const baseURL = API_BASE_URL.concat("/footfallData")
 
-    let months = []
-    let totals = []
-    let restaurants = []
-    let fastFoodOutlets = []
-    let caterers = []
-    let others = []
+    let months = [], totals = [], restaurants = [], fastFoodOutlets = [], caterers = [], others = []
+    let average = 0, foodAmt = 0, serviceStaff = 0, kitchenStaff = 0;
 
     useEffect(() => {
+        // testAPI()
+        // testAuthenticatedAPI()
         axios.get(baseURL).then((response) => {
             setResp(response.data.list)
             setFootfallData(response.data.list.slice(48, 60));
             setLastUpdateDate(response.data.lastUpdated);
+            setAverages(response.data.averages)
         });
     }, []);
     
@@ -74,6 +74,14 @@ function FootfallData() {
         console.log("im loading the month data " + isChanged)
     }
 
+    if (averages) {
+        //check which user details 
+        average = Math.round(averages[0])
+        foodAmt = average
+        serviceStaff = Math.round(averages[0] * 0.8)
+        kitchenStaff = Math.round(averages[0] * 1.2)
+    }
+
     //whenever i post, i dont get again... so how? 
     const postValues = () => {
         axios.post(baseURL)
@@ -86,12 +94,15 @@ function FootfallData() {
         //     // console.log("yes i am executed")
             
         // })
+
+        //this doesnt work :(
         axios.get(baseURL).then((response) => {
             setResp(response.data.list)
             setFootfallData(response.data.list.slice(48, 60));
             setLastUpdateDate(response.data.lastUpdated);
             setChanged(response.data.isChanged);
             setYear("1 year")
+            setAverages(response.data.averages)
             console.log("inside " + isChanged)
         });
         console.log("outside " + isChanged)
@@ -116,19 +127,25 @@ function FootfallData() {
     <>
         <Container fluid>
             <Row>
-            <Col lg="4" sm="6">
+            <Col>
+                <Card className="card-my">
+                    <Card.Title as="h4">Restaurants</Card.Title>
+                </Card>
+            </Col>
+            </Row>
+            <Row>
+            <Col lg="3" sm="6">
                 <Card className="card-stats">
                 <Card.Body>
                     <Row>
-                    <Col xs="5">
-                        <div className="icon-big text-center icon-warning">
-                        <i className="nc-icon nc-chart text-warning"></i>
-                        </div>
-                    </Col>
                     <Col xs="7">
                         <div className="numbers">
-                        <p className="card-category">BANANA</p>
-                        <Card.Title as="h4">150GB</Card.Title>
+                        <Card.Title as="h4">Average Footfall %</Card.Title>
+                        </div>
+                    </Col>
+                    <Col xs="5">
+                        <div className="icon-big text-center icon-warning">
+                        <Card.Title as="h2">{average}%</Card.Title>
                         </div>
                     </Col>
                     </Row>
@@ -136,8 +153,8 @@ function FootfallData() {
                 <Card.Footer>
                     <hr></hr>
                     <div className="stats">
-                    <i className="fas fa-redo mr-1"></i>
-                    Update Now
+                    <i className="fas fa-history"></i>
+                    Data averaged over 6 months
                     </div>
                 </Card.Footer>
                 </Card>
@@ -146,15 +163,14 @@ function FootfallData() {
                 <Card className="card-stats">
                 <Card.Body>
                     <Row>
-                    <Col xs="5">
-                        <div className="icon-big text-center icon-warning">
-                        <i className="nc-icon nc-vector text-danger"></i>
-                        </div>
-                    </Col>
                     <Col xs="7">
                         <div className="numbers">
-                        <p className="card-category">Errors</p>
-                        <Card.Title as="h4">23</Card.Title>
+                        <Card.Title as="h4">No. Kitchen Staff</Card.Title>
+                        </div>
+                    </Col>
+                    <Col xs="5">
+                        <div className="icon-big text-center icon-warning">
+                        <Card.Title as="h2">{kitchenStaff}%</Card.Title>
                         </div>
                     </Col>
                     </Row>
@@ -162,8 +178,58 @@ function FootfallData() {
                 <Card.Footer>
                     <hr></hr>
                     <div className="stats">
-                    <i className="far fa-clock-o mr-1"></i>
-                    In the last hour
+                    <i className="fas fa-history"></i>
+                    Data averaged over 6 months
+                    </div>
+                </Card.Footer>
+                </Card>
+            </Col>
+            <Col lg="3" sm="6">
+                <Card className="card-stats">
+                <Card.Body>
+                    <Row>
+                    <Col xs="7">
+                        <div className="numbers">
+                        <Card.Title as="h4">No. Service Staff</Card.Title>
+                        </div>
+                    </Col>
+                    <Col xs="5">
+                        <div className="icon-big text-center icon-warning">
+                        <Card.Title as="h2">{serviceStaff}%</Card.Title>
+                        </div>
+                    </Col>
+                    </Row>
+                </Card.Body>
+                <Card.Footer>
+                    <hr></hr>
+                    <div className="stats">
+                    <i className="fas fa-history"></i>
+                    Data averaged over 6 months
+                    </div>
+                </Card.Footer>
+                </Card>
+            </Col>
+            <Col lg="3" sm="6">
+                <Card className="card-stats">
+                <Card.Body>
+                    <Row>
+                    <Col xs="7">
+                        <div className="numbers">
+                        <Card.Title as="h4">Amount of Food</Card.Title>
+                        </div>
+                    </Col>
+                    <Col xs="5">
+                        <div className="icon-big text-center icon-warning">
+                        <Card.Title as="h2">{foodAmt}%</Card.Title>
+                        </div>
+                    </Col>
+                    </Row>
+                </Card.Body>
+                <Card.Footer>
+                    <hr></hr>
+                    <div className="stats">
+                    <i className="fas fa-history"></i>
+                    Data averaged over 6 months
                     </div>
                 </Card.Footer>
                 </Card>
