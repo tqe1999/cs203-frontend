@@ -20,3 +20,11 @@ export async function returnIdToken() {
     const idToken = (await Auth.currentSession()).getIdToken().getJwtToken();
     return idToken;
 }
+
+/** getCurrentEmail() returns the email of current user */
+export async function getCurrentEmail() {
+    console.log("AmplifyAuth: getCurrentEmail()");
+    const user = (await Auth.currentAuthenticatedUser());
+    const email = user.attributes.email;
+    return email;
+}
