@@ -20,7 +20,7 @@ import {
 } from "react-bootstrap";
 
 import { API_BASE_URL } from "../assets/constants/apiConstants";
-import { testAPI, testAuthenticatedAPI, getUserInfo } from "../amplify-cognito/AmplifyAPI.js"
+import { getUserProfile, getUserInfo } from "../amplify-cognito/AmplifyAPI.js"
 
 
 function FootfallData() {
@@ -31,11 +31,11 @@ function FootfallData() {
     const [isChanged, setChanged] = useState(true)
     const [year, setYear] = useState("1 year")
     const [averages, setAverages] = useState(null)
-    const [userEmail, setUserEmail] = useState("")
     const [shopType, setShopType] = useState(null)
 
     const baseURL = API_BASE_URL.concat("/footfallData")
     const baseURLuser = API_BASE_URL.concat("/users/userByEmail")
+    //0=restaurants, 1=fastfoodoutlets, 2=caterer, 3=other
 
     let months = [], totals = [], restaurants = [], fastFoodOutlets = [], caterers = [], others = []
     let average = 0, foodAmt = 0, serviceStaff = 0, kitchenStaff = 0;
@@ -49,36 +49,15 @@ function FootfallData() {
             setAverages(response.data.averages)
             console.log(response)
         });
+
+        //get user details 
+        getUserProfile().then(userProfile => {
+            console.log(userProfile.shop.shopType);
+            
+            setShopType(userProfile.shop.shopType)
+        });
     }, [isChanged]);
 
-    useDidMountEffect(() => {
-        console.log("EXECUTED useEffect 2")
-
-        let shop = null
-        axios.get(baseURLuser, {
-            params: {
-                email: userEmail
-            }
-            })
-            .then(function (response) {
-                shop = response.data.shop.shopType
-                setShopType(response.data.shop.shopType)
-        })
-    }, [userEmail]);
-    //0=restaurants, 1=fastfoodoutlets, 2=caterer, 3=other
-
-    // useDidMountEffect(() => {
-    //     console.log("BLOODY SHOPTYPE" + shopType)
-
-    // }, [shopType])
-
-    //get user details 
-    console.log("EXECUTED get user details")
-    const promise = getUserInfo();
-    Promise.resolve(promise).then(function(value) {
-        setUserEmail(value);
-    });
-    
     if (footfallData) {
         console.log("EXECUTED if footfalldata")
         // console.log(footfallData)
@@ -100,12 +79,9 @@ function FootfallData() {
             caterers.push(footfallData[i].caterers)
             others.push(footfallData[i].otherPlaces)
         }
-        // console.log(months)
-        // console.log(totals)
-        // console.log(others)
     }
 
-    if (shopType) {
+    if (shopType && averages) {
         console.log("EXECUTED if shopType")
 
         let i = 3
@@ -161,12 +137,12 @@ function FootfallData() {
                 <Card className="card-stats">
                 <Card.Body>
                     <Row>
-                    <Col xs="7">
+                    <Col xs="6">
                         <div className="numbers">
-                        <Card.Title as="h4">Average Footfall %</Card.Title>
+                        <Card.Title as="h4">Average Footfall</Card.Title>
                         </div>
                     </Col>
-                    <Col xs="5">
+                    <Col xs="6">
                         <div className="icon-big text-center icon-warning">
                         <Card.Title as="h2">{average}%</Card.Title>
                         </div>
@@ -186,12 +162,12 @@ function FootfallData() {
                 <Card className="card-stats">
                 <Card.Body>
                     <Row>
-                    <Col xs="7">
+                    <Col xs="6">
                         <div className="numbers">
-                        <Card.Title as="h4">No. Kitchen Staff</Card.Title>
+                        <Card.Title as="h4">Kitchen Staff</Card.Title>
                         </div>
                     </Col>
-                    <Col xs="5">
+                    <Col xs="6">
                         <div className="icon-big text-center icon-warning">
                         <Card.Title as="h2">{kitchenStaff}%</Card.Title>
                         </div>
@@ -211,12 +187,12 @@ function FootfallData() {
                 <Card className="card-stats">
                 <Card.Body>
                     <Row>
-                    <Col xs="7">
+                    <Col xs="6">
                         <div className="numbers">
-                        <Card.Title as="h4">No. Service Staff</Card.Title>
+                        <Card.Title as="h4">Service Staff</Card.Title>
                         </div>
                     </Col>
-                    <Col xs="5">
+                    <Col xs="6">
                         <div className="icon-big text-center icon-warning">
                         <Card.Title as="h2">{serviceStaff}%</Card.Title>
                         </div>
@@ -236,12 +212,12 @@ function FootfallData() {
                 <Card className="card-stats">
                 <Card.Body>
                     <Row>
-                    <Col xs="7">
+                    <Col xs="6">
                         <div className="numbers">
                         <Card.Title as="h4">Amount of Food</Card.Title>
                         </div>
                     </Col>
-                    <Col xs="5">
+                    <Col xs="6">
                         <div className="icon-big text-center icon-warning">
                         <Card.Title as="h2">{foodAmt}%</Card.Title>
                         </div>
