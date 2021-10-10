@@ -28,3 +28,27 @@ export async function getCurrentEmail() {
     const email = user.attributes.email;
     return email;
 }
+
+export async function createCognitoAccount(email) {
+    console.log("AmplifyAuth: createCognitoAccount");
+
+    const { user } = await Auth.signUp({
+        username: email,
+        password: generateRandomPassword(),
+        attributes: {
+            email: email
+        }
+    });
+}
+
+function generateRandomPassword() {
+    let length = 16,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        symbols = "!@#$%^&*()-_+=",
+        retVal = "";
+    for (let i = 0; i < length / 2; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * charset.length));
+        retVal += symbols.charAt(Math.floor(Math.random() * symbols.length))
+    }
+    return retVal;
+}
