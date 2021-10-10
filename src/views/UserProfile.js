@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
+import * as AmplifyAuth from "../amplify-cognito/AmplifyAuth";
 
 // react-bootstrap components
 import {
@@ -14,6 +16,31 @@ import {
 } from "react-bootstrap";
 
 function User() {
+  const [ name, setName ] = useState(null);
+  const [ telegramHandle, setTelegramHandle ] = useState(null);
+  const [ userProfile, setUserProfile ] = useState(new Map());
+  
+  // Called only upon the first render
+  useEffect(() => {
+    AmplifyAPI.getUserProfile().then(userProfile => {
+      console.log(userProfile);
+      
+      setUserProfile(userProfile);
+      setName(userProfile.name);
+      setTelegramHandle(userProfile.telegramHandle);
+    });
+  }, [])
+  
+  // Called when button "Update Profile" is clicked
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Submit: Update Profile");
+    
+    AmplifyAPI.updateUserProfile(name, telegramHandle).then(userProfile => {
+      console.log(userProfile);
+    });
+  }
+
   return (
     <>
       <Container fluid>
@@ -24,70 +51,41 @@ function User() {
                 <Card.Title as="h4">Edit Profile</Card.Title>
               </Card.Header>
               <Card.Body>
-                <Form>
+                <Form onSubmit = {handleSubmit}>
                   <Row>
-                    <Col className="pr-1" md="5">
+                    <Col className="pr-1" md="4">
                       <Form.Group>
-                        <label>Company (disabled)</label>
+                        <label>Name</label>
                         <Form.Control
-                          defaultValue="Creative Code Inc."
-                          disabled
-                          placeholder="Company"
+                          value={name}
+                          defaultValue="-"
                           type="text"
+                          onChange={
+                            (e) => setName(e.target.value)
+                          }
                         ></Form.Control>
                       </Form.Group>
                     </Col>
-                    <Col className="px-1" md="3">
+                    <Col className="pr-1" md="4">
                       <Form.Group>
-                        <label>Username</label>
+                        <label>Telegram Handle, e.g. @____</label>
                         <Form.Control
-                          defaultValue="michael23"
-                          placeholder="Username"
+                          value={telegramHandle}
+                          defaultValue="-"
                           type="text"
+                          onChange={
+                            (e) => setTelegramHandle(e.target.value)
+                          }
                         ></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="pl-1" md="4">
                       <Form.Group>
-                        <label htmlFor="exampleInputEmail1">
-                          Email address
-                        </label>
+                        <label>User Type</label>
                         <Form.Control
-                          placeholder="Email"
-                          type="email"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col className="pr-1" md="6">
-                      <Form.Group>
-                        <label>First Name</label>
-                        <Form.Control
-                          defaultValue="Mike"
-                          placeholder="Company"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    <Col className="pl-1" md="6">
-                      <Form.Group>
-                        <label>Last Name</label>
-                        <Form.Control
-                          defaultValue="Andrew"
-                          placeholder="Last Name"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md="12">
-                      <Form.Group>
-                        <label>Address</label>
-                        <Form.Control
-                          defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                          placeholder="Home Address"
+                          disabled
+                          value={userProfile.userType}
+                          defaultValue="-"
                           type="text"
                         ></Form.Control>
                       </Form.Group>
@@ -96,45 +94,60 @@ function User() {
                   <Row>
                     <Col className="pr-1" md="4">
                       <Form.Group>
-                        <label>City</label>
+                        <label>Vaccination Status</label>
                         <Form.Control
-                          defaultValue="Mike"
-                          placeholder="City"
+                          disabled
+                          value={userProfile.vaccinationStatus}
+                          defaultValue="-"
                           type="text"
                         ></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="px-1" md="4">
                       <Form.Group>
-                        <label>Country</label>
+                        <label>Swab Test Result</label>
                         <Form.Control
-                          defaultValue="Andrew"
-                          placeholder="Country"
+                          disabled
+                          value={userProfile.swabTestResult}
+                          defaultValue="-"
                           type="text"
                         ></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="pl-1" md="4">
                       <Form.Group>
-                        <label>Postal Code</label>
+                        <label>FET Status</label>
                         <Form.Control
-                          placeholder="ZIP Code"
-                          type="number"
+                          disabled
+                          value={userProfile.fetStatus}
+                          defaultValue="-"
+                          type="text"
                         ></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
                   <Row>
-                    <Col md="12">
+                    <Col className="pr-1" md="5">
                       <Form.Group>
-                        <label>About Me</label>
+                        <label>Company</label>
                         <Form.Control
-                          cols="80"
-                          defaultValue="Lamborghini Mercy, Your chick she so thirsty, I'm in
-                          that two seat Lambo."
-                          placeholder="Here can be your description"
-                          rows="4"
-                          as="textarea"
+                          disabled
+                          value={userProfile.company}
+                          defaultValue="-"
+                          type="text"
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                    <Col className="pl-1" md="7">
+                      <Form.Group>
+                        <label htmlFor="exampleInputEmail1">
+                          Email address
+                        </label>
+                        <Form.Control
+                          disabled
+                          value={userProfile.email}
+                          defaultValue="-"
+                          type="email"
                         ></Form.Control>
                       </Form.Group>
                     </Col>
@@ -170,15 +183,11 @@ function User() {
                       className="avatar border-gray"
                       src={require("assets/img/faces/face-3.jpg").default}
                     ></img>
-                    <h5 className="title">Mike Andrew</h5>
+                    <h5 className="title">{userProfile.name}</h5>
                   </a>
-                  <p className="description">michael24</p>
+                  <p className="description">{userProfile.email}</p>
+                  <p className="description">{userProfile.telegramHandle}</p>
                 </div>
-                <p className="description text-center">
-                  "Lamborghini Mercy <br></br>
-                  Your chick she so thirsty <br></br>
-                  I'm in that two seat Lambo"
-                </p>
               </Card.Body>
               <hr></hr>
               <div className="button-container mr-auto ml-auto">
