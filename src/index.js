@@ -28,8 +28,12 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import AdminLayout from "layouts/Admin.js";
 
+import AmplifyConfig from "./amplify-cognito/AmplifyConfig.js"
+
 ReactDOM.render(
   <BrowserRouter>
+    <AmplifyConfig />
+
     <Switch>
       <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
       <Redirect from="/" to="/admin/dashboard" />

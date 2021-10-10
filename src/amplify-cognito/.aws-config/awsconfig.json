@@ -1,0 +1,16 @@
+{
+    "Auth": {
+        "region": "ap-southeast-1",
+        "userPoolId": "ap-southeast-1_jVulnk9is",
+        "userPoolWebClientId": "8j1q4ijrph64bv64vn5or3ch7",
+        "mandatorySignIn": false
+    },
+    "API": {
+        "endpoints": [
+            {
+                "name": "backend-api",
+                "endpoint": "https://api.covfeed.link"
+            }
+        ]
+    }
+}

@@ -20,7 +20,7 @@ import { API_BASE_URL } from "../assets/constants/apiConstants";
 import "../components/Table/UserTable.js"
 import UserTable from "../components/Table/UserTable.js";
 
-function Supervisor() {
+function Admin() {
   const [company, setCompany] = useState(null);
   const [companyTableData, setCompanyTableData] = useState(null);
 
@@ -31,7 +31,7 @@ function Supervisor() {
   useEffect(() => {
       axios
         // .get(`http://localhost:8080/users/${value}`, {
-        .get(baseURL + "KFC", {
+        .get(baseURL + "SMU", {
             headers: {
               "Access-Control-Allow-Origin": "*"
             },
@@ -159,4 +159,4 @@ function Supervisor() {
   );
 }
 
-export default Supervisor;
+export default Admin;
