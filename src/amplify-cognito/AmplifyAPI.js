@@ -32,3 +32,11 @@ export async function testAuthenticatedAPI() {
         console.log(error.response)
     });
 }
+
+/** gets user email */
+export async function getUserInfo() {
+    const user = await Auth.currentAuthenticatedUser();
+    console.log('attributes:', user.attributes);
+    // console.log('email', user.attributes.email)
+    return user.attributes.email;
+}

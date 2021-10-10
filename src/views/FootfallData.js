@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import ChartistGraph from "react-chartist";
 import axios from 'axios'
+import useDidMountEffect from "assets/UseDidMountEffect";
 // react-bootstrap components
 import {
   Badge,
@@ -19,36 +20,67 @@ import {
 } from "react-bootstrap";
 
 import { API_BASE_URL } from "../assets/constants/apiConstants";
-import { testAPI, testAuthenticatedAPI } from "../amplify-cognito/AmplifyAPI.js"
+import { testAPI, testAuthenticatedAPI, getUserInfo } from "../amplify-cognito/AmplifyAPI.js"
 
 
 function FootfallData() {
 
     const [resp, setResp] = useState([])
-    const [footfallData, setFootfallData] = useState([])
+    const [footfallData, setFootfallData] = useState(null)
     const [lastUpdateDate, setLastUpdateDate] = useState("")
     const [isChanged, setChanged] = useState(true)
     const [year, setYear] = useState("1 year")
-    const [averages, setAverages] = useState([])
-    //0=restaurants, 1=fastfoodoutlets, 2=caterer, 3=other
+    const [averages, setAverages] = useState(null)
+    const [userEmail, setUserEmail] = useState("")
+    const [shopType, setShopType] = useState(null)
 
     const baseURL = API_BASE_URL.concat("/footfallData")
+    const baseURLuser = API_BASE_URL.concat("/users/userByEmail")
 
     let months = [], totals = [], restaurants = [], fastFoodOutlets = [], caterers = [], others = []
     let average = 0, foodAmt = 0, serviceStaff = 0, kitchenStaff = 0;
 
     useEffect(() => {
-        // testAPI()
-        // testAuthenticatedAPI()
+        console.log("EXECUTED useEffect 1")
         axios.get(baseURL).then((response) => {
             setResp(response.data.list)
             setFootfallData(response.data.list.slice(48, 60));
             setLastUpdateDate(response.data.lastUpdated);
             setAverages(response.data.averages)
+            console.log(response)
         });
-    }, []);
+    }, [isChanged]);
+
+    useDidMountEffect(() => {
+        console.log("EXECUTED useEffect 2")
+
+        let shop = null
+        axios.get(baseURLuser, {
+            params: {
+                email: userEmail
+            }
+            })
+            .then(function (response) {
+                shop = response.data.shop.shopType
+                setShopType(response.data.shop.shopType)
+        })
+    }, [userEmail]);
+    //0=restaurants, 1=fastfoodoutlets, 2=caterer, 3=other
+
+    // useDidMountEffect(() => {
+    //     console.log("BLOODY SHOPTYPE" + shopType)
+
+    // }, [shopType])
+
+    //get user details 
+    console.log("EXECUTED get user details")
+    const promise = getUserInfo();
+    Promise.resolve(promise).then(function(value) {
+        setUserEmail(value);
+    });
     
     if (footfallData) {
+        console.log("EXECUTED if footfalldata")
         // console.log(footfallData)
         const length = footfallData.length
 
@@ -71,41 +103,32 @@ function FootfallData() {
         // console.log(months)
         // console.log(totals)
         // console.log(others)
-        console.log("im loading the month data " + isChanged)
     }
 
-    if (averages) {
-        //check which user details 
-        average = Math.round(averages[0])
+    if (shopType) {
+        console.log("EXECUTED if shopType")
+
+        let i = 3
+        //0=restaurant, 1=fastfoodoutlet, 2=caterer, 3=other
+        if (shopType === "restaurant") {
+            i = 0
+        } else if (shopType === "fastfoodoutlet") {
+            i = 1
+        } else if (shopType === "caterer") {
+            i = 2
+        }
+        average = Math.round(averages[i])
         foodAmt = average
-        serviceStaff = Math.round(averages[0] * 0.8)
-        kitchenStaff = Math.round(averages[0] * 1.2)
+        serviceStaff = Math.round(averages[i] * 0.8)
+        kitchenStaff = Math.round(averages[i] * 1.2)
     }
 
     //whenever i post, i dont get again... so how? 
     const postValues = () => {
         axios.post(baseURL)
-        // .then((response) => {
-        //     console.log(response)
-        //     // setResp(response.data.list)
-        //     // setFootfallData(response.data.list);
-        //     // setLastUpdateDate(response.data.lastUpdated);
-        //     // setChanged(response.data.isChanged);
-        //     // console.log("yes i am executed")
-            
-        // })
-
-        //this doesnt work :(
-        axios.get(baseURL).then((response) => {
-            setResp(response.data.list)
-            setFootfallData(response.data.list.slice(48, 60));
-            setLastUpdateDate(response.data.lastUpdated);
-            setChanged(response.data.isChanged);
-            setYear("1 year")
-            setAverages(response.data.averages)
-            console.log("inside " + isChanged)
-        });
-        console.log("outside " + isChanged)
+        setChanged(!isChanged)
+        setFootfallData(null)
+        console.log("EXECUTED post")
     }
 
     const setOneYear = () => {
