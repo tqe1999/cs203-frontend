@@ -1,7 +1,7 @@
 import React from "react";
-import { Button } from "react-bootstrap"
+import { Button } from "react-bootstrap";
 
-const ReadOnlyRow = ({ item, i , handleEditClick}) => {
+const ReadOnlyRow = ({ item, i, handleEditClick }) => {
   return (
     <tr key={i}>
       <td>{item.typeOfShop}</td>
@@ -9,15 +9,17 @@ const ReadOnlyRow = ({ item, i , handleEditClick}) => {
       <td>{item.maxGrpSizeVacc}</td>
       <td>{item.maxGrpSizeNonVacc}</td>
       <td>{item.socialDistance}</td>
-      <td>{item.closingTime}</td>
+      <td>{item.closingTime.slice(0,5)}</td>
       <td>{item.phase}</td>
       <td>
         <Button
           className="btn-fill btn-sm pull-right"
-          type="submit"
+          type="button"
           variant="info"
           onClick={(event) => handleEditClick(event, item)}
-        >Edit</Button>
+        >
+          Edit
+        </Button>
       </td>
     </tr>
   );

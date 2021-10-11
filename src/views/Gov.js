@@ -20,8 +20,8 @@ import {
 import { API_BASE_URL } from "../assets/constants/apiConstants";
 
 function Gov() {
-  const [company, setCompany] = useState(null);
   const [measuresTableData, setMeasuresTableData] = useState(null);
+
   const [editMeasuresFormData, setEditMeasuresFormData] = useState({
     typeOfShop: "",
     dineInSize: 0,
@@ -64,6 +64,41 @@ function Gov() {
       });
   };
 
+  const handleEditFormSubmit = (event) => {
+    event.preventDefault();
+    const editedMeasures = {
+      typeOfShop: editMeasuresFormData.typeOfShop,
+      dineInSize: editMeasuresFormData.dineInSize,
+      maxGrpSizeVacc: editMeasuresFormData.maxGrpSizeVacc,
+      maxGrpSizeNonVacc: editMeasuresFormData.maxGrpSizeNonVacc,
+      socialDistance: editMeasuresFormData.socialDistance,
+      closingTime: editMeasuresFormData.closingTime,
+      phase: editMeasuresFormData.phase,
+    };
+    console.log(editedMeasures);
+
+    axios
+      .post(`http://localhost:8080/measures`, editedMeasures, {
+        //.get(baseURL + value, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .then((result) => {
+        console.log(result);
+      });
+
+    const newMeasuresTableData = [...measuresTableData];
+
+    const index = newMeasuresTableData.findIndex(
+      (measure) => measure.typeOfShop === editedMeasures.typeOfShop
+    );
+
+    newMeasuresTableData[index] = editedMeasures;
+    setMeasuresTableData(newMeasuresTableData);
+    setEditItemTypeOfShop(null);
+  };
+
   const handleEditFormChange = (event) => {
     event.preventDefault();
 
@@ -92,44 +127,21 @@ function Gov() {
     setEditMeasuresFormData(formValues);
   };
 
+  const handleCancelClick = () => {
+    setEditItemTypeOfShop(null);
+  };
+
   return (
     <Container fluid>
       {measuresTableData === null ? null : (
         <Row>
           <Col md="12">
-            <Card className="strpied-tabled-with-hover">
+            <Card className="striped-tabled-with-hover">
               <Card.Header>
                 <Card.Title as="h4">Measures </Card.Title>
-                <p className="card-category">
-                  {company === null ? null : company}
-                </p>
-                <Form onSubmit={handleSubmit}>
-                  <Row>
-                    <Col className="pr-1" md="5">
-                      <Form.Group>
-                        <label>Type of Shop</label>
-                        <Form.Control
-                          //defaultValue="Creative Code Inc."
-                          placeholder="E.g. Cafe"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    <Col>
-                      <Button
-                        className="btn-fill btn-sm pull-right"
-                        type="submit"
-                        variant="info"
-                      >
-                        Submit
-                      </Button>
-                    </Col>
-                  </Row>
-                  <div className="clearfix"></div>
-                </Form>
               </Card.Header>
               <Card.Body className="table-full-width table-responsive px-0">
-                <Form>
+                <Form onSubmit={handleEditFormSubmit}>
                   <Table className="table-hover table-striped">
                     <thead>
                       <tr>
@@ -151,7 +163,12 @@ function Gov() {
                       {measuresTableData.map((item, i) => (
                         <>
                           {editItemTypeOfShop === item.typeOfShop ? (
-                            <EditableRow editFormData={editMeasuresFormData} handleEditFormChange={handleEditFormChange}></EditableRow>
+                            <EditableRow
+                              editFormData={editMeasuresFormData}
+                              i={i}
+                              handleEditFormChange={handleEditFormChange}
+                              handleCancelClick={handleCancelClick}
+                            ></EditableRow>
                           ) : (
                             <ReadOnlyRow
                               item={item}
