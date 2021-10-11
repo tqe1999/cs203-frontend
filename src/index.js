@@ -26,6 +26,8 @@ import "./assets/scss/light-bootstrap-dashboard-react.scss?v=2.0.0";
 import "./assets/css/demo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
+import Landing from "views/Landing.js"
+
 import AdminLayout from "layouts/Admin.js";
 
 import AmplifyConfig from "./amplify-cognito/AmplifyConfig.js"
@@ -36,7 +38,10 @@ ReactDOM.render(
 
     <Switch>
       <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-      <Redirect from="/" to="/admin/dashboard" />
+      {/* <Redirect from="/" to="/admin/dashboard" /> */}
+      <Route path="/">
+        <Landing></Landing>
+      </Route>
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")

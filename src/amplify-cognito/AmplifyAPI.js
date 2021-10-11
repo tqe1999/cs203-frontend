@@ -33,6 +33,14 @@ export async function testAuthenticatedAPI() {
     });
 }
 
+/** gets user email */
+export async function getUserInfo() {
+    const user = await Auth.currentAuthenticatedUser();
+    console.log('attributes:', user.attributes);
+    // console.log('email', user.attributes.email)
+    return user.attributes.email;
+}
+
 export async function getUserProfile() {
     console.log("AmplifyAPI: getUserProfile()");
     const apiName = 'backend-api';

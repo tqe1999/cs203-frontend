@@ -14,6 +14,12 @@ import {
   Col,
 } from "react-bootstrap";
 
+import { API_BASE_URL } from "../../assets/constants/apiConstants";
+
+import * as SupervisorAPI from "../../api/SupervisorAPI";
+
+
+
 function UserTable(props) {
     const [rows, setRows] = useState([{}])
 
@@ -21,6 +27,8 @@ function UserTable(props) {
       console.log(props.companyTableData)
       setRows(props.companyTableData)
   }, []); 
+
+    const baseURL = API_BASE_URL.concat("/users/")
 
     const [editMode, setEditMode] = useState(false);
 
@@ -35,6 +43,8 @@ function UserTable(props) {
         setRows(
             temp
         );
+
+
       };
       const handleAddRow = () => {
         const item = {
@@ -48,17 +58,46 @@ function UserTable(props) {
         setRows(
           rows => [...rows, item]
         );
+
       };
 
       const handleRemoveSpecificRow = (idx) => () => {
         const temp = [...rows]
+        console.log(idx)
+        setRemoveList(removeList => [...removeList, temp[idx]])
+        console.log(temp[idx])
         temp.splice(idx, 1)
         setRows( temp )
+        
       }
+
+      
 
       const saveTable = () => {
         setEditMode(false)
         setRows(rows);
+
+        const newUser = {
+          name: rows[0].name
+        };
+
+        //make api call here
+        console.log(rows[0].name);
+        axios.put(baseURL + "KFC", newUser, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .then((result) => {
+          console.log(result);
+        });
+        // SupervisorAPI.updateUsersInCompany(rows[0].name).then(response => {
+        //   console.log(response);
+          
+        // });
+
+        
+
       }
 
       const editTable = () => {

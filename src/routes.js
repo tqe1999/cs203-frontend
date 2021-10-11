@@ -27,6 +27,7 @@ import FootfallData from "views/FootfallData.js"
 import Supervisor from "views/Supervisor.js"
 import Admin from "views/Admin.js"
 
+import Gov from "views/Gov.js"
 
 const dashboardRoutes = [
   {
@@ -105,6 +106,13 @@ const dashboardRoutes = [
     name: "Admin",
     icon: "nc-icon nc-chart-pie-35",
     component: Admin,
+    layout: "/admin",
+  },
+  {
+    path: "/gov",
+    name: "Gov",
+    icon: "nc-icon nc-chart-pie-35",
+    component: Gov,
     layout: "/admin",
   }
 ];
