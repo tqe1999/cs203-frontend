@@ -33,10 +33,10 @@ function Gov() {
   });
   const [editItemTypeOfShop, setEditItemTypeOfShop] = useState(null);
 
-  const baseURL = API_BASE_URL.concat("/users/");
+  const baseURL = API_BASE_URL.concat("/measures/");
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/measures`, {
+      .get(baseURL, {
         headers: {
           "Access-Control-Allow-Origin": "*",
         },
@@ -52,7 +52,7 @@ function Gov() {
     setCompany(e.target[0].value);
     const value = e.target[0].value;
     axios
-      .get(`http://localhost:8080/measures`, {
+      .get(baseURL, {
         //.get(baseURL + value, {
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -78,7 +78,7 @@ function Gov() {
     console.log(editedMeasures);
 
     axios
-      .post(`http://localhost:8080/measures`, editedMeasures, {
+      .post(baseURL, editedMeasures, {
         //.get(baseURL + value, {
         headers: {
           "Access-Control-Allow-Origin": "*",

@@ -22,7 +22,7 @@
     align-items: center;
     justify-content: center;
     font-size: calc(10px + 2vmin);
-    color: #61301f;
+    color: #fff;
 }
 
 .landing-innerbox h1 {
@@ -46,8 +46,8 @@
     width: 100px;
     border-style: solid;
     border-width: 2px;
-    border-color: #61301f;
-    color: #61301f;
+    border-color: #fff;
+    color: #fff;
     padding: 15px 22px;
     text-align: center;
     text-decoration: none;
@@ -59,15 +59,15 @@
 }
 
 .button:hover {
-    border-color: #61301f;
-    color: #61301f;
+    border-color: #fff;
+    color: #fff;
 
 }
 
 
 .button:focus {
-    border-color: #61301f;
-    color: #61301f;
+    border-color: #fff;
+    color: #fff;
 }
 
 .button-big {
