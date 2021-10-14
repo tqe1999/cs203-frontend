@@ -9,7 +9,7 @@
         "endpoints": [
             {
                 "name": "backend-api",
-                "endpoint": "https://dev.covfeed.link"
+                "endpoint": "https://api.covfeed.link"
             }
         ]
     }
