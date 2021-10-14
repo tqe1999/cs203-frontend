@@ -35,7 +35,7 @@ function Dashboard() {
   const [isChanged, setChanged] = useState(true)
   const [year, setYear] = useState("1 year")
 
-  const [shopType, setShopType] = useState("food");
+  const [shopType, setShopType] = useState("fastfoodoutlet");
 
   const measuresURL = API_BASE_URL.concat("/measures");
   const footfallURL = API_BASE_URL.concat("/footfallData");
@@ -182,7 +182,7 @@ function Dashboard() {
                   <Col xs="11">
                     <div className="numbers text-center">
                       <p className="card-category">Unvaccinated group size</p>
-                      <Card.Title as="h4">{maxGrpSizeVacc}</Card.Title>
+                      <Card.Title as="h4">{maxGrpSizeNonVacc}</Card.Title>
                     </div>
                   </Col>
                 </Row>
