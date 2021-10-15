@@ -28,13 +28,14 @@ function UserTable(props) {
       setRows(props.companyTableData)
   }, []); 
 
-    const baseURL = API_BASE_URL.concat("/users/")
+    const baseURL = API_BASE_URL.concat("/employees/")
 
     const [editMode, setEditMode] = useState(false);
 
-    const [addList, setAddList] = useState([])
+    const [addRow, setAddRow] = useState(true)
 
-    const [removeList, setRemoveList] = useState([])
+    const [removeRow, setRemoveRow] = useState(true);
+
 
     const handleChange = (e, idx) => {
         const { name, value } = e.target;
@@ -47,6 +48,8 @@ function UserTable(props) {
 
       };
       const handleAddRow = () => {
+        setAddRow(false);
+        setRemoveRow(false);
         const item = {
           name: "",
           email: "",
@@ -62,28 +65,45 @@ function UserTable(props) {
       };
 
       const handleRemoveSpecificRow = (idx) => () => {
+        setEditMode(false)
         const temp = [...rows]
         console.log(idx)
-        setRemoveList(removeList => [...removeList, temp[idx]])
         console.log(temp[idx])
+
+        axios.delete(baseURL + temp[idx].email, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        }).then((result) => {
+          console.log(result);
+        });
+        //call api on temp[idx] to remove
         temp.splice(idx, 1)
         setRows( temp )
+        
         
       }
 
       
 
       const saveTable = () => {
+        setAddRow(true);
         setEditMode(false)
         setRows(rows);
 
-        const newUser = {
-          name: rows[0].name
+        let newRow = rows[rows.length - 1]
+        const newUser = { //insert company from cognito
+          "name": newRow.name,
+          "company": "KFC",
+          "email": newRow.email,
+          "userType": newRow.userType,
+          "vaccinationStatus": newRow.vaccinationStatus,
+          "swabTestResult": newRow.swabTestResult,
+          "fetStatus": newRow.fetStatus,
         };
 
         //make api call here
-        console.log(rows[0].name);
-        axios.put(baseURL + "KFC", newUser, {
+        axios.post(baseURL, newUser, {
           headers: {
             "Access-Control-Allow-Origin": "*",
           },
@@ -111,19 +131,11 @@ function UserTable(props) {
             <div>
             {editMode ? (
               <div>
-                {rows.length !== 0 && (
-                  <div>
-                    
-                      <Button align="right" onClick={saveTable}>
-                        SAVE
-                      </Button>
-                 
-                  </div>
-                )}
+                {null}
               </div>
             ) : (
               <div>
-                <Button align="right" onClick={editTable}>
+                <Button align="right" variant="info" className="btn-fill pull-right" onClick={editTable}>
                   EDIT
                 </Button>
               </div>
@@ -200,12 +212,14 @@ function UserTable(props) {
                             />
                         </td>
                         <td>
-                            <button
-                            className="btn btn-outline-danger btn-sm"
+                          {removeRow ?
+                            <Button
+                            variant="info" className="btn-fill pull-right"
                             onClick={handleRemoveSpecificRow(idx)}
                             >
                             Remove
-                            </button>
+                            </Button> : null
+                          }
                         </td>
                         </tr>
                     ))
@@ -230,14 +244,7 @@ function UserTable(props) {
                         <td>
                             {rows[idx].fetStatus}
                         </td>
-                        <td>
-                            <button
-                            className="btn btn-outline-danger btn-sm"
-                            onClick={handleRemoveSpecificRow(idx)}
-                            >
-                            Remove
-                            </button>
-                        </td>
+                        
                         </tr>
                     ))
 
@@ -246,9 +253,11 @@ function UserTable(props) {
                 </Table>
                 {editMode ? 
                 <div>
+                    {addRow ?
                     <button onClick={handleAddRow} className="btn btn-primary">
                         Add Row
-                    </button>
+                    </button> : null
+                    }
                     <button onClick={saveTable} className="btn btn-primary">
                         Save Table
                     </button>

@@ -49,7 +49,7 @@ function Sidebar({ color, image, routes }) {
             </div>
           </a>
           <a className="simple-text" href="http://www.creative-tim.com">
-            The New Normal
+            Covid F&B
           </a>
         </div>
         <Nav>

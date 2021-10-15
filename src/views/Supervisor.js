@@ -26,7 +26,7 @@ function Supervisor() {
 
   const [rows, setRows] = useState([{}])
 
-  const baseURL = API_BASE_URL.concat("/users/")
+  const baseURL = API_BASE_URL.concat("/employees/")
 
   useEffect(() => {
       axios
