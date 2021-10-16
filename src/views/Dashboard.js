@@ -50,7 +50,6 @@ function Dashboard() {
   useEffect(() => {
     axios.get(measuresURL + "/" + shopType).then((response) => {
       const data = response.data;
-      console.log(data)
       setDineInSize(data.dineInSize);
       setMaxGrpSizeVacc(data.maxGrpSizeVacc);
       setMaxGrpSizeNonVacc(data.maxGrpSizeNonVacc);
