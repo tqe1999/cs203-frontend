@@ -3,18 +3,16 @@ import axios from 'axios'
 
 // react-bootstrap components
 import {
-  Container
+  Container,
 } from "react-bootstrap";
 
 
 import { API_BASE_URL } from "../assets/constants/apiConstants";
-
-import "../components/Table/EmployeeTable.js"
 import EmployeeTable from "../components/Table/EmployeeTable.js";
 
-function Supervisor() {
+function Administrator() {
   const [companyTableData, setCompanyTableData] = useState(null);
-  const baseURL = API_BASE_URL.concat("/employees/")
+  const baseURL = API_BASE_URL.concat("/employees/administrator/")
 
   useEffect(() => {
       axios
@@ -33,9 +31,9 @@ function Supervisor() {
   return (
     
       <Container fluid>
-          {companyTableData === null ? null : <EmployeeTable companyTableData = {companyTableData} userType = "Supervisor"/>}
+          {companyTableData === null ? null : <EmployeeTable companyTableData = {companyTableData} userType = "Administrator"/>}
       </Container>
   );
 }
 
-export default Supervisor;
+export default Administrator;

@@ -25,7 +25,7 @@ import Notifications from "views/Notifications.js";
 import Upgrade from "views/Upgrade.js";
 import FootfallData from "views/FootfallData.js"
 import Supervisor from "views/Supervisor.js"
-import Admin from "views/Admin.js"
+import Administrator from "views/Administrator.js"
 
 import Gov from "views/Gov.js"
 
@@ -102,10 +102,10 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/admin",
-    name: "Admin",
+    path: "/administrator",
+    name: "Administrator",
     icon: "nc-icon nc-chart-pie-35",
-    component: Admin,
+    component: Administrator,
     layout: "/admin",
   },
   {

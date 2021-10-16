@@ -20,7 +20,7 @@ import * as SupervisorAPI from "../../api/SupervisorAPI";
 
 
 
-function UserTable(props) {
+function EmployeeTable(props) {
     const [rows, setRows] = useState([{}])
 
     useEffect(() => {
@@ -34,7 +34,13 @@ function UserTable(props) {
 
     const [addRow, setAddRow] = useState(true)
 
+    const [rowHasBeenAdded, setRowHasBeenAdded] = useState(false)
+
+    const [rowHasBeenUpdated, setRowHasBeenUpdated] = useState(false)
+
     const [removeRow, setRemoveRow] = useState(true);
+
+    const [rowToEdit, setRowToEdit] = useState(-10)
 
 
     const handleChange = (e, idx) => {
@@ -62,6 +68,9 @@ function UserTable(props) {
           rows => [...rows, item]
         );
 
+        setRowToEdit(rows.length)
+        setRowHasBeenAdded(true)
+
       };
 
       const handleRemoveSpecificRow = (idx) => () => {
@@ -88,40 +97,74 @@ function UserTable(props) {
 
       const saveTable = () => {
         setAddRow(true);
+        setRemoveRow(true);
         setEditMode(false)
         setRows(rows);
+        setRowToEdit(-10)
 
-        let newRow = rows[rows.length - 1]
-        const newUser = { //insert company from cognito
-          "name": newRow.name,
-          "company": "KFC",
-          "email": newRow.email,
-          "userType": newRow.userType,
-          "vaccinationStatus": newRow.vaccinationStatus,
-          "swabTestResult": newRow.swabTestResult,
-          "fetStatus": newRow.fetStatus,
-        };
+        if (rowHasBeenAdded) {
+          let newRow = rows[rows.length - 1]
+          const newUser = { //insert company from cognito
+            "name": newRow.name,
+            "company": "KFC",
+            "email": newRow.email,
+            "userType": newRow.userType,
+            "vaccinationStatus": newRow.vaccinationStatus,
+            "swabTestResult": newRow.swabTestResult,
+            "fetStatus": newRow.fetStatus,
+          };
 
-        //make api call here
-        axios.post(baseURL, newUser, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-        });
-        // SupervisorAPI.updateUsersInCompany(rows[0].name).then(response => {
-        //   console.log(response);
-          
-        // });
+          //make api call here
+          axios.post(baseURL, newUser, {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            },
+          })
+          .then((result) => {
+            console.log(result);
+          });
 
+          setRowHasBeenAdded(false);
+        }
+
+        if (rowHasBeenUpdated) {
+          let updatedRow = rows[rowToEdit]
+          const updatedUser = { //insert company from cognito
+            "name": updatedRow.name,
+            "company": "KFC",
+            "email": updatedRow.email,
+            "userType": updatedRow.userType,
+            "vaccinationStatus": updatedRow.vaccinationStatus,
+            "swabTestResult": updatedRow.swabTestResult,
+            "fetStatus": updatedRow.fetStatus,
+          };
+
+          //make api call here
+          axios.put(baseURL + updatedRow.email, updatedUser, {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            },
+          })
+          .then((result) => {
+            console.log(result);
+          });
+
+          setRowHasBeenUpdated(false);
+        }
+        
         
 
       }
 
       const editTable = () => {
-        setEditMode(true)
+        setEditMode(true);
+      }
+
+      const editRow = (idx) => {
+        setAddRow(false);
+        setRemoveRow(false);
+        setRowToEdit(idx) 
+        setRowHasBeenUpdated(true);
       }
 
     return (
@@ -136,7 +179,7 @@ function UserTable(props) {
             ) : (
               <div>
                 <Button align="right" variant="info" className="btn-fill pull-right" onClick={editTable}>
-                  EDIT
+                  AMEND TABLE
                 </Button>
               </div>
             )}
@@ -155,8 +198,13 @@ function UserTable(props) {
                     </thead>
                     <tbody>
 
-                    {editMode ? 
-                    rows.map((item, idx) => (
+                    {
+                    rows.map((item, idx) => {
+                      console.log(idx);
+                      console.log(rows.length - 1)
+                    return editMode && idx == rowToEdit ?
+                    (
+                        
                         <tr id="addr0" key={idx}>
                         <td>
                             <input
@@ -169,17 +217,29 @@ function UserTable(props) {
                             />
                         </td>
                         <td>
-                            <input
+                          {rowHasBeenAdded ? 
+                          <input
+                          type="text"
+                          name="email"
+                          value={rows[idx].email}
+                          onChange={(e) => handleChange(e, idx)}
+                          className="form-control"
+                          required
+                          />
+                           : rows[idx].email}
+                        </td>
+                        <td>
+                          {props.userType == "Supervisor" ? rows[idx].userType
+                          : 
+                          <input
                             type="text"
-                            name="email"
-                            value={rows[idx].email}
+                            name="userType"
+                            value={rows[idx].userType}
                             onChange={(e) => handleChange(e, idx)}
                             className="form-control"
                             required
                             />
-                        </td>
-                        <td>
-                          {rows[idx].userType}
+                          }
                         </td>
                         <td>
                             <input
@@ -212,7 +272,7 @@ function UserTable(props) {
                             />
                         </td>
                         <td>
-                          {removeRow ?
+                          {(removeRow && rows[idx].userType == "Employee") ?
                             <Button
                             variant="info" className="btn-fill pull-right"
                             onClick={handleRemoveSpecificRow(idx)}
@@ -221,11 +281,20 @@ function UserTable(props) {
                             </Button> : null
                           }
                         </td>
+                        <td>
+                          {(removeRow && rows[idx].userType == "Employee") ?
+                            <Button
+                            variant="info" className="btn-fill pull-right"
+                            onClick={() => editRow(idx)}
+                            >
+                            Edit
+                            </Button> : null
+                          }
+                        </td>
                         </tr>
-                    ))
-                    :
-                    rows.map((item, idx) => (
-                        <tr id="addr0" key={idx}>
+                    
+                    ) : (
+                         <tr id="addr0" key={idx}>
                         <td>
                             {rows[idx].name}
                         </td>
@@ -244,10 +313,29 @@ function UserTable(props) {
                         <td>
                             {rows[idx].fetStatus}
                         </td>
-                        
+                        <td>
+                          {(props.userType == "Administrator" && editMode && removeRow) || (editMode && removeRow && rows[idx].userType == "Employee") ?
+                            <Button
+                            variant="info" className="btn-fill pull-right"
+                            onClick={handleRemoveSpecificRow(idx)}
+                            >
+                            Remove
+                            </Button> : <Button variant="info" className="btn-fill pull-right" disabled>Remove</Button>
+                          }
+                        </td>
+                        <td>
+                          {(props.userType == "Administrator" && editMode && removeRow) || (editMode && removeRow && rows[idx].userType == "Employee") ?
+                            <Button
+                            variant="info" className="btn-fill pull-right"
+                            onClick={() => editRow(idx)}
+                            >
+                            Edit
+                            </Button>  : <Button variant="info" className="btn-fill pull-right" disabled>Edit</Button>
+                          }
+                        </td>
                         </tr>
-                    ))
-
+                    )
+                  })
                     }
                     </tbody>
                 </Table>
@@ -271,4 +359,4 @@ function UserTable(props) {
 
 }
 
-export default UserTable;
+export default EmployeeTable;
