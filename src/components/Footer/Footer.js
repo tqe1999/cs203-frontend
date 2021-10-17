@@ -25,7 +25,7 @@ class Footer extends Component {
         <Container fluid>
           <nav>
             <ul className="footer-menu">
-              <li>
+              {/* <li>
                 <a href="#pablo" onClick={(e) => e.preventDefault()}>
                   Home
                 </a>
@@ -44,12 +44,11 @@ class Footer extends Component {
                 <a href="#pablo" onClick={(e) => e.preventDefault()}>
                   Blog
                 </a>
-              </li>
+              </li> */}
             </ul>
             <p className="copyright text-center">
-              © {new Date().getFullYear()}{" "}
-              <a href="http://www.creative-tim.com">Creative Tim</a>, made with
-              love for a better web
+              COVID-19 F&B App - For all your needs 
+              
             </p>
           </nav>
         </Container>
