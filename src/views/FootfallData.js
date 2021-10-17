@@ -53,8 +53,17 @@ function FootfallData() {
         //get user details 
         getUserProfile().then(userProfile => {
             console.log(userProfile.shop.shopType);
-            
-            setShopType(userProfile.shop.shopType)
+            const shop = userProfile.shop.shopType
+
+            //0=restaurant, 1=fastfoodoutlet, 2=caterer, 3=other
+            setShopType("Cafes, Food Courts and Other Eating Places")
+            if (shop === "restaurant") {
+                setShopType("Restaurants")
+            } else if (shop === "fastfoodoutlet") {
+                setShopType("Fast Food Outlets")
+            } else if (shop === "caterer") {
+                setShopType("Caterers")
+            }
         });
     }, [isChanged]);
 
@@ -84,15 +93,16 @@ function FootfallData() {
     if (shopType && averages) {
         console.log("EXECUTED if shopType")
 
-        let i = 3
         //0=restaurant, 1=fastfoodoutlet, 2=caterer, 3=other
-        if (shopType === "restaurant") {
+        let i = 3
+        if (shopType === "Restaurants") {
             i = 0
-        } else if (shopType === "fastfoodoutlet") {
+        } else if (shopType === "Fast Food Outlets") {
             i = 1
-        } else if (shopType === "caterer") {
+        } else if (shopType === "Caterers") {
             i = 2
         }
+
         average = Math.round(averages[i])
         foodAmt = average
         serviceStaff = Math.round(averages[i] * 0.8)
@@ -128,7 +138,7 @@ function FootfallData() {
             <Row>
             <Col>
                 <Card className="card-my">
-                    <Card.Title as="h4">Restaurants</Card.Title>
+                    <Card.Title as="h4">{shopType}</Card.Title>
                 </Card>
             </Col>
             </Row>
