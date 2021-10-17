@@ -9,7 +9,7 @@
         "endpoints": [
             {
                 "name": "backend-api",
-                "endpoint": "https://api.covfeed.link"
+                "endpoint": "http://localhost:8080"
             }
         ]
     }
