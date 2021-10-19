@@ -17,6 +17,7 @@ import {
   Dropdown,
 } from "react-bootstrap";
 import axios from "axios";
+import NewsDisplayList from "components/News/NewsDisplayList";
 
 import { API_BASE_URL } from "../assets/constants/apiConstants"
 
@@ -34,11 +35,13 @@ function Dashboard() {
   const [lastUpdateDate, setLastUpdateDate] = useState("")
   const [isChanged, setChanged] = useState(true)
   const [year, setYear] = useState("1 year")
-
   const [shopType, setShopType] = useState("fastfoodoutlet");
+
+  const [newsArticles, setNewsArticles] = useState([])
 
   const measuresURL = API_BASE_URL.concat("/measures");
   const footfallURL = API_BASE_URL.concat("/footfallData");
+  const newsURL = API_BASE_URL.concat("/newsArticle")
 
   let months = []
   let totals = []
@@ -47,6 +50,7 @@ function Dashboard() {
   let caterers = []
   let others = []
 
+  //measures
   useEffect(() => {
     axios.get(measuresURL + "/" + shopType).then((response) => {
       const data = response.data;
@@ -57,15 +61,26 @@ function Dashboard() {
       setClosingTime(data.closingTime)
       setPhase(data.phase)
     });
-  });
+  }, []);
 
+  //news
+  useEffect(() => {
+    console.log("enters useEffect news")
+    axios.get(newsURL).then((response) => {
+      console.log("DISPLAYING NEWS ARTICLES~~")
+      console.log(response.data)
+      setNewsArticles(response.data)
+    })
+  }, [])
+
+  //footfalldata
   useEffect(() => {
         axios.get(footfallURL).then((response) => {
             setResp(response.data.list)
             setFootfallData(response.data.list.slice(48, 60));
             setLastUpdateDate(response.data.lastUpdated);
         });
-    }, []);
+    }, [isChanged]);
     
     if (footfallData) {
         // console.log(footfallData)
@@ -93,26 +108,11 @@ function Dashboard() {
         console.log("im loading the month data " + isChanged)
     }
 
-    //whenever i post, i dont get again... so how? 
     const postValues = () => {
-        axios.post(footfallURL)
-        // .then((response) => {
-        //     console.log(response)
-        //     // setResp(response.data.list)
-        //     // setFootfallData(response.data.list);
-        //     // setLastUpdateDate(response.data.lastUpdated);
-        //     // setChanged(response.data.isChanged);
-        //     // console.log("yes i am executed")
-            
-        // })
-        axios.get(footfallURL).then((response) => {
-            setResp(response.data.list)
-            setFootfallData(response.data.list.slice(48, 60));
-            setLastUpdateDate(response.data.lastUpdated);
-            setChanged(response.data.isChanged);
-            console.log("inside " + isChanged)
-        });
-        console.log("outside " + isChanged)
+      axios.post(baseURL)
+      setChanged(!isChanged)
+      setFootfallData(null)
+      console.log("EXECUTED post")
     }
 
     const setOneYear = () => {
@@ -133,6 +133,13 @@ function Dashboard() {
   return (
     <>
       <Container fluid>
+      <Row>
+            <Col>
+                <Card className="card-my">
+                    <Card.Title as="h4">Current Measures</Card.Title>
+                </Card>
+            </Col>
+        </Row>
         <Row>
           <Col lg="2" sm="6">
             <Card className="card-stats">
@@ -231,6 +238,14 @@ function Dashboard() {
             </Card>
           </Col>
         </Row>
+        <Row>
+            <Col>
+                <Card className="card-my">
+                    <Card.Title as="h4">Recent News Articles</Card.Title>
+                </Card>
+            </Col>
+        </Row>
+        <NewsDisplayList articles={newsArticles}/>
         <Row>
           <Col md="12">
             <Card >

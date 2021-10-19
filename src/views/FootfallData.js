@@ -34,7 +34,6 @@ function FootfallData() {
     const [shopType, setShopType] = useState(null)
 
     const baseURL = API_BASE_URL.concat("/footfallData")
-    const baseURLuser = API_BASE_URL.concat("/users/userByEmail")
     //0=restaurants, 1=fastfoodoutlets, 2=caterer, 3=other
 
     let months = [], totals = [], restaurants = [], fastFoodOutlets = [], caterers = [], others = []
@@ -109,7 +108,6 @@ function FootfallData() {
         kitchenStaff = Math.round(averages[i] * 1.2)
     }
 
-    //whenever i post, i dont get again... so how? 
     const postValues = () => {
         axios.post(baseURL)
         setChanged(!isChanged)
