@@ -3,6 +3,7 @@ import axios from "axios";
 import { Form } from "react-bootstrap";
 import ReadOnlyRow from "components/ReadOnlyRow/ReadOnlyRow";
 import EditableRow from "components/EditableRow.js/EditableRow";
+import NewsInput from "../components/News/NewsInput";
 
 // react-bootstrap components
 import {
@@ -185,6 +186,9 @@ function Gov() {
           </Col>
         </Row>
       )}
+      <NewsInput>
+
+      </NewsInput>
     </Container>
   );
 }

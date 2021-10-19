@@ -1,0 +1,16 @@
+.news-list {
+    list-style: none;
+    padding: 0;
+    width: 100%; 
+    float: left;
+}
+
+.news-list li {
+    display: inline-block;
+    width: 100%;
+}
+
+.news-description {
+    margin-bottom: 15px;
+}
+
