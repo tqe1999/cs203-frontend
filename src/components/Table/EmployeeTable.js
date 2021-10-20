@@ -16,14 +16,24 @@ import {
 
 import { API_BASE_URL } from "../../assets/constants/apiConstants";
 
-import * as SupervisorAPI from "../../api/SupervisorAPI";
 
+
+import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
+import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth";
 
 
 function EmployeeTable(props) {
     const [rows, setRows] = useState([{}])
+    const [company, setCompany] = useState(null);
 
     useEffect(() => {
+
+      AmplifyAPI.getUserProfile().then(userProfile => {
+        console.log(userProfile);
+        
+        setCompany(userProfile.company);
+      });
+      
       console.log(props.companyTableData)
       setRows(props.companyTableData)
   }, []); 
@@ -104,9 +114,9 @@ function EmployeeTable(props) {
 
         if (rowHasBeenAdded) {
           let newRow = rows[rows.length - 1]
-          const newUser = { //insert company from cognito
+          const newUser = { 
             "name": newRow.name,
-            "company": "KFC",
+            "company": company,
             "email": newRow.email,
             "userType": newRow.userType,
             "vaccinationStatus": newRow.vaccinationStatus,
@@ -128,16 +138,20 @@ function EmployeeTable(props) {
         }
 
         if (rowHasBeenUpdated) {
+          console.log(company + "HIIIIIIIIIIIIIIIIIIIIII");
           let updatedRow = rows[rowToEdit]
-          const updatedUser = { //insert company from cognito
+          const updatedUser = { 
             "name": updatedRow.name,
-            "company": "KFC",
+            "company": company,
             "email": updatedRow.email,
             "userType": updatedRow.userType,
             "vaccinationStatus": updatedRow.vaccinationStatus,
             "swabTestResult": updatedRow.swabTestResult,
             "fetStatus": updatedRow.fetStatus,
           };
+
+          console.log(updatedUser)
+
 
           //make api call here
           axios.put(baseURL + updatedRow.email, updatedUser, {
@@ -200,8 +214,6 @@ function EmployeeTable(props) {
 
                     {
                     rows.map((item, idx) => {
-                      console.log(idx);
-                      console.log(rows.length - 1)
                     return editMode && idx == rowToEdit ?
                     (
                         

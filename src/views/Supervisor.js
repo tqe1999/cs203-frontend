@@ -12,13 +12,20 @@ import { API_BASE_URL } from "../assets/constants/apiConstants";
 import "../components/Table/EmployeeTable.js"
 import EmployeeTable from "../components/Table/EmployeeTable.js";
 
+
+import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
+import * as AmplifyAuth from "../amplify-cognito/AmplifyAuth";
+
 function Supervisor() {
   const [companyTableData, setCompanyTableData] = useState(null);
   const baseURL = API_BASE_URL.concat("/employees/")
 
   useEffect(() => {
-      axios
-        .get(baseURL + "KFC", {
+      AmplifyAPI.getUserProfile().then(userProfile => {
+        console.log(userProfile);
+        
+        axios
+        .get(baseURL + userProfile.company, {
             headers: {
               "Access-Control-Allow-Origin": "*"
             },
@@ -27,6 +34,8 @@ function Supervisor() {
           console.log(result)
           setCompanyTableData(result.data)
         });
+      });
+      
   }, []); 
   
 
