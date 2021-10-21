@@ -20,10 +20,11 @@ import axios from "axios";
 import NewsDisplayList from "components/News/NewsDisplayList";
 
 import { API_BASE_URL } from "../assets/constants/apiConstants"
+import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
 
 function Dashboard() {
 
-  const [dineInSize, setDineInSize] = useState(null);;
+  const [dineInSize, setDineInSize] = useState(null);
   const [maxGrpSizeVacc, setMaxGrpSizeVacc] = useState(null);
   const [maxGrpSizeNonVacc, setMaxGrpSizeNonVacc] = useState(null);
   const [socialDistance, setSocialDistance] = useState(null);
@@ -35,7 +36,6 @@ function Dashboard() {
   const [lastUpdateDate, setLastUpdateDate] = useState("")
   const [isChanged, setChanged] = useState(true)
   const [year, setYear] = useState("1 year")
-  const [shopType, setShopType] = useState("fastfoodoutlet");
 
   const [newsArticles, setNewsArticles] = useState([])
 
@@ -52,15 +52,18 @@ function Dashboard() {
 
   //measures
   useEffect(() => {
-    axios.get(measuresURL + "/" + shopType).then((response) => {
-      const data = response.data;
-      setDineInSize(data.dineInSize);
-      setMaxGrpSizeVacc(data.maxGrpSizeVacc);
-      setMaxGrpSizeNonVacc(data.maxGrpSizeNonVacc);
-      setSocialDistance(data.socialDistance)
-      setClosingTime(data.closingTime)
-      setPhase(data.phase)
-    });
+    AmplifyAPI.getUserProfile().then(userProfile => {
+      axios.get(measuresURL + "/" + userProfile.shop.shopType).then((response) => {
+        const data = response.data;
+        setDineInSize(data.dineInSize);
+        setMaxGrpSizeVacc(data.maxGrpSizeVacc);
+        setMaxGrpSizeNonVacc(data.maxGrpSizeNonVacc);
+        setSocialDistance(data.socialDistance)
+        setClosingTime(data.closingTime)
+        setPhase(data.phase)
+      })
+      
+    })
   }, []);
 
   //news
