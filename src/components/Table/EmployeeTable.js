@@ -29,12 +29,10 @@ function EmployeeTable(props) {
     useEffect(() => {
 
       AmplifyAPI.getUserProfile().then(userProfile => {
-        console.log(userProfile);
         
         setCompany(userProfile.company);
       });
       
-      console.log(props.companyTableData)
       setRows(props.companyTableData)
   }, []); 
 
@@ -138,7 +136,6 @@ function EmployeeTable(props) {
         }
 
         if (rowHasBeenUpdated) {
-          console.log(company + "HIIIIIIIIIIIIIIIIIIIIII");
           let updatedRow = rows[rowToEdit]
           const updatedUser = { 
             "name": updatedRow.name,

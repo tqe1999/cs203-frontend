@@ -26,6 +26,7 @@ import Upgrade from "views/Upgrade.js";
 import FootfallData from "views/FootfallData.js"
 import Supervisor from "views/Supervisor.js"
 import Administrator from "views/Administrator.js"
+import TableLayout from "views/TableLayout.js"
 
 import Gov from "views/Gov.js"
 
@@ -114,7 +115,14 @@ const dashboardRoutes = [
     icon: "nc-icon nc-chart-pie-35",
     component: Gov,
     layout: "/admin",
-  }
+  },
+  {
+    path: "/tablelayout",
+    name: "TableLayout",
+    icon: "nc-icon nc-notes",
+    component: TableLayout,
+    layout: "/admin",
+  },
 ];
 
 export default dashboardRoutes;
