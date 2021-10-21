@@ -20,35 +20,18 @@ import {
 
 export default function TableLayout() {
     const baseURL = API_BASE_URL.concat("/tablelayout/")
-    useEffect(() => {
-        axios
-        .post(baseURL, {
-            headers: {
-              "Access-Control-Allow-Origin": "*"
-            },
-        })
-        .then((result) => {
-
-          console.log(result.data);
-
-          let tableData = result.data;
-
-          const resultant = []
-
-          for (let i = 0; i < tableData.length; i++) {
-            let dict = {}
-            dict['name'] = i + 1;
-            dict['data'] = tableData[i];
-
-            resultant.push(dict);
-          }
-          setSeries(resultant);
-        });
-
-        
-    }, []); 
 
     const [series, setSeries] = useState(null);
+
+    const [widthOfTable, setWidthOfTable] = useState();
+
+    const [heightOfTable, setHeightOfTable] = useState();
+
+    const [widthOfShop, setWidthOfShop] = useState();
+
+    const [heightOfShop, setHeightOfShop] = useState();
+
+    const [numOfTables, setNumOfTables] = useState();
 
     const [options, setOptions] = useState({
         chart: {
@@ -64,129 +47,127 @@ export default function TableLayout() {
         }
       });
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+
+        const shopConfiguration = { 
+            "widthOfShop": widthOfShop,
+            "heightOfShop": heightOfShop,
+            "widthOfTable": widthOfTable,
+            "heightOfTable": heightOfTable,
+            "numOfTables": numOfTables,
+           
+          };
+
+        axios
+        .post(baseURL, shopConfiguration, {
+            headers: {
+              "Access-Control-Allow-Origin": "*"
+            },
+        })
+        .then((result) => {
+
+          console.log(result);
+
+          let tableData = result.data;
+
+          
+
+          const resultant = []
+
+          for (let i = 0; i < tableData.length; i++) {
+            let dict = {}
+            dict['name'] = i + 1;
+            dict['data'] = tableData[i];
+
+            resultant.push(dict);
+          }
+
+          if (tableData == "") {
+            setSeries(null);
+          } else {
+            setSeries(resultant);
+          }
+        });
+
+    }
+
     
 
     return (
         <div>
-            {/* <Container fluid>
+            <Container fluid>
         <Row>
           <Col offset = {1} md="12">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">Edit Profile</Card.Title>
+                <Card.Title as="h4">Provide your outlet information</Card.Title>
               </Card.Header>
               <Card.Body>
                 <Form>
                   <Row>
-                    <Col className="pr-1" md="5">
+                    <Col className="pr-1" md="3">
                       <Form.Group>
-                        <label>Company (disabled)</label>
+                        <label>Width of shop (in metres)</label>
                         <Form.Control
-                          defaultValue="Creative Code Inc."
-                          disabled
-                          placeholder="Company"
-                          type="text"
+                          defaultValue=""
+                          placeholder="Shop Width"
+                          type="number"
+                          value={widthOfShop}
+                        onChange={e => setWidthOfShop(e.target.value)}
                         ></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="px-1" md="3">
                       <Form.Group>
-                        <label>Username</label>
+                        <label>Height of shop (in metres)</label>
                         <Form.Control
-                          defaultValue="michael23"
-                          placeholder="Username"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    <Col className="pl-1" md="4">
-                      <Form.Group>
-                        <label htmlFor="exampleInputEmail1">
-                          Email address
-                        </label>
-                        <Form.Control
-                          placeholder="Email"
-                          type="email"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col className="pr-1" md="6">
-                      <Form.Group>
-                        <label>First Name</label>
-                        <Form.Control
-                          defaultValue="Mike"
-                          placeholder="Company"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    <Col className="pl-1" md="6">
-                      <Form.Group>
-                        <label>Last Name</label>
-                        <Form.Control
-                          defaultValue="Andrew"
-                          placeholder="Last Name"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md="12">
-                      <Form.Group>
-                        <label>Address</label>
-                        <Form.Control
-                          defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                          placeholder="Home Address"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col className="pr-1" md="4">
-                      <Form.Group>
-                        <label>City</label>
-                        <Form.Control
-                          defaultValue="Mike"
-                          placeholder="City"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    <Col className="px-1" md="4">
-                      <Form.Group>
-                        <label>Country</label>
-                        <Form.Control
-                          defaultValue="Andrew"
-                          placeholder="Country"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    <Col className="pl-1" md="4">
-                      <Form.Group>
-                        <label>Postal Code</label>
-                        <Form.Control
-                          placeholder="ZIP Code"
+                          defaultValue=""
+                          placeholder="Shop Height"
                           type="number"
+                          value={heightOfShop}
+                        onChange={e => setHeightOfShop(e.target.value)}
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                    <Col className="pl-1" md="3">
+                      <Form.Group>
+                      <label>Width of each table (in metres)</label>
+                        <Form.Control
+                          placeholder="Table Width"
+                          type="number"
+                          required
+                          value={widthOfTable}
+                        onChange={e => setWidthOfTable(e.target.value)}
+                          
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                    <Col className="pl-1" md="3">
+                      <Form.Group>
+                      <label>Height of each table (in metres)</label>
+                        <Form.Control
+                          placeholder="Table Height"
+                          type="number"
+                          required
+                          value={heightOfTable}
+                        onChange={e => setHeightOfTable(e.target.value)}
                         ></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
                   <Row>
-                    <Col md="12">
+                    <Col className="pr-1" md="12">
                       <Form.Group>
-                        <label>About Me</label>
+                        <label>Number of Tables</label>
                         <Form.Control
-                          cols="80"
-                          defaultValue="Lamborghini Mercy, Your chick she so thirsty, I'm in
-                          that two seat Lambo."
-                          placeholder="Here can be your description"
-                          rows="4"
-                          as="textarea"
+                          defaultValue=""
+                          placeholder="Company"
+                          type="number"
+                          required
+                          value={numOfTables}
+                        onChange={e => setNumOfTables(e.target.value)}
                         ></Form.Control>
                       </Form.Group>
                     </Col>
@@ -195,8 +176,9 @@ export default function TableLayout() {
                     className="btn-fill pull-right"
                     type="submit"
                     variant="info"
+                    onClick = {handleSubmit}
                   >
-                    Update Profile
+                    Recommend me!
                   </Button>
                   <div className="clearfix"></div>
                 </Form>
@@ -205,12 +187,11 @@ export default function TableLayout() {
           </Col>
           
         </Row>
-      </Container> */}
+      </Container>
 
 
 
            {series !== null ? 
-        //    <div>DATA COLLECTED </div>
            <Fragment>
             <Chart
                 options={options}
@@ -219,7 +200,9 @@ export default function TableLayout() {
                 height={350}
             />
             </Fragment>
-           : null}
+           : <div>
+               NO INFO / TOO MANY TABLES PROVIDED. PLEASE TRY AGAIN!
+               </div>}
         </div>
     )
 
