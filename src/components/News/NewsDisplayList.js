@@ -27,24 +27,23 @@ const NewsDisplayList = props => {
     if (newsArticles.length === 0) {
       return (
         <Card>
-          NOOOOOOO
+          Loading...
         </Card>
       )
     }
 
     return (
         <Row>
-          <ul className="news-list">
-            {newsArticles.map(article => (
-              <NewsDisplayItem 
-                key={article.id}
-                title={article.title}
-                description={article.description}
-                date={article.date}
-                url={article.url}
-              />
-            ))}
-          </ul>
+          {newsArticles.map(article => (
+            <NewsDisplayItem 
+              key={article.id}
+              title={article.title}
+              description={article.description}
+              date={article.date}
+              url={article.url}
+              imageUrl={article.imageUrl}
+            />
+          ))}
         </Row>
     )
 }

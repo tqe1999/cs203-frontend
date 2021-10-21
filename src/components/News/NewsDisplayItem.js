@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import axios from 'axios'
+import { DEFAULT_IMAGE_URL } from "../../assets/constants/apiConstants";
+
 // react-bootstrap components
 import {
   Badge,
@@ -22,10 +24,12 @@ import './news-list.css';
 const NewsDisplayItem = props => {
     const date = new Date(props.date[0], props.date[1] - 1, props.date[2]).toDateString()
 
+    const imageUrl = props.imageUrl ? props.imageUrl: DEFAULT_IMAGE_URL;
+
     return (
-        <li className="news-list">
-        <Col lg="12" sm="12">
+        <Col xl="4" lg="6" md="4" sm="6" >
             <Card className="card-stats">
+                <Card.Img variant="top" src={imageUrl} />
                 <Card.Header>
                     <Card.Title as="h4">
                         {props.title}
@@ -45,7 +49,6 @@ const NewsDisplayItem = props => {
                 </Card.Footer>
             </Card>
         </Col>
-        </li>
     )
 }
 
