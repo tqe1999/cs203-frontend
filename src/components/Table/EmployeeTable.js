@@ -21,6 +21,8 @@ import { API_BASE_URL } from "../../assets/constants/apiConstants";
 import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
 import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth";
 
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+
 
 function EmployeeTable(props) {
     const [rows, setRows] = useState([{}])
@@ -49,6 +51,16 @@ function EmployeeTable(props) {
     const [removeRow, setRemoveRow] = useState(true);
 
     const [rowToEdit, setRowToEdit] = useState(-10)
+
+    var products = [{
+      id: 1,
+      name: "Item name 1",
+      price: 100
+  },{
+      id: 2,
+      name: "Item name 2",
+      price: 100
+  }];
 
 
     const handleChange = (e, idx) => {
@@ -84,15 +96,12 @@ function EmployeeTable(props) {
       const handleRemoveSpecificRow = (idx) => () => {
         setEditMode(false)
         const temp = [...rows]
-        console.log(idx)
-        console.log(temp[idx])
 
         axios.delete(baseURL + temp[idx].email, {
           headers: {
             "Access-Control-Allow-Origin": "*",
           },
         }).then((result) => {
-          console.log(result);
         });
         //call api on temp[idx] to remove
         temp.splice(idx, 1)
@@ -122,6 +131,7 @@ function EmployeeTable(props) {
             "fetStatus": newRow.fetStatus,
           };
 
+
           //make api call here
           axios.post(baseURL, newUser, {
             headers: {
@@ -131,6 +141,7 @@ function EmployeeTable(props) {
           .then((result) => {
             console.log(result);
           });
+
 
           setRowHasBeenAdded(false);
         }
@@ -147,7 +158,6 @@ function EmployeeTable(props) {
             "fetStatus": updatedRow.fetStatus,
           };
 
-          console.log(updatedUser)
 
 
           //make api call here
@@ -178,10 +188,33 @@ function EmployeeTable(props) {
         setRowHasBeenUpdated(true);
       }
 
+      const priceFormatter = (cell, row) => {
+        return '<i class="glyphicon glyphicon-usd"></i> ' + cell;
+      }
+
     return (
         <div>
-            <div className="container">
+            <Container fluid>
+            <Row>
+                <Col>
+                    <Card className="card-my">
+                        <Card.Title as="h4">Current Measures</Card.Title>
+                    </Card>
+                </Col>
+            </Row>
+            <div>
+            <BootstrapTable data={products} striped={true} hover={true}>
+              <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
+              <TableHeaderColumn dataField="name" dataSort={true}>Product Name</TableHeaderColumn>
+              <TableHeaderColumn dataField="price" dataFormat={priceFormatter}>Product Price</TableHeaderColumn>
+          </BootstrapTable>
+              </div>
             <div className="row clearfix">
+            <BootstrapTable data={products} striped={true} hover={true} insertRow deleteRow>
+              <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
+              <TableHeaderColumn dataField="name" dataSort={true}>Product Name</TableHeaderColumn>
+              <TableHeaderColumn dataField="price" dataSort={true} dataFormat={priceFormatter}>Product Price</TableHeaderColumn>
+          </BootstrapTable>
             <div>
             {editMode ? (
               <div>
@@ -362,7 +395,7 @@ function EmployeeTable(props) {
                 }
                 </div>
             </div>
-            </div>
+            </Container>
         </div>
     )
 
