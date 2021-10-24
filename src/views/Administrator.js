@@ -29,7 +29,7 @@ function Administrator() {
             },
         })
         .then((result) => {
-          console.log(result)
+          console.log(result.data)
           setCompanyTableData(result.data)
         });
         
