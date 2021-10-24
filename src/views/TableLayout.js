@@ -33,6 +33,8 @@ export default function TableLayout() {
 
     const [numOfTables, setNumOfTables] = useState();
 
+    const [firstTime, setFirstTime] = useState(true);
+
     const [options, setOptions] = useState({
         chart: {
           height: 100,
@@ -48,7 +50,9 @@ export default function TableLayout() {
       });
 
     const handleSubmit = (e) => {
+    
         e.preventDefault();
+        setFirstTime(false);
 
 
         const shopConfiguration = { 
@@ -98,6 +102,15 @@ export default function TableLayout() {
     return (
         <div>
             <Container fluid>
+            <Row>
+                <Col>
+                    <Card className="card-my">
+                        <Card.Title as="h4">{firstTime || series !== null ? <div>Kindly fill up the configuration of your restaurant
+                 </div>: <div>Your restaurant does not have enough space. Try with less tables. </div>}</Card.Title>
+                    </Card>
+                </Col>
+            </Row>
+           
         <Row>
           <Col offset = {1} md="12">
             <Card>
@@ -200,9 +213,9 @@ export default function TableLayout() {
                 height={350}
             />
             </Fragment>
-           : <div>
-               NO INFO / TOO MANY TABLES PROVIDED. PLEASE TRY AGAIN!
-               </div>}
+           : 
+               null
+               }
         </div>
     )
 
