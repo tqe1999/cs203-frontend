@@ -15,10 +15,11 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 import { Auth } from 'aws-amplify';
+
 import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI.js";
 import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth.js";
 
@@ -39,7 +40,7 @@ function Header() {
   };
 
   const getBrandText = () => {
-    for (let i = 0; i < routes.length; i++) {
+    for (let i = 0; i < routes.length; i++) { 
       if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
         return routes[i].name;
       }

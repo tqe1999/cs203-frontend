@@ -15,18 +15,31 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { useLocation, NavLink } from "react-router-dom";
 
 import { Nav } from "react-bootstrap";
 
 import logo from "assets/img/reactlogo.png";
 
+import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI.js";
+import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth.js";
+
 function Sidebar({ color, image, routes }) {
   const location = useLocation();
   const activeRoute = (routeName) => {
     return location.pathname.indexOf(routeName) > -1 ? "active" : "";
   };
+
+  const [userType, setUserType] = useState();
+
+  useEffect(() => {
+
+    AmplifyAPI.getUserProfile().then(userProfile => {
+      setUserType(userProfile.userType);
+    });
+    
+  }, []); 
   return (
     <div className="sidebar" data-image={image} data-color={color}>
       <div
@@ -54,6 +67,11 @@ function Sidebar({ color, image, routes }) {
         </div>
         <Nav>
           {routes.map((prop, key) => {
+            if ((prop.name === "Supervisor" && userType !== "Supervisor") || (prop.name === "Administrator" && userType !== "Admin") || (prop.name === "Gov" && userType !== "Admin")) {
+              if (userType !== "Prof") {
+                return null;
+              }
+            }
             if (!prop.redirect)
               return (
                 <li

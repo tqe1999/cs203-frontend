@@ -19,7 +19,6 @@ function Administrator() {
 
   useEffect(() => {
       AmplifyAPI.getUserProfile().then(userProfile => {
-        console.log(userProfile);
 
 
         axios
@@ -29,7 +28,6 @@ function Administrator() {
             },
         })
         .then((result) => {
-          console.log(result.data)
           setCompanyTableData(result.data)
         });
         
