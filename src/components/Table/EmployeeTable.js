@@ -49,14 +49,20 @@ function EmployeeTable(props) {
       };
 
       const onAddRow = (row) => {
-        alert("YOU ARE A GENIUS")
         let newRow = row;
+
+        let userTypeOfNewUser = null;
+        if (props.userType === "Administrator") {
+          userTypeOfNewUser = "Supervisor";
+        } else {
+          userTypeOfNewUser = "Employee"
+        }
 
         const newUser = { 
           "name": newRow.name,
           "company": company,
           "email": newRow.email,
-          "userType": newRow.userType,
+          "userType": userTypeOfNewUser,
           "vaccinationStatus": newRow.vaccinationStatus,
           "swabTestResult": newRow.swabTestResult,
           "fetStatus": newRow.fetStatus,
@@ -74,7 +80,7 @@ function EmployeeTable(props) {
             name: newRow.name,
             email: newRow.email,
             company: company,
-            userType: newRow.userType,
+            userType: userTypeOfNewUser,
             vaccinationStatus: newRow.vaccinationStatus,
             swabTestResult: newRow.swabTestResult,
             fetStatus: newRow.fetStatus, 
@@ -86,10 +92,8 @@ function EmployeeTable(props) {
       }
 
       const onDeleteRow = (rowsData) => {
-        console.log(rowsData);
         let temp = [...rows]
         for (let i = 0; i < rowsData.length; i++) {
-          console.log("STARTING")
 
           axios.delete(baseURL + rowsData[i], {
             headers: {
@@ -108,6 +112,33 @@ function EmployeeTable(props) {
 
         setRows( temp );
         
+      }
+
+      const onAfterSaveCell = (value) => {
+        console.log(value);
+        let updatedRow = value;
+          const updatedUser = { 
+            "name": updatedRow.name,
+            "company": company,
+            "email": updatedRow.email,
+            "userType": updatedRow.userType,
+            "vaccinationStatus": updatedRow.vaccinationStatus,
+            "swabTestResult": updatedRow.swabTestResult,
+            "fetStatus": updatedRow.fetStatus,
+          };
+
+
+
+          //make api call here
+          axios.put(baseURL + updatedRow.email, updatedUser, {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            },
+          })
+          .then((result) => {
+            console.log(result);
+          });
+
       }
 
       const options = {
@@ -129,13 +160,16 @@ function EmployeeTable(props) {
             
             <div className="row clearfix">
             <BootstrapTable data={rows} options = {options} striped={true} hover={true} insertRow deleteRow selectRow = {selectRow} pagination search
-  multiColumnSearch columnFilter exportCSV  >
-              {/* <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn> */}
+  multiColumnSearch columnFilter exportCSV  cellEdit={ {
+    mode: "click",
+    blurToSave: true,
+     afterSaveCell: onAfterSaveCell
+   } }>
               <TableHeaderColumn dataField="name" dataSort={true}>Name</TableHeaderColumn>
-              {props.userType == "Administrator"? 
-              <TableHeaderColumn dataField="company" dataSort={true} dataFormat={priceFormatter}>Company</TableHeaderColumn> : null}
+              {props.userType === "Administrator" || props.userType === "Prof" ? 
+              <TableHeaderColumn dataField="company" editable={false} dataSort={true} dataFormat={priceFormatter}>Company</TableHeaderColumn> : null}
               <TableHeaderColumn dataField="email" isKey={true} dataAlign="center" dataSort={true}>Email</TableHeaderColumn>
-              <TableHeaderColumn dataField="userType"  dataAlign="center" dataSort={true}>User Type</TableHeaderColumn>
+              <TableHeaderColumn dataField="userType" editable={false} dataAlign="center" dataSort={true}>User Type</TableHeaderColumn>
               <TableHeaderColumn dataField="vaccinationStatus" dataAlign="center" dataSort={true}>Vaccination Status</TableHeaderColumn>
               <TableHeaderColumn dataField="swabTestResult" dataAlign="center" dataSort={true}>Swab Test Result</TableHeaderColumn>
               <TableHeaderColumn dataField="fetStatus" dataAlign="center" dataSort={true}>FET Status</TableHeaderColumn>
