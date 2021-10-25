@@ -25,6 +25,7 @@ const NewsDisplayItem = props => {
     const date = new Date(props.date[0], props.date[1] - 1, props.date[2]).toDateString()
 
     const imageUrl = props.imageUrl ? props.imageUrl: DEFAULT_IMAGE_URL;
+    const newsUrl = props.url ? props.url: "#";
 
     return (
         <Col xl="4" lg="6" md="4" sm="6" >
@@ -39,6 +40,9 @@ const NewsDisplayItem = props => {
                     <div className="news-description">
                         {props.description}
                     </div>
+                    <a className="news-link" href={newsUrl}>
+                        &#128279; Link to news article
+                    </a>
                 </Card.Body>
                 <Card.Footer>
                     <hr/>
