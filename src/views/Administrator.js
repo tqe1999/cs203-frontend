@@ -4,6 +4,8 @@ import axios from 'axios'
 // react-bootstrap components
 import {
   Container,
+  Row, 
+  Card
 } from "react-bootstrap";
 
 
@@ -20,7 +22,6 @@ function Administrator() {
   useEffect(() => {
       AmplifyAPI.getUserProfile().then(userProfile => {
 
-
         axios
         .get(baseURL + userProfile.company, {
             headers: {
@@ -29,10 +30,9 @@ function Administrator() {
         })
         .then((result) => {
           setCompanyTableData(result.data)
+          console.log("GET company executed")
         });
-        
-        
-      });
+        });
       
   }, []); 
   
@@ -40,7 +40,7 @@ function Administrator() {
   return (
     
       <Container fluid>
-          {companyTableData === null ? null : <EmployeeTable companyTableData = {companyTableData} userType = "Administrator"/>}
+        {companyTableData === null ? null : <EmployeeTable companyTableData = {companyTableData} userType = "Administrator"/>}
       </Container>
   );
 }

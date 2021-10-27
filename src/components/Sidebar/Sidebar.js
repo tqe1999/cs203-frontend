@@ -67,7 +67,7 @@ function Sidebar({ color, image, routes }) {
         </div>
         <Nav>
           {routes.map((prop, key) => {
-            if ((prop.name === "Supervisor" && userType !== "Supervisor") || (prop.name === "Administrator" && userType !== "Admin") || (prop.name === "Gov" && userType !== "Admin")) {
+            if ((prop.name === "Supervisor" && userType !== "Supervisor") || (prop.name === "Administrator" && userType !== "Admin") || (prop.name === "Gov" && userType !== "Admin" || (prop.name === "Shop" && userType !== "Admin"))) {
               if (userType !== "Prof") {
                 return null;
               }

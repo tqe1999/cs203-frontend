@@ -31,7 +31,6 @@ function EmployeeTable(props) {
     useEffect(() => {
 
       AmplifyAPI.getUserProfile().then(userProfile => {
-        
         setCompany(userProfile.company);
       });
       

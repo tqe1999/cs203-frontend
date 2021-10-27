@@ -27,8 +27,8 @@ import FootfallData from "views/FootfallData.js"
 import Supervisor from "views/Supervisor.js"
 import Administrator from "views/Administrator.js"
 import TableLayout from "views/TableLayout.js"
-
 import Gov from "views/Gov.js"
+import Shop from "views/Shop.js"
 
 const dashboardRoutes = [
   // {
@@ -91,29 +91,36 @@ const dashboardRoutes = [
   {
     path: "/footfallData",
     name: "Footfall Data",
-    icon: "nc-icon nc-chart-pie-35",
+    icon: "nc-icon nc-chart-bar-32",
     component: FootfallData,
     layout: "/admin",
   },
   {
     path: "/supervisor",
     name: "Supervisor",
-    icon: "nc-icon nc-chart-pie-35",
+    icon: "nc-icon nc-settings-gear-64",
     component: Supervisor,
     layout: "/admin",
   },
   {
+    path: "/gov",
+    name: "Measures & News",
+    icon: "nc-icon nc-settings-gear-64",
+    component: Gov,
+    layout: "/admin",
+  },
+  {
     path: "/administrator",
-    name: "Administrator",
-    icon: "nc-icon nc-chart-pie-35",
+    name: "Employees",
+    icon: "nc-icon nc-settings-gear-64",
     component: Administrator,
     layout: "/admin",
   },
   {
-    path: "/gov",
-    name: "Gov",
-    icon: "nc-icon nc-chart-pie-35",
-    component: Gov,
+    path: "/shop",
+    name: "Shops",
+    icon: "nc-icon nc-settings-gear-64",
+    component: Shop,
     layout: "/admin",
   },
   {
