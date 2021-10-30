@@ -21,6 +21,8 @@ import { API_BASE_URL } from "../../assets/constants/apiConstants";
 import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
 import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth";
 
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+
 
 function EmployeeTable(props) {
     const [rows, setRows] = useState([{}])
@@ -29,7 +31,6 @@ function EmployeeTable(props) {
     useEffect(() => {
 
       AmplifyAPI.getUserProfile().then(userProfile => {
-        
         setCompany(userProfile.company);
       });
       
@@ -38,105 +39,83 @@ function EmployeeTable(props) {
 
     const baseURL = API_BASE_URL.concat("/employees/")
 
-    const [editMode, setEditMode] = useState(false);
+      const priceFormatter = (cell, row) => {
+        return '<i class="glyphicon glyphicon-usd"></i> ' + cell;
+      }
 
-    const [addRow, setAddRow] = useState(true)
-
-    const [rowHasBeenAdded, setRowHasBeenAdded] = useState(false)
-
-    const [rowHasBeenUpdated, setRowHasBeenUpdated] = useState(false)
-
-    const [removeRow, setRemoveRow] = useState(true);
-
-    const [rowToEdit, setRowToEdit] = useState(-10)
-
-
-    const handleChange = (e, idx) => {
-        const { name, value } = e.target;
-        const temp = [...rows];
-        temp[idx][name] = value;
-        setRows(
-            temp
-        );
-
-
+      const selectRow = {
+        mode: 'checkbox' //radio or checkbox
       };
-      const handleAddRow = () => {
-        setAddRow(false);
-        setRemoveRow(false);
-        const item = {
-          name: "",
-          email: "",
-          userType: "Employee",
-          vaccinationStatus: "",
-          swabTestResult: "",
-          fetStatus: "", 
+
+      const onAddRow = (row) => {
+        let newRow = row;
+
+        let userTypeOfNewUser = null;
+        if (props.userType === "Administrator") {
+          userTypeOfNewUser = "Supervisor";
+        } else {
+          userTypeOfNewUser = "Employee"
+        }
+
+        const newUser = { 
+          "name": newRow.name,
+          "company": company,
+          "email": newRow.email,
+          "userType": userTypeOfNewUser,
+          "vaccinationStatus": newRow.vaccinationStatus,
+          "swabTestResult": newRow.swabTestResult,
+          "fetStatus": newRow.fetStatus,
         };
-        setRows(
-          rows => [...rows, item]
-        );
 
-        setRowToEdit(rows.length)
-        setRowHasBeenAdded(true)
-
-      };
-
-      const handleRemoveSpecificRow = (idx) => () => {
-        setEditMode(false)
-        const temp = [...rows]
-        console.log(idx)
-        console.log(temp[idx])
-
-        axios.delete(baseURL + temp[idx].email, {
+        axios.post(baseURL, newUser, {
           headers: {
             "Access-Control-Allow-Origin": "*",
           },
-        }).then((result) => {
+        })
+        .then((result) => {
           console.log(result);
+
+          const item = {
+            name: newRow.name,
+            email: newRow.email,
+            company: company,
+            userType: userTypeOfNewUser,
+            vaccinationStatus: newRow.vaccinationStatus,
+            swabTestResult: newRow.swabTestResult,
+            fetStatus: newRow.fetStatus, 
+          };
+          setRows(
+            rows => [...rows, item]
+          );
         });
-        //call api on temp[idx] to remove
-        temp.splice(idx, 1)
-        setRows( temp )
-        
-        
       }
 
-      
+      const onDeleteRow = (rowsData) => {
+        let temp = [...rows]
+        for (let i = 0; i < rowsData.length; i++) {
 
-      const saveTable = () => {
-        setAddRow(true);
-        setRemoveRow(true);
-        setEditMode(false)
-        setRows(rows);
-        setRowToEdit(-10)
-
-        if (rowHasBeenAdded) {
-          let newRow = rows[rows.length - 1]
-          const newUser = { 
-            "name": newRow.name,
-            "company": company,
-            "email": newRow.email,
-            "userType": newRow.userType,
-            "vaccinationStatus": newRow.vaccinationStatus,
-            "swabTestResult": newRow.swabTestResult,
-            "fetStatus": newRow.fetStatus,
-          };
-
-          //make api call here
-          axios.post(baseURL, newUser, {
+          axios.delete(baseURL + rowsData[i], {
             headers: {
               "Access-Control-Allow-Origin": "*",
             },
-          })
-          .then((result) => {
-            console.log(result);
+          }).then((result) => {
+            temp = temp.filter((row) => {
+              return row.email !== rowsData[i];
+            });
+        
+            setRows( temp );
           });
-
-          setRowHasBeenAdded(false);
+  
+          
         }
 
-        if (rowHasBeenUpdated) {
-          let updatedRow = rows[rowToEdit]
+        setRows( temp );
+        
+      }
+
+      const onAfterSaveCell = (value) => {
+        console.log(value);
+        let updatedRow = value;
           const updatedUser = { 
             "name": updatedRow.name,
             "company": company,
@@ -147,7 +126,6 @@ function EmployeeTable(props) {
             "fetStatus": updatedRow.fetStatus,
           };
 
-          console.log(updatedUser)
 
 
           //make api call here
@@ -160,209 +138,43 @@ function EmployeeTable(props) {
             console.log(result);
           });
 
-          setRowHasBeenUpdated(false);
-        }
-        
-        
-
       }
 
-      const editTable = () => {
-        setEditMode(true);
-      }
-
-      const editRow = (idx) => {
-        setAddRow(false);
-        setRemoveRow(false);
-        setRowToEdit(idx) 
-        setRowHasBeenUpdated(true);
-      }
+      const options = {
+        onAddRow: onAddRow,
+        onDeleteRow: onDeleteRow,
+        clickToSelectAndEditCell: true
+      };
 
     return (
         <div>
-            <div className="container">
+            <Container fluid>
+            <Row>
+                <Col>
+                    <Card className="card-my">
+                        <Card.Title as="h4">Employee Information</Card.Title>
+                    </Card>
+                </Col>
+            </Row>
+            
             <div className="row clearfix">
-            <div>
-            {editMode ? (
-              <div>
-                {null}
-              </div>
-            ) : (
-              <div>
-                <Button align="right" variant="info" className="btn-fill pull-right" onClick={editTable}>
-                  AMEND TABLE
-                </Button>
-              </div>
-            )}
-          </div>
-                <div className="col-md-12 column">
-                <Table className="table-hover table-striped table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>User Type</th>
-                        <th>Vaccination Status</th>
-                        <th>Swab Test Result</th>
-                        <th>FET Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-
-                    {
-                    rows.map((item, idx) => {
-                    return editMode && idx == rowToEdit ?
-                    (
-                        
-                        <tr id="addr0" key={idx}>
-                        <td>
-                            <input
-                            type="text"
-                            name="name"
-                            value={rows[idx].name}
-                            onChange={(e) => handleChange(e, idx)}
-                            className="form-control"
-                            required
-                            />
-                        </td>
-                        <td>
-                          {rowHasBeenAdded ? 
-                          <input
-                          type="text"
-                          name="email"
-                          value={rows[idx].email}
-                          onChange={(e) => handleChange(e, idx)}
-                          className="form-control"
-                          required
-                          />
-                           : rows[idx].email}
-                        </td>
-                        <td>
-                          {props.userType == "Supervisor" ? rows[idx].userType
-                          : 
-                          <input
-                            type="text"
-                            name="userType"
-                            value={rows[idx].userType}
-                            onChange={(e) => handleChange(e, idx)}
-                            className="form-control"
-                            required
-                            />
-                          }
-                        </td>
-                        <td>
-                            <input
-                            type="text"
-                            name="vaccinationStatus"
-                            value={rows[idx].vaccinationStatus}
-                            onChange={(e) => handleChange(e, idx)}
-                            className="form-control"
-                            required
-                            />
-                        </td>
-                        <td>
-                            <input
-                            type="text"
-                            name="swabTestResult"
-                            value={rows[idx].swabTestResult}
-                            onChange={(e) => handleChange(e, idx)}
-                            className="form-control"
-                            required
-                            />
-                        </td>
-                        <td>
-                            <input
-                            type="text"
-                            name="fetStatus"
-                            value={rows[idx].fetStatus}
-                            onChange={(e) => handleChange(e, idx)}
-                            className="form-control"
-                            required
-                            />
-                        </td>
-                        <td>
-                          {(removeRow && rows[idx].userType == "Employee") ?
-                            <Button
-                            variant="info" className="btn-fill pull-right"
-                            onClick={handleRemoveSpecificRow(idx)}
-                            >
-                            Remove
-                            </Button> : null
-                          }
-                        </td>
-                        <td>
-                          {(removeRow && rows[idx].userType == "Employee") ?
-                            <Button
-                            variant="info" className="btn-fill pull-right"
-                            onClick={() => editRow(idx)}
-                            >
-                            Edit
-                            </Button> : null
-                          }
-                        </td>
-                        </tr>
-                    
-                    ) : (
-                         <tr id="addr0" key={idx}>
-                        <td>
-                            {rows[idx].name}
-                        </td>
-                        <td>
-                            {rows[idx].email}
-                        </td>
-                        <td>
-                            {rows[idx].userType}
-                        </td>
-                        <td>
-                            {rows[idx].vaccinationStatus}
-                        </td>
-                        <td>
-                            {rows[idx].swabTestResult}
-                        </td>
-                        <td>
-                            {rows[idx].fetStatus}
-                        </td>
-                        <td>
-                          {(props.userType == "Administrator" && editMode && removeRow) || (editMode && removeRow && rows[idx].userType == "Employee") ?
-                            <Button
-                            variant="info" className="btn-fill pull-right"
-                            onClick={handleRemoveSpecificRow(idx)}
-                            >
-                            Remove
-                            </Button> : <Button variant="info" className="btn-fill pull-right" disabled>Remove</Button>
-                          }
-                        </td>
-                        <td>
-                          {(props.userType == "Administrator" && editMode && removeRow) || (editMode && removeRow && rows[idx].userType == "Employee") ?
-                            <Button
-                            variant="info" className="btn-fill pull-right"
-                            onClick={() => editRow(idx)}
-                            >
-                            Edit
-                            </Button>  : <Button variant="info" className="btn-fill pull-right" disabled>Edit</Button>
-                          }
-                        </td>
-                        </tr>
-                    )
-                  })
-                    }
-                    </tbody>
-                </Table>
-                {editMode ? 
-                <div>
-                    {addRow ?
-                    <button onClick={handleAddRow} className="btn btn-primary">
-                        Add Row
-                    </button> : null
-                    }
-                    <button onClick={saveTable} className="btn btn-primary">
-                        Save Table
-                    </button>
-                </div> : null
-                }
-                </div>
+            <BootstrapTable data={rows} options = {options} striped={true} hover={true} insertRow deleteRow selectRow = {selectRow} pagination search
+  multiColumnSearch columnFilter exportCSV  cellEdit={ {
+    mode: "click",
+    blurToSave: true,
+     afterSaveCell: onAfterSaveCell
+   } }>
+              <TableHeaderColumn dataField="name" dataSort={true}>Name</TableHeaderColumn>
+              {props.userType === "Administrator" || props.userType === "Prof" ? 
+              <TableHeaderColumn dataField="company" editable={false} dataSort={true} dataFormat={priceFormatter}>Company</TableHeaderColumn> : null}
+              <TableHeaderColumn dataField="email" isKey={true} dataAlign="center" dataSort={true}>Email</TableHeaderColumn>
+              <TableHeaderColumn dataField="userType" editable={false} dataAlign="center" dataSort={true}>User Type</TableHeaderColumn>
+              <TableHeaderColumn dataField="vaccinationStatus" dataAlign="center" dataSort={true}>Vaccination Status</TableHeaderColumn>
+              <TableHeaderColumn dataField="swabTestResult" dataAlign="center" dataSort={true}>Swab Test Result</TableHeaderColumn>
+              <TableHeaderColumn dataField="fetStatus" dataAlign="center" dataSort={true}>FET Status</TableHeaderColumn>
+          </BootstrapTable>
             </div>
-            </div>
+            </Container>
         </div>
     )
 

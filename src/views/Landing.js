@@ -9,7 +9,7 @@ function Landing() {
         <div className="landing-innerbox">
           <h1>Covid F&B</h1>
           <p>A smoother transition to a new normal</p>
-          <Spacer space="10" />
+          <Spacer space="5" />
           <div>
             <Link
               class="button"
