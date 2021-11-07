@@ -145,21 +145,12 @@ function Dashboard() {
         </Row>
         <Row>
           <Col lg="2" sm="6">
-            <Card className="card-stats">
-              <Card.Body>
-                <Row>
-                  {/* <Col xs="5">
-                    <div className="icon-big text-center icon-warning">
-                      <i className="nc-icon nc-chart text-warning"></i>
-                    </div>
-                  </Col> */}
-                  <Col xs="11">
-                    <div className="numbers text-center">
-                      <p className="card-category">Dine in size</p>
-                      <Card.Title as="h4">{dineInSize}</Card.Title>
-                    </div>
-                  </Col>
-                </Row>
+            <Card className="card-my-measures">
+              <Card.Body className="card-my-measures">
+                  <div className="numbers text-center">
+                    <p className="card-category">Dine in size</p>
+                    <Card.Title as="h4">{dineInSize}</Card.Title>
+                  </div>
               </Card.Body>
               {/* <Card.Footer>
                 <hr></hr>
@@ -171,72 +162,52 @@ function Dashboard() {
             </Card>
           </Col>
           <Col lg="2" sm="6">
-            <Card className="card-stats">
-              <Card.Body>
-                <Row>
-                  <Col xs="11">
-                    <div className="numbers text-center">
-                      <p className="card-category">Vaccinated group size</p>
-                      <Card.Title as="h4">{maxGrpSizeVacc}</Card.Title>
-                    </div>
-                  </Col>
-                </Row>
+            <Card className="card-my-measures">
+              <Card.Body className="card-my-measures">
+                  <div className="numbers text-center">
+                    <p className="card-category">Vaccinated group size</p>
+                    <Card.Title as="h4">{maxGrpSizeVacc}</Card.Title>
+                  </div>
               </Card.Body>
             </Card>
           </Col>
           <Col lg="2" sm="6">
-            <Card className="card-stats">
-              <Card.Body>
-                <Row>
-                  <Col xs="11">
-                    <div className="numbers text-center">
-                      <p className="card-category">Unvaccinated group size</p>
-                      <Card.Title as="h4">{maxGrpSizeNonVacc}</Card.Title>
-                    </div>
-                  </Col>
-                </Row>
+            <Card className="card-my-measures">
+              <Card.Body className="card-my-measures">
+                  <div className="numbers text-center">
+                    <p className="card-category">Unvaccinated group size</p>
+                    <Card.Title as="h4">{maxGrpSizeNonVacc}</Card.Title>
+                  </div>
               </Card.Body>
             </Card>
           </Col>
           <Col lg="2" sm="6">
-            <Card className="card-stats">
-              <Card.Body>
-                <Row>
-                  <Col xs="11">
+            <Card className="card-my-measures">
+              <Card.Body className="card-my-measures">
                     <div className="numbers text-center">
                       <p className="card-category">Social distance</p>
                       <Card.Title as="h4">{socialDistance}</Card.Title>
                     </div>
-                  </Col>
-                </Row>
               </Card.Body>
             </Card>
           </Col>
           <Col lg="2" sm="6">
-            <Card className="card-stats">
-              <Card.Body>
-                <Row>
-                  <Col xs="11">
-                    <div className="numbers text-center">
-                      <p className="card-category">Closing time</p>
-                      <Card.Title as="h4">{closingTime}</Card.Title>
-                    </div>
-                  </Col>
-                </Row>
+            <Card className="card-my-measures">
+              <Card.Body className="card-my-measures">
+                  <div className="numbers text-center">
+                    <p className="card-category">Closing time</p>
+                    <Card.Title as="h4">{closingTime}</Card.Title>
+                  </div>
               </Card.Body>
             </Card>
           </Col>
           <Col lg="2" sm="6">
-            <Card className="card-stats">
-              <Card.Body>
-                <Row>
-                  <Col xs="11">
-                    <div className="numbers text-center">
-                      <p className="card-category">Phase</p>
-                      <Card.Title as="h4">{phase}</Card.Title>
-                    </div>
-                  </Col>
-                </Row>
+            <Card className="card-my-measures">
+              <Card.Body className="card-my-measures">
+                  <div className="numbers text-center">
+                    <p className="card-category">Phase</p>
+                    <Card.Title as="h4">{phase}</Card.Title>
+                  </div>
               </Card.Body>
             </Card>
           </Col>
