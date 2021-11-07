@@ -136,7 +136,7 @@ function FootfallData() {
             <Row>
             <Col>
                 <Card className="card-my">
-                    <Card.Title as="h4">{shopType}</Card.Title>
+                    <Card.Title as="h4">Data for {shopType}</Card.Title>
                 </Card>
             </Col>
             </Row>

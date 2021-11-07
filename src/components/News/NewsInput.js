@@ -54,9 +54,6 @@ function NewsInput () {
         <Row>
           <Col md="12">
             <Card className="card-stats">
-                <Card.Header>
-                  <Card.Title as="h4">Add News Articles </Card.Title>
-                </Card.Header>
                 <Card.Body>
                 <Form onSubmit = {handleSubmit}>
                   <Row>

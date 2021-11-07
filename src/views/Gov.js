@@ -134,13 +134,17 @@ function Gov() {
 
   return (
     <Container fluid>
+      <Row>
+        <Col>
+            <Card className="card-my">
+                <Card.Title as="h4">Edit Measures</Card.Title>
+            </Card>
+        </Col>
+      </Row>
       {measuresTableData === null ? null : (
         <Row>
           <Col md="12">
             <Card className="striped-tabled-with-hover">
-              <Card.Header>
-                <Card.Title as="h4">Measures </Card.Title>
-              </Card.Header>
               <Card.Body className="table-full-width table-responsive px-0">
                 <Form onSubmit={handleEditFormSubmit}>
                   <Table className="table-hover table-striped">
@@ -186,9 +190,14 @@ function Gov() {
           </Col>
         </Row>
       )}
-      <NewsInput>
-
-      </NewsInput>
+      <Row>
+        <Col>
+            <Card className="card-my">
+                <Card.Title as="h4">Add News Articles </Card.Title>
+            </Card>
+        </Col>
+      </Row>
+      <NewsInput/>
     </Container>
   );
 }
