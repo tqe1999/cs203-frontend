@@ -15,6 +15,7 @@ import {
   OverlayTrigger,
   Tooltip,
   Dropdown,
+  Modal,
 } from "react-bootstrap";
 
 import { API_BASE_URL } from "../../assets/constants/apiConstants";
@@ -30,6 +31,10 @@ function NewsInput () {
     //Word Count for description 
     const [ wordCount, setWordCount ] = useState(0)
 
+    //for the Modal box 
+    const [ showModal, setShowModal ] = useState(false)
+    const [ message, setMessage ] = useState(null)
+
     const baseURL = API_BASE_URL.concat("/newsArticle")
 
     const handleKeyPress = (e) => {
@@ -37,17 +42,33 @@ function NewsInput () {
     }
 
     const handleSubmit = (e) => {
-        console.log("handle submit is called")
         e.preventDefault();
+
+        setDescription("")
+        setTitle("")
+        setUrl("")
+        setDate("")
+
+        const append = wordCount > 256 ? "..." : ""
+
         axios.post(baseURL, {
             title : title,
-            description : description,
+            description : description.substring(0, 257) + append,
             date : new Date(date),
             url : url
         })
         .then(function (response) {
-            console.log(response);
+            if (response.status === 200) {
+              setMessage("News Article successfully added!")
+            } else {
+              setMessage("Oops, an error occured. (HTTP Status: " + response.status + "). Try again later!")
+            }
+            setShowModal(true)
         })
+    }
+
+    const handleClose = () => {
+      setShowModal(false)
     }
 
     return (
@@ -55,7 +76,7 @@ function NewsInput () {
           <Col md="12">
             <Card className="card-stats">
                 <Card.Body>
-                <Form onSubmit = {handleSubmit}>
+                <Form>
                   <Row>
                     <Col className="pr-1" md="12">
                       <Form.Group>
@@ -119,8 +140,11 @@ function NewsInput () {
                   </Row>
                 <Button
                     className="btn-fill pull-right"
-                    type="submit"
+                    type="reset"
                     variant="info"
+                    onClick={(e) => {
+                      handleSubmit(e)
+                    }}
                 >
                     Post News
                 </Button>
@@ -132,6 +156,19 @@ function NewsInput () {
                 </Card.Footer>
             </Card>
           </Col>
+          <Modal show={showModal}>
+            <Modal.Header>
+              <Modal.Title>Add News Article</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+              <p>{message}</p>
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button variant="primary" onClick={handleClose}>Close</Button>
+            </Modal.Footer>
+        </Modal>
       </Row>
     )
 }
