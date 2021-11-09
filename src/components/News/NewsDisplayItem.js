@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
-import axios from 'axios'
 import { DEFAULT_IMAGE_URL } from "../../assets/constants/apiConstants";
 
 // react-bootstrap components

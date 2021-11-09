@@ -45,6 +45,13 @@ function User() {
     <>
       <Container fluid>
         <Row>
+            <Col>
+                <Card className="card-my">
+                    <Card.Title as="h4">Welcome to your profile, {name}!</Card.Title>
+                </Card>
+            </Col>
+        </Row>
+        <Row>
           <Col md="8">
             <Card>
               <Card.Header>

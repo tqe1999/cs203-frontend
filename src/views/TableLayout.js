@@ -1,6 +1,5 @@
 import React, { Fragment, Component, useEffect, useState } from 'react';
-import axios from 'axios'
-
+import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
 
 import Chart from 'react-apexcharts';
 import { API_BASE_URL } from "../assets/constants/apiConstants";
@@ -20,6 +19,7 @@ import {
 
 export default function TableLayout() {
     const baseURL = API_BASE_URL.concat("/tablelayout/")
+    const DEFAULT_SIZE = 750
 
     const [series, setSeries] = useState(null);
 
@@ -37,23 +37,35 @@ export default function TableLayout() {
 
     const [options, setOptions] = useState({
         chart: {
-          height: 100,
+          height: 200,
           type: 'heatmap'
         },
         dataLabels: {
-          enabled: false
+          enabled: false,
         },
         colors: ['#008FFB'],
-        title: {
-          text: 'Recommended table arrangement'
-        }
+        // title: {
+        //   text: 'Recommended table arrangement'
+        // }
       });
+
+    const [tableWidth, setTableWidth] = useState(DEFAULT_SIZE);
+
+    const [tableHeight, setTableHeight] = useState(DEFAULT_SIZE)
 
     const handleSubmit = (e) => {
     
         e.preventDefault();
         setFirstTime(false);
 
+        const factor = widthOfShop / heightOfShop
+        if (factor > 1) {
+          setTableWidth(DEFAULT_SIZE)
+          setTableHeight(1 / factor * DEFAULT_SIZE)
+        } else if (factor < 1) {
+          setTableWidth(factor * DEFAULT_SIZE)
+          setTableHeight(DEFAULT_SIZE)
+        }
 
         const shopConfiguration = { 
             "widthOfShop": widthOfShop,
@@ -61,15 +73,9 @@ export default function TableLayout() {
             "widthOfTable": widthOfTable,
             "heightOfTable": heightOfTable,
             "numOfTables": numOfTables,
-           
           };
 
-        axios
-        .post(baseURL, shopConfiguration, {
-            headers: {
-              "Access-Control-Allow-Origin": "*"
-            },
-        })
+        AmplifyAPI.addTableLayout(shopConfiguration)
         .then((result) => {
 
           console.log(result);
@@ -105,8 +111,9 @@ export default function TableLayout() {
             <Row>
                 <Col>
                     <Card className="card-my">
-                        <Card.Title as="h4">{firstTime || series !== null ? <div>Kindly fill up the configuration of your restaurant
-                 </div>: <div>Your restaurant does not have enough space. Try with less tables. </div>}</Card.Title>
+                        {/* <Card.Title as="h4">{firstTime || series !== null ? <div>Kindly fill up the configuration of your restaurant
+                 </div>: <div>Your restaurant does not have enough space. Try with less tables. </div>}</Card.Title> */}
+                      <Card.Title as="h4">Provide outlet information</Card.Title>
                     </Card>
                 </Col>
             </Row>
@@ -114,9 +121,6 @@ export default function TableLayout() {
         <Row>
           <Col offset = {1} md="12">
             <Card>
-              <Card.Header>
-                <Card.Title as="h4">Provide your outlet information</Card.Title>
-              </Card.Header>
               <Card.Body>
                 <Form>
                   <Row>
@@ -200,22 +204,32 @@ export default function TableLayout() {
           </Col>
           
         </Row>
+        {series !== null ? 
+            <div>
+              <Row>
+                <Col>
+                    <Card className="card-my">
+                        <Card.Title as="h4">Recommended Table Arrangement</Card.Title>
+                    </Card>
+                </Col>
+              </Row>
+              <div style={{width:tableWidth}}>
+              <Fragment>
+                <Chart
+                    options={options}
+                    series={series}
+                    type="heatmap"
+                    height={tableHeight}
+                />
+                </Fragment>
+              </div>
+            </div>
+           : null}
       </Container>
 
 
 
-           {series !== null ? 
-           <Fragment>
-            <Chart
-                options={options}
-                series={series}
-                type="heatmap"
-                height={350}
-            />
-            </Fragment>
-           : 
-               null
-               }
+           
         </div>
     )
 

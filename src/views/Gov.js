@@ -4,6 +4,7 @@ import { Form } from "react-bootstrap";
 import ReadOnlyRow from "components/ReadOnlyRow/ReadOnlyRow";
 import EditableRow from "components/EditableRow.js/EditableRow";
 import NewsInput from "../components/News/NewsInput";
+import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
 
 // react-bootstrap components
 import {
@@ -78,16 +79,10 @@ function Gov() {
     };
     console.log(editedMeasures);
 
-    axios
-      .post(baseURL, editedMeasures, {
-        //.get(baseURL + value, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
-      .then((result) => {
-        console.log(result);
-      });
+    AmplifyAPI.updateMeasures(editedMeasures)
+    .then((result) => {
+      console.log(result);
+    });
 
     const newMeasuresTableData = [...measuresTableData];
 
@@ -134,13 +129,17 @@ function Gov() {
 
   return (
     <Container fluid>
+      <Row>
+        <Col>
+            <Card className="card-my">
+                <Card.Title as="h4">Edit Measures</Card.Title>
+            </Card>
+        </Col>
+      </Row>
       {measuresTableData === null ? null : (
         <Row>
           <Col md="12">
             <Card className="striped-tabled-with-hover">
-              <Card.Header>
-                <Card.Title as="h4">Measures </Card.Title>
-              </Card.Header>
               <Card.Body className="table-full-width table-responsive px-0">
                 <Form onSubmit={handleEditFormSubmit}>
                   <Table className="table-hover table-striped">
@@ -186,9 +185,14 @@ function Gov() {
           </Col>
         </Row>
       )}
-      <NewsInput>
-
-      </NewsInput>
+      <Row>
+        <Col>
+            <Card className="card-my">
+                <Card.Title as="h4">Add News Articles </Card.Title>
+            </Card>
+        </Col>
+      </Row>
+      <NewsInput/>
     </Container>
   );
 }

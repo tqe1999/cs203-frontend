@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios'
 
 // react-bootstrap components
 import {
@@ -24,15 +23,10 @@ function Supervisor() {
       AmplifyAPI.getUserProfile().then(userProfile => {
         console.log(userProfile);
         
-        axios
-        .get(baseURL + userProfile.company, {
-            headers: {
-              "Access-Control-Allow-Origin": "*"
-            },
-        })
+        AmplifyAPI.getEmployeesUnderCompany(userProfile.company)
         .then((result) => {
           console.log(result)
-          setCompanyTableData(result.data)
+          setCompanyTableData(result)
         });
       });
       
