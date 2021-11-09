@@ -1,6 +1,5 @@
 import React, { Fragment, Component, useEffect, useState } from 'react';
-import axios from 'axios'
-
+import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
 
 import Chart from 'react-apexcharts';
 import { API_BASE_URL } from "../assets/constants/apiConstants";
@@ -79,12 +78,7 @@ export default function TableLayout() {
             "numOfTables": numOfTables,
           };
 
-        axios
-        .post(baseURL, shopConfiguration, {
-            headers: {
-              "Access-Control-Allow-Origin": "*"
-            },
-        })
+        AmplifyAPI.addTableLayout(shopConfiguration)
         .then((result) => {
 
           console.log(result);

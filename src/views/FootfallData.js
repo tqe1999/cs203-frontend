@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import ChartistGraph from "react-chartist";
 import axios from 'axios'
 import useDidMountEffect from "assets/UseDidMountEffect";
+import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
+
 // react-bootstrap components
 import {
   Badge,
@@ -109,7 +111,7 @@ function FootfallData() {
     }
 
     const postValues = () => {
-        axios.post(baseURL)
+        AmplifyAPI.updateFootFallData();
         setChanged(!isChanged)
         setFootfallData(null)
         console.log("EXECUTED post")

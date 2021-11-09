@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
-import axios from 'axios'
+import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
+import axios from "axios";
+
 // react-bootstrap components
 import {
   Badge,
@@ -27,6 +29,7 @@ function NewsInput () {
     const [ description, setDescription ] = useState(null)
     const [ title, setTitle ] = useState(null)
     const [ url, setUrl ] = useState(null)
+    const [ imageUrl, setImageUrl ] = useState(null)
 
     //Word Count for description 
     const [ wordCount, setWordCount ] = useState(0)
@@ -50,19 +53,17 @@ function NewsInput () {
         setDate("")
 
         const append = wordCount > 256 ? "..." : ""
-
-        axios.post(baseURL, {
+        AmplifyAPI.addNewsArticle({
             title : title,
             description : description.substring(0, 257) + append,
             date : new Date(date),
             url : url
         })
         .then(function (response) {
-            if (response.status === 200) {
-              setMessage("News Article successfully added!")
-            } else {
-              setMessage("Oops, an error occured. (HTTP Status: " + response.status + "). Try again later!")
-            }
+            setMessage("News Article successfully added!")
+            setShowModal(true)
+        }).catch(error => {
+            setMessage("Oops, error occurred while trying to create news article. Try again later")
             setShowModal(true)
         })
     }
