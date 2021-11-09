@@ -18,6 +18,7 @@ import {
 function User() {
   const [ name, setName ] = useState(null);
   const [ telegramHandle, setTelegramHandle ] = useState(null);
+  const [ telegramSignUpToken, setTelegramSignUpToken ] = useState(null);
   const [ userProfile, setUserProfile ] = useState(new Map());
   
   // Called only upon the first render
@@ -27,7 +28,8 @@ function User() {
       
       setUserProfile(userProfile);
       setName(userProfile.name);
-      setTelegramHandle(userProfile.telegramHandle);
+      setTelegramSignUpToken(userProfile.telegramSignUpToken);
+      //setTelegramHandle(userProfile.telegramHandle);
     });
   }, [])
   
@@ -45,11 +47,11 @@ function User() {
     <>
       <Container fluid>
         <Row>
-            <Col>
-                <Card className="card-my">
-                    <Card.Title as="h4">Welcome to your profile, {name}!</Card.Title>
-                </Card>
-            </Col>
+          <Col>
+            <Card className="card-my">
+              <Card.Title as="h4">Welcome to your profile, {name}!</Card.Title>
+            </Card>
+          </Col>
         </Row>
         <Row>
           <Col md="8">
@@ -194,8 +196,9 @@ function User() {
                   <p className="description">{userProfile.email}</p>
                   {/*<p className="description">{userProfile.telegramHandle}</p>*/}
                 </div>
-                <div style={{"display": "flex", "justify-content":"center"}}>
-                  <Button href="https://www.google.com"
+                <div style={{ display: "flex", "justify-content": "center" }}>
+                  <Button
+                    href={"https://telegram.me/Covid19_FnB_Bot?start="+telegramSignUpToken}
                     target="_blank"
                     className="btn-fill btn-sm pull-right"
                     type="button"
