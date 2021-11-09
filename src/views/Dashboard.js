@@ -111,12 +111,12 @@ function Dashboard() {
         console.log("im loading the month data " + isChanged)
     }
 
-    const postValues = () => {
-      axios.post(baseURL)
-      setChanged(!isChanged)
-      setFootfallData(null)
-      console.log("EXECUTED post")
-    }
+    // const postValues = () => {
+    //   axios.post(baseURL)
+    //   setChanged(!isChanged)
+    //   setFootfallData(null)
+    //   console.log("EXECUTED post")
+    // }
 
     const setOneYear = () => {
         setFootfallData(resp.slice(48, 60))

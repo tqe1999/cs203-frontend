@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
-import axios from 'axios'
+import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
+
 // react-bootstrap components
 import {
   Badge,
@@ -26,6 +27,7 @@ function NewsInput () {
     const [ description, setDescription ] = useState(null)
     const [ title, setTitle ] = useState(null)
     const [ url, setUrl ] = useState(null)
+    const [ imageUrl, setImageUrl ] = useState(null)
 
     //Word Count for description 
     const [ wordCount, setWordCount ] = useState(0)
@@ -37,17 +39,13 @@ function NewsInput () {
     }
 
     const handleSubmit = (e) => {
-        console.log("handle submit is called")
         e.preventDefault();
-        axios.post(baseURL, {
-            title : title,
-            description : description,
-            date : new Date(date),
-            url : url
-        })
-        .then(function (response) {
-            console.log(response);
-        })
+        console.log("Submit: Add News Article");
+
+        AmplifyAPI.addNewsArticle(title, description, date, url, imageUrl)
+        .then(newsArticle => {
+          console.log(newsArticle);
+        });
     }
 
     return (
