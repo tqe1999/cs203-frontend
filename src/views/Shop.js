@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios'
 
 // react-bootstrap components
 import {
@@ -20,14 +19,10 @@ const Shop = () => {
     const shopURL = API_BASE_URL.concat("/shops") 
 
     useEffect(() => {
-        axios.get(shopURL, {
-            headers: {
-              "Access-Control-Allow-Origin": "*"
-            },
-          }).then((result) => {
-              setShopTableData(result.data)
-        })
-    }, []); 
+      AmplifyAPI.getShops().then(result => {
+        setShopTableData(result);
+      })
+    }, []);
     
     return (
         <Container fluid>
