@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
+import axios from "axios";
 
 // react-bootstrap components
 import {
@@ -16,6 +17,7 @@ import {
   OverlayTrigger,
   Tooltip,
   Dropdown,
+  Modal,
 } from "react-bootstrap";
 
 import { API_BASE_URL } from "../../assets/constants/apiConstants";
@@ -32,6 +34,10 @@ function NewsInput () {
     //Word Count for description 
     const [ wordCount, setWordCount ] = useState(0)
 
+    //for the Modal box 
+    const [ showModal, setShowModal ] = useState(false)
+    const [ message, setMessage ] = useState(null)
+
     const baseURL = API_BASE_URL.concat("/newsArticle")
 
     const handleKeyPress = (e) => {
@@ -40,12 +46,30 @@ function NewsInput () {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Submit: Add News Article");
 
-        AmplifyAPI.addNewsArticle(title, description, date, url, imageUrl)
-        .then(newsArticle => {
-          console.log(newsArticle);
-        });
+        setDescription("")
+        setTitle("")
+        setUrl("")
+        setDate("")
+
+        const append = wordCount > 256 ? "..." : ""
+        AmplifyAPI.addNewsArticle({
+            title : title,
+            description : description.substring(0, 257) + append,
+            date : new Date(date),
+            url : url
+        })
+        .then(function (response) {
+            setMessage("News Article successfully added!")
+            setShowModal(true)
+        }).catch(error => {
+            setMessage("Oops, error occurred while trying to create news article. Try again later")
+            setShowModal(true)
+        })
+    }
+
+    const handleClose = () => {
+      setShowModal(false)
     }
 
     return (
@@ -53,7 +77,7 @@ function NewsInput () {
           <Col md="12">
             <Card className="card-stats">
                 <Card.Body>
-                <Form onSubmit = {handleSubmit}>
+                <Form>
                   <Row>
                     <Col className="pr-1" md="12">
                       <Form.Group>
@@ -117,8 +141,11 @@ function NewsInput () {
                   </Row>
                 <Button
                     className="btn-fill pull-right"
-                    type="submit"
+                    type="reset"
                     variant="info"
+                    onClick={(e) => {
+                      handleSubmit(e)
+                    }}
                 >
                     Post News
                 </Button>
@@ -130,6 +157,19 @@ function NewsInput () {
                 </Card.Footer>
             </Card>
           </Col>
+          <Modal show={showModal}>
+            <Modal.Header>
+              <Modal.Title>Add News Article</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+              <p>{message}</p>
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button variant="primary" onClick={handleClose}>Close</Button>
+            </Modal.Footer>
+        </Modal>
       </Row>
     )
 }

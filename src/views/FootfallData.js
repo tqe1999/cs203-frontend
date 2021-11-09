@@ -360,7 +360,7 @@ function FootfallData() {
             <Col lg="3" md="12">
                 <Card className="card-my"> 
                 <Card.Body>
-                    <Button className="btn btn-round-my" onClick={() => postValues()} variant="default">
+                    <Button className="btn-fill pull-right" variant="info" onClick={() => postValues()}>
                     Update Values
                     </Button>
                 </Card.Body>

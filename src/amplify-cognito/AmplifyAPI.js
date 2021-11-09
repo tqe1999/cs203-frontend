@@ -89,7 +89,7 @@ export async function updateUserProfile(name, telegramHandle) {
     return API.put(apiName, path, myInit);
 }
 
-export async function addNewsArticle(title, description, date, url, imageUrl) {
+export async function addNewsArticle(newArticle) {
   console.log("AmplifyAPI: addNewsArticle()");
   const apiName = 'backend-api';
   const path = '/newsArticle';
@@ -97,13 +97,7 @@ export async function addNewsArticle(title, description, date, url, imageUrl) {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
     },
-    body: {
-      title,
-      description,
-      date,
-      url,
-      imageUrl,
-    }
+    body: newArticle
   };
 
   return API.post(apiName, path, myInit);

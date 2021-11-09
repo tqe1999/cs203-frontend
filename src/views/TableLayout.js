@@ -65,6 +65,9 @@ export default function TableLayout() {
         } else if (factor < 1) {
           setTableWidth(factor * DEFAULT_SIZE)
           setTableHeight(DEFAULT_SIZE)
+        } else {
+          setTableWidth(DEFAULT_SIZE)
+          setTableHeight(DEFAULT_SIZE)
         }
 
         const shopConfiguration = { 
