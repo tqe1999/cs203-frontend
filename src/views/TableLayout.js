@@ -87,10 +87,10 @@ export default function TableLayout() {
 
           const resultant = []
 
-          for (let i = 0; i < tableData.length; i++) {
+          for (let i = 0; i < result.length; i++) {
             let dict = {}
             dict['name'] = i + 1;
-            dict['data'] = tableData[i];
+            dict['data'] = result[i];
 
             resultant.push(dict);
           }
@@ -181,7 +181,7 @@ export default function TableLayout() {
                         <label>Number of Tables</label>
                         <Form.Control
                           defaultValue=""
-                          placeholder="Company"
+                          placeholder="Number of Tables"
                           type="number"
                           required
                           value={numOfTables}
