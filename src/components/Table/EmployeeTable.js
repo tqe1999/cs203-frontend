@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
+import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth";
+
 
 // react-bootstrap components
 import {
@@ -24,14 +26,14 @@ function EmployeeTable(props) {
 
     useEffect(() => {
 
-      AmplifyAPI.getUserProfile().then(userProfile => {
+      AmplifyAPI.getUser().then(userProfile => {
         setCompany(userProfile.company);
       });
       
       setRows(props.companyTableData)
   }, []); 
 
-    const baseURL = API_BASE_URL.concat("/employees/")
+    const baseURL = API_BASE_URL.concat("/users/")
 
       const priceFormatter = (cell, row) => {
         return '<i class="glyphicon glyphicon-usd"></i> ' + cell;
@@ -78,6 +80,8 @@ function EmployeeTable(props) {
             rows => [...rows, item]
           );
         });
+
+        AmplifyAuth.createCognitoAccount(newRow.email);
       }
 
       const onDeleteRow = (rowsData) => {

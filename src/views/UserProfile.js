@@ -27,7 +27,7 @@ function User() {
   
   // Called only upon the first render
   useEffect(() => {
-    AmplifyAPI.getUserProfile().then(userProfile => {
+    AmplifyAPI.getUser().then(userProfile => {
       console.log(userProfile);
       
       setUserProfile(userProfile);

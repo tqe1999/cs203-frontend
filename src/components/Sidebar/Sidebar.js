@@ -35,7 +35,7 @@ function Sidebar({ color, image, routes }) {
 
   useEffect(() => {
 
-    AmplifyAPI.getUserProfile().then(userProfile => {
+    AmplifyAPI.getUser().then(userProfile => {
       setUserType(userProfile.userType);
     });
     
@@ -67,8 +67,8 @@ function Sidebar({ color, image, routes }) {
         </div>
         <Nav>
           {routes.map((prop, key) => {
-            if ((prop.name === "Supervisor" && userType !== "Supervisor") || (prop.name === "Administrator" && userType !== "Admin") || (prop.name === "Gov" && userType !== "Admin" || (prop.name === "Shop" && userType !== "Admin"))) {
-              if (userType !== "Prof") {
+            if ((prop.name === "Supervisor" && userType !== "ROLE_SUPERVISOR") || (prop.name === "Administrator" && userType !== "ROLE_ADMIN") || (prop.name === "Gov" && userType !== "ROLE_ADMIN" || (prop.name === "Shop" && userType !== "ROLE_ADMIN"))) {
+              if (userType !== "ROLE_PROF") {
                 return null;
               }
             }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
+import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth";
 
 // react-bootstrap components
 import {
@@ -54,6 +55,8 @@ const ShopTable = (props) => {
 
             setRows([...rows, item]);
         })
+
+        AmplifyAuth.createCognitoAccount(newRow.email);
     }
 
     const onDeleteRow = (rowsData) => {

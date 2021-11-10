@@ -38,7 +38,7 @@ function Dashboard() {
 
   //measures
   useEffect(() => {
-    AmplifyAPI.getUserProfile().then(userProfile => {
+    AmplifyAPI.getUser().then(userProfile => {
       axios.get(measuresURL + "/" + userProfile.shop.shopType).then((response) => {
         const data = response.data;
         setDineInSize(data.dineInSize);
