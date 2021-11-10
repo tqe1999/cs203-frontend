@@ -17,10 +17,10 @@ import * as AmplifyAuth from "../amplify-cognito/AmplifyAuth";
 
 function Supervisor() {
   const [companyTableData, setCompanyTableData] = useState(null);
-  const baseURL = API_BASE_URL.concat("/employees/")
+  const baseURL = API_BASE_URL.concat("/users/")
 
   useEffect(() => {
-      AmplifyAPI.getUserProfile().then(userProfile => {
+      AmplifyAPI.getUser().then(userProfile => {
         console.log(userProfile);
         
         AmplifyAPI.getEmployeesUnderCompany(userProfile.company)

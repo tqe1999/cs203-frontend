@@ -31,7 +31,6 @@ export default function TableLayout() {
 
     const [heightOfShop, setHeightOfShop] = useState();
 
-    const [numOfTables, setNumOfTables] = useState();
 
     const [firstTime, setFirstTime] = useState(true);
 
@@ -75,7 +74,6 @@ export default function TableLayout() {
             "heightOfShop": heightOfShop,
             "widthOfTable": widthOfTable,
             "heightOfTable": heightOfTable,
-            "numOfTables": numOfTables,
           };
 
         AmplifyAPI.addTableLayout(shopConfiguration)
@@ -83,7 +81,7 @@ export default function TableLayout() {
 
           console.log(result);
 
-          let tableData = result.data;
+          let tableData = result;
 
           
 
@@ -177,7 +175,7 @@ export default function TableLayout() {
                       </Form.Group>
                     </Col>
                   </Row>
-                  <Row>
+                  {/* <Row>
                     <Col className="pr-1" md="12">
                       <Form.Group>
                         <label>Number of Tables</label>
@@ -191,7 +189,7 @@ export default function TableLayout() {
                         ></Form.Control>
                       </Form.Group>
                     </Col>
-                  </Row>
+                  </Row> */}
                   <Button
                     className="btn-fill pull-right"
                     type="submit"
