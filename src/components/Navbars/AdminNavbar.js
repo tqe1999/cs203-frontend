@@ -15,9 +15,13 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
+import { Auth } from 'aws-amplify';
+
+import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI.js";
+import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth.js";
 
 import routes from "routes.js";
 
@@ -36,7 +40,7 @@ function Header() {
   };
 
   const getBrandText = () => {
-    for (let i = 0; i < routes.length; i++) {
+    for (let i = 0; i < routes.length; i++) { 
       if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
         return routes[i].name;
       }
@@ -196,9 +200,36 @@ function Header() {
               <Nav.Link
                 className="m-0"
                 href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                onClick={(e) => AmplifyAPI.testAPI()}
               >
-                <span className="no-icon">Log out</span>
+                <span className="no-icon">Test API</span>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                className="m-0"
+                href="#pablo"
+                onClick={(e) => AmplifyAPI.testAuthenticatedAPI()}
+              >
+                <span className="no-icon">Test Authenticated API</span>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                className="m-0"
+                href="#pablo"
+                onClick={(e) => AmplifyAuth.federatedSignIn()}
+              >
+                <span className="no-icon"><b>Login</b></span>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                className="m-0"
+                href="#pablo"
+                onClick={(e) => AmplifyAuth.signOut()}
+              >
+                <span className="no-icon"><b>Logout</b></span>
               </Nav.Link>
             </Nav.Item>
           </Nav>

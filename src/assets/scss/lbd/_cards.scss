@@ -94,6 +94,14 @@
 
         .legend{
             padding: 5px 0;
+
+            .text-purple {
+                color: $purple;
+            }
+
+            .text-light-green {
+                color: $my-green;
+            }
         }
 
         hr{
@@ -178,8 +186,6 @@
     }
     .card-footer{
         padding: 0px 15px 10px 15px;
-
-
     }
     .icon-big {
         font-size: 3em;
@@ -191,7 +197,7 @@
         }
     }
 
-
+    
 }
 
 .card-user{
@@ -251,4 +257,43 @@
     .card-header{
         background-color: transparent !important;
     }
+}
+
+.card-my {
+    border-radius: $none;
+    border-color: transparent !important;
+    background-color: transparent !important;
+    margin-bottom: 30px;
+}
+
+.card-my-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-my-measures {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 110px;
+
+    .card-body{
+        padding: 5px 15px 5px 15px;
+
+        .numbers{
+            font-size: 1.8rem;
+            text-align: center;
+
+            p{
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+.card-my-table {
+    width: 325px;
 }
