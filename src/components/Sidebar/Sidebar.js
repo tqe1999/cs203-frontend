@@ -67,11 +67,20 @@ function Sidebar({ color, image, routes }) {
         </div>
         <Nav>
           {routes.map((prop, key) => {
-            if ((prop.name === "Supervisor" && userType !== "ROLE_SUPERVISOR") || (prop.name === "Administrator" && userType !== "ROLE_ADMIN") || (prop.name === "Gov" && userType !== "ROLE_ADMIN" || (prop.name === "Shop" && userType !== "ROLE_ADMIN"))) {
-              if (userType !== "ROLE_PROF") {
-                return null;
-              }
+            console.log(userType)
+            console.log(prop.name);
+            if (userType === "Employee" && ((prop.name === "Supervisor") || (prop.name === "Measures & News") || (prop.name === "Employees") || (prop.name === "Shops"))) {
+              return null;
             }
+
+            if (userType === "Supervisor" && ((prop.name === "Supervisor") || (prop.name === "Measures & News") || (prop.name === "Shops"))) {
+              return null;
+            }
+
+            if (userType === "Admin" && ((prop.name === "Employees"))) {
+              return null;
+            }
+
             if (!prop.redirect)
               return (
                 <li

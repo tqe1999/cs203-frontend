@@ -102,7 +102,6 @@ function EmployeeTable(props) {
       }
 
       const onAfterSaveCell = (value) => {
-        console.log(value);
         let updatedRow = value;
           const updatedUser = { 
             "name": updatedRow.name,
