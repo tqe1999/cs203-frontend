@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios'
 
 // react-bootstrap components
 import {
@@ -18,21 +17,16 @@ import * as AmplifyAuth from "../amplify-cognito/AmplifyAuth";
 
 function Supervisor() {
   const [companyTableData, setCompanyTableData] = useState(null);
-  const baseURL = API_BASE_URL.concat("/employees/")
+  const baseURL = API_BASE_URL.concat("/users/")
 
   useEffect(() => {
-      AmplifyAPI.getUserProfile().then(userProfile => {
+      AmplifyAPI.getUser().then(userProfile => {
         console.log(userProfile);
         
-        axios
-        .get(baseURL + userProfile.company, {
-            headers: {
-              "Access-Control-Allow-Origin": "*"
-            },
-        })
+        AmplifyAPI.getEmployeesUnderCompany(userProfile.company)
         .then((result) => {
           console.log(result)
-          setCompanyTableData(result.data)
+          setCompanyTableData(result)
         });
       });
       

@@ -13,16 +13,21 @@ import {
   Container,
   Row,
   Col,
+  Modal,
 } from "react-bootstrap";
 
 function User() {
   const [ name, setName ] = useState(null);
   const [ telegramHandle, setTelegramHandle ] = useState(null);
   const [ userProfile, setUserProfile ] = useState(new Map());
+
+  //for the Modal box 
+  const [ showModal, setShowModal ] = useState(false)
+  const [ message, setMessage ] = useState(null)
   
   // Called only upon the first render
   useEffect(() => {
-    AmplifyAPI.getUserProfile().then(userProfile => {
+    AmplifyAPI.getUser().then(userProfile => {
       console.log(userProfile);
       
       setUserProfile(userProfile);
@@ -39,6 +44,14 @@ function User() {
     AmplifyAPI.updateUserProfile(name, telegramHandle).then(userProfile => {
       console.log(userProfile);
     });
+
+    setMessage("Profile successfully updated!")
+    setShowModal(true)
+  }
+
+  const handleClose = () => {
+    setShowModal(false)
+    window.location.reload();
   }
 
   return (
@@ -47,7 +60,7 @@ function User() {
         <Row>
             <Col>
                 <Card className="card-my">
-                    <Card.Title as="h4">Welcome to your profile, {name}!</Card.Title>
+                    <Card.Title as="h4">Welcome to your profile, {userProfile.name}!</Card.Title>
                 </Card>
             </Col>
         </Row>
@@ -226,6 +239,19 @@ function User() {
             </Card>
           </Col>
         </Row>
+        <Modal show={showModal}>
+            <Modal.Header>
+              <Modal.Title>Edit Profile</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+              <p>{message}</p>
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button variant="primary" onClick={handleClose}>Close</Button>
+            </Modal.Footer>
+        </Modal>
       </Container>
     </>
   );

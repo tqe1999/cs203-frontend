@@ -4,6 +4,7 @@ import { Form } from "react-bootstrap";
 import ReadOnlyRow from "components/ReadOnlyRow/ReadOnlyRow";
 import EditableRow from "components/EditableRow.js/EditableRow";
 import NewsInput from "../components/News/NewsInput";
+import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
 
 // react-bootstrap components
 import {
@@ -78,16 +79,10 @@ function Gov() {
     };
     console.log(editedMeasures);
 
-    axios
-      .post(baseURL, editedMeasures, {
-        //.get(baseURL + value, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
-      .then((result) => {
-        console.log(result);
-      });
+    AmplifyAPI.updateMeasures(editedMeasures)
+    .then((result) => {
+      console.log(result);
+    });
 
     const newMeasuresTableData = [...measuresTableData];
 

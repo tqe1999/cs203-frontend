@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios'
+import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
+import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth";
 
 // react-bootstrap components
 import {
@@ -15,12 +16,6 @@ import {
 } from "react-bootstrap";
 
 import { API_BASE_URL } from "../../assets/constants/apiConstants";
-
-
-
-import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
-import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth";
-
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 const ShopTable = (props) => {
@@ -39,17 +34,14 @@ const ShopTable = (props) => {
     const onAddRow = (row) => {
         let newRow = row;
 
-        axios.post(shopURL, {
+        AmplifyAPI.addShop({
             name : newRow.name,
             shopType : newRow.shopType,
             area : newRow.area,
             numTables : newRow.numTables,
             sizeTables : newRow.sizeTables
-        }, {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-            },
-        }).then((result) => {
+        })
+        .then((result) => {
             console.log(result);
 
             const item = {
@@ -63,17 +55,16 @@ const ShopTable = (props) => {
 
             setRows([...rows, item]);
         })
+
+        AmplifyAuth.createCognitoAccount(newRow.email);
     }
 
     const onDeleteRow = (rowsData) => {
         let temp = [...rows]
 
         for (let i = 0; i < rowsData.length; i++) {
-            axios.delete(shopURL + '/' + rowsData[i], {
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                  },
-            }).then((result) => {
+            AmplifyAPI.deleteShop(rowsData[i])
+            .then((result) => {
                 console.log(result)
 
                 temp = temp.filter((row) => {
@@ -88,16 +79,12 @@ const ShopTable = (props) => {
 
     const onAfterSaveCell = (value) => {
         let newRow = value;
-        axios.put(shopURL + '/' + newRow.name, {
+        AmplifyAPI.updateShop(newRow.name, {
             name : newRow.name,
             shopType : newRow.shopType,
             area : newRow.area,
             numTables : newRow.numTables,
             sizeTables : newRow.sizeTables
-        }, {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-            },
         }).then((result) => {
             console.log(result);
         })

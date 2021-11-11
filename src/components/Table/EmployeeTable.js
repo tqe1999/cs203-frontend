@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios'
+import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
+import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth";
+
 
 // react-bootstrap components
 import {
@@ -15,12 +17,6 @@ import {
 } from "react-bootstrap";
 
 import { API_BASE_URL } from "../../assets/constants/apiConstants";
-
-
-
-import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
-import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth";
-
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 
@@ -30,14 +26,14 @@ function EmployeeTable(props) {
 
     useEffect(() => {
 
-      AmplifyAPI.getUserProfile().then(userProfile => {
+      AmplifyAPI.getUser().then(userProfile => {
         setCompany(userProfile.company);
       });
       
       setRows(props.companyTableData)
   }, []); 
 
-    const baseURL = API_BASE_URL.concat("/employees/")
+    const baseURL = API_BASE_URL.concat("/users/")
 
       const priceFormatter = (cell, row) => {
         return '<i class="glyphicon glyphicon-usd"></i> ' + cell;
@@ -67,11 +63,7 @@ function EmployeeTable(props) {
           "fetStatus": newRow.fetStatus,
         };
 
-        axios.post(baseURL, newUser, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
+        AmplifyAPI.addNewUser(newUser)
         .then((result) => {
           console.log(result);
 
@@ -88,33 +80,28 @@ function EmployeeTable(props) {
             rows => [...rows, item]
           );
         });
+
+        AmplifyAuth.createCognitoAccount(newRow.email);
       }
 
       const onDeleteRow = (rowsData) => {
         let temp = [...rows]
         for (let i = 0; i < rowsData.length; i++) {
 
-          axios.delete(baseURL + rowsData[i], {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-            },
-          }).then((result) => {
+          AmplifyAPI.deleteUser(rowsData[i])
+          .then((result) => {
             temp = temp.filter((row) => {
               return row.email !== rowsData[i];
             });
         
             setRows( temp );
           });
-  
-          
         }
 
         setRows( temp );
-        
       }
 
       const onAfterSaveCell = (value) => {
-        console.log(value);
         let updatedRow = value;
           const updatedUser = { 
             "name": updatedRow.name,
@@ -129,11 +116,7 @@ function EmployeeTable(props) {
 
 
           //make api call here
-          axios.put(baseURL + updatedRow.email, updatedUser, {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-            },
-          })
+          AmplifyAPI.updateUser(updatedRow.email, updatedUser)
           .then((result) => {
             console.log(result);
           });

@@ -7,7 +7,7 @@ function Landing() {
     <div className="landing">
       <div className="landing-box">
         <div className="landing-innerbox">
-          <h1>Covid F&B</h1>
+          <h1>Covfeed</h1>
           <p>A smoother transition to a new normal</p>
           <Spacer space="5" />
           <div>
