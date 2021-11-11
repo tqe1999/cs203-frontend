@@ -23,13 +23,21 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 function EmployeeTable(props) {
     const [rows, setRows] = useState([{}])
     const [company, setCompany] = useState(null);
+    const [shop, setShop] = useState(null); 
+    const [shops, setShops] = useState([])
 
     useEffect(() => {
 
       AmplifyAPI.getUser().then(userProfile => {
+        console.log(userProfile)
         setCompany(userProfile.company);
+        setShop(userProfile.shop); //go to shop.id later 
       });
       
+      AmplifyAPI.getShops().then(result => {
+        setShops(result)
+      })
+
       setRows(props.companyTableData)
   }, []); 
 
@@ -53,9 +61,29 @@ function EmployeeTable(props) {
           userTypeOfNewUser = "Employee"
         }
 
+        let newCompany = null
+        if (company !== null) {
+          newCompany = company
+        } else {
+          newCompany = newRow.company
+        }
+
+        let newShop = shop
+        if (shop === null) {
+          for (let i = 0; i < shops.length; i++) {
+            if (shops[i].id == newRow.shopId) {
+              // console.log("shopId " + newRow.shopId)
+              // console.log("HEY BIJ")
+              newShop = shops[i]
+            }
+          }
+        }
+        // console.log("shop!! " + newShop)
+        
         const newUser = { 
           "name": newRow.name,
-          "company": company,
+          "company": newCompany,
+          "shop": newShop,
           "email": newRow.email,
           "userType": userTypeOfNewUser,
           "vaccinationStatus": newRow.vaccinationStatus,
@@ -70,7 +98,8 @@ function EmployeeTable(props) {
           const item = {
             name: newRow.name,
             email: newRow.email,
-            company: company,
+            company: newCompany,
+            shopId: newShop.id,
             userType: userTypeOfNewUser,
             vaccinationStatus: newRow.vaccinationStatus,
             swabTestResult: newRow.swabTestResult,
@@ -103,9 +132,30 @@ function EmployeeTable(props) {
 
       const onAfterSaveCell = (value) => {
         let updatedRow = value;
+
+        let newCompany = null
+        if (company !== null) {
+          newCompany = company
+        } else {
+          newCompany = updatedRow.company
+        }
+
+        let newShop = shop
+        if (shop === null) {
+          for (let i = 0; i < shops.length; i++) {
+            if (shops[i].id == updatedRow.shopId) {
+              console.log("shopId " + updatedRow.shopId)
+              console.log("HEY BIJ")
+              newShop = shops[i]
+            }
+          }
+        }
+        console.log(newShop)
+
           const updatedUser = { 
             "name": updatedRow.name,
-            "company": company,
+            "company": newCompany,
+            "shop": newShop,
             "email": updatedRow.email,
             "userType": updatedRow.userType,
             "vaccinationStatus": updatedRow.vaccinationStatus,
@@ -113,11 +163,10 @@ function EmployeeTable(props) {
             "fetStatus": updatedRow.fetStatus,
           };
 
-
-
           //make api call here
           AmplifyAPI.updateUser(updatedRow.email, updatedUser)
           .then((result) => {
+            // console.log("HELLO LOOK HERE")
             console.log(result);
           });
 
@@ -149,7 +198,9 @@ function EmployeeTable(props) {
    } }>
               <TableHeaderColumn dataField="name" dataSort={true}>Name</TableHeaderColumn>
               {props.userType === "Administrator" || props.userType === "Prof" ? 
-              <TableHeaderColumn dataField="company" editable={false} dataSort={true} dataFormat={priceFormatter}>Company</TableHeaderColumn> : null}
+              <TableHeaderColumn dataField="shopId" dataSort={true}>Shop ID</TableHeaderColumn> : null}
+              {/* {props.userType === "Administrator" || props.userType === "Prof" ? 
+              <TableHeaderColumn dataField="company" dataSort={true} dataFormat={priceFormatter}>Company</TableHeaderColumn> : null} */}
               <TableHeaderColumn dataField="email" isKey={true} dataAlign="center" dataSort={true}>Email</TableHeaderColumn>
               <TableHeaderColumn dataField="userType" editable={false} dataAlign="center" dataSort={true}>User Type</TableHeaderColumn>
               <TableHeaderColumn dataField="vaccinationStatus" dataAlign="center" dataSort={true}>Vaccination Status</TableHeaderColumn>
