@@ -41,11 +41,11 @@ export async function getUserInfo() {
     return user.attributes.email;
 }
 
-export async function getUserProfile() {
+export async function getUser() {
     console.log("AmplifyAPI: getUserProfile()");
     const apiName = 'backend-api';
     const email = await AmplifyAuth.getCurrentEmail();
-    const path = '/users/email/' + email;
+    const path = '/users/' + email;
     const myInit = {
       headers: {
         Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -89,7 +89,7 @@ export async function updateUserProfile(name, telegramHandle) {
     return API.put(apiName, path, myInit);
 }
 
-export async function addNewsArticle(title, description, date, url, imageUrl) {
+export async function addNewsArticle(newArticle) {
   console.log("AmplifyAPI: addNewsArticle()");
   const apiName = 'backend-api';
   const path = '/newsArticle';
@@ -97,13 +97,7 @@ export async function addNewsArticle(title, description, date, url, imageUrl) {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
     },
-    body: {
-      title,
-      description,
-      date,
-      url,
-      imageUrl,
-    }
+    body: newArticle
   };
 
   return API.post(apiName, path, myInit);
@@ -112,7 +106,7 @@ export async function addNewsArticle(title, description, date, url, imageUrl) {
 export async function addNewUser(newUser) {
   console.log("AmplifyAPI: addNewUser()");
   const apiName = 'backend-api';
-  const path = '/employees';
+  const path = '/users';
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -126,7 +120,7 @@ export async function addNewUser(newUser) {
 export async function deleteUser(email) {
   console.log("AmplifyAPI: deleteUser()");
   const apiName = 'backend-api';
-  const path = '/employees/' + email;
+  const path = '/users/' + email;
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -139,7 +133,7 @@ export async function deleteUser(email) {
 export async function updateUser(email, updatedUser) {
   console.log("AmplifyAPI: updateUser()");
   const apiName = 'backend-api';
-  const path = '/employees/' + email;
+  const path = '/users/' + email;
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -194,7 +188,7 @@ export async function updateShop(shopName, updatedShop) {
 export async function getEmployeesUnderCompany(company) {
   console.log("AmplifyAPI: getEmployeesUnderCompany()");
   const apiName = 'backend-api';
-  const path = '/employees/' + company;
+  const path = '/users/supervisor/' + company;
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -207,7 +201,7 @@ export async function getEmployeesUnderCompany(company) {
 export async function getEmployeesAndAdminsUnderCompany(company) {
   console.log("AmplifyAPI: getEmployeesAndAdminsUnderCompany()");
   const apiName = 'backend-api';
-  const path = '/employees/administrator/' + company;
+  const path = '/users/administrator/' + company;
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,

@@ -35,7 +35,7 @@ function Sidebar({ color, image, routes }) {
 
   useEffect(() => {
 
-    AmplifyAPI.getUserProfile().then(userProfile => {
+    AmplifyAPI.getUser().then(userProfile => {
       setUserType(userProfile.userType);
     });
     
@@ -56,22 +56,53 @@ function Sidebar({ color, image, routes }) {
           >
             <div className="logo-img">
               <img
-                src={require("assets/img/reactlogo.png").default}
+                src={require("assets/img/covfeedlogo.png").default}
                 alt="..."
               />
             </div>
           </a>
           <a className="simple-text" href="http://www.creative-tim.com">
-            Covid F&B
+            Covfeed
           </a>
         </div>
         <Nav>
           {routes.map((prop, key) => {
-            if ((prop.name === "Supervisor" && userType !== "Supervisor") || (prop.name === "Administrator" && userType !== "Admin") || (prop.name === "Gov" && userType !== "Admin" || (prop.name === "Shop" && userType !== "Admin"))) {
-              if (userType !== "Prof") {
-                return null;
-              }
+            if (prop.name === "Logout"){
+              return (
+                <li
+                className={
+                  prop.upgrade
+                    ? "active active-pro"
+                    : activeRoute(prop.layout + prop.path)
+                }
+                key={key}
+              >
+                <NavLink
+                  to={prop.layout + prop.path}
+                  className="nav-link"
+                  activeClassName="active"
+                  onClick={(e) => AmplifyAuth.signOut()}
+                >
+                  <i className={prop.icon} />
+                  <p>{prop.name}</p>
+                </NavLink>
+              </li>
+              )
             }
+            console.log(userType)
+            console.log(prop.name);
+            if (userType === "Employee" && ((prop.name === "Supervisor") || (prop.name === "Measures & News") || (prop.name === "Employees") || (prop.name === "Shops"))) {
+              return null;
+            }
+
+            if (userType === "Supervisor" && ((prop.name === "Supervisor") || (prop.name === "Measures & News") || (prop.name === "Shops"))) {
+              return null;
+            }
+
+            if (userType === "Admin" && ((prop.name === "Employees"))) {
+              return null;
+            }
+
             if (!prop.redirect)
               return (
                 <li

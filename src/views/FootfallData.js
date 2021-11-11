@@ -22,7 +22,7 @@ import {
 } from "react-bootstrap";
 
 import { API_BASE_URL } from "../assets/constants/apiConstants";
-import { getUserProfile, getUserInfo } from "../amplify-cognito/AmplifyAPI.js"
+import { getUser, getUserInfo } from "../amplify-cognito/AmplifyAPI.js"
 
 
 function FootfallData() {
@@ -52,7 +52,7 @@ function FootfallData() {
         });
 
         //get user details 
-        getUserProfile().then(userProfile => {
+        getUser().then(userProfile => {
             console.log(userProfile.shop.shopType);
             const shop = userProfile.shop.shopType
 
@@ -360,7 +360,7 @@ function FootfallData() {
             <Col lg="3" md="12">
                 <Card className="card-my"> 
                 <Card.Body>
-                    <Button className="btn btn-round-my" onClick={() => postValues()} variant="default">
+                    <Button className="btn-fill pull-right" variant="info" onClick={() => postValues()}>
                     Update Values
                     </Button>
                 </Card.Body>

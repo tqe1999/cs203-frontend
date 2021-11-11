@@ -31,7 +31,6 @@ export default function TableLayout() {
 
     const [heightOfShop, setHeightOfShop] = useState();
 
-    const [numOfTables, setNumOfTables] = useState();
 
     const [firstTime, setFirstTime] = useState(true);
 
@@ -65,6 +64,9 @@ export default function TableLayout() {
         } else if (factor < 1) {
           setTableWidth(factor * DEFAULT_SIZE)
           setTableHeight(DEFAULT_SIZE)
+        } else {
+          setTableWidth(DEFAULT_SIZE)
+          setTableHeight(DEFAULT_SIZE)
         }
 
         const shopConfiguration = { 
@@ -72,7 +74,6 @@ export default function TableLayout() {
             "heightOfShop": heightOfShop,
             "widthOfTable": widthOfTable,
             "heightOfTable": heightOfTable,
-            "numOfTables": numOfTables,
           };
 
         AmplifyAPI.addTableLayout(shopConfiguration)
@@ -80,16 +81,16 @@ export default function TableLayout() {
 
           console.log(result);
 
-          let tableData = result.data;
+          let tableData = result;
 
           
 
           const resultant = []
 
-          for (let i = 0; i < tableData.length; i++) {
+          for (let i = 0; i < result.length; i++) {
             let dict = {}
             dict['name'] = i + 1;
-            dict['data'] = tableData[i];
+            dict['data'] = result[i];
 
             resultant.push(dict);
           }
@@ -174,13 +175,13 @@ export default function TableLayout() {
                       </Form.Group>
                     </Col>
                   </Row>
-                  <Row>
+                  {/* <Row>
                     <Col className="pr-1" md="12">
                       <Form.Group>
                         <label>Number of Tables</label>
                         <Form.Control
                           defaultValue=""
-                          placeholder="Company"
+                          placeholder="Number of Tables"
                           type="number"
                           required
                           value={numOfTables}
@@ -188,7 +189,7 @@ export default function TableLayout() {
                         ></Form.Control>
                       </Form.Group>
                     </Col>
-                  </Row>
+                  </Row> */}
                   <Button
                     className="btn-fill pull-right"
                     type="submit"
