@@ -27,8 +27,10 @@ import FootfallData from "views/FootfallData.js"
 import Supervisor from "views/Supervisor.js"
 import Administrator from "views/Administrator.js"
 import TableLayout from "views/TableLayout.js"
+import Logout from "views/Logout.js"
 import Gov from "views/Gov.js"
 import Shop from "views/Shop.js"
+import { LocalDiningOutlined } from "@material-ui/icons";
 
 const dashboardRoutes = [
   // {
@@ -130,6 +132,13 @@ const dashboardRoutes = [
     component: TableLayout,
     layout: "/admin",
   },
+  {
+    path: "/logout",
+    name: "Logout",
+    icon: "nc-icon nc-button-power",
+    component: Logout,
+    layout: "/admin"
+  }
 ];
 
 export default dashboardRoutes;
