@@ -25,6 +25,8 @@ function EmployeeTable(props) {
     const [company, setCompany] = useState(null);
     const [shop, setShop] = useState(null); 
     const [shops, setShops] = useState([])
+    const [userType, setUserType] = useState(null);
+    const [companyDropDown, setCompanyDropDown] = useState()
 
     useEffect(() => {
 
@@ -32,6 +34,7 @@ function EmployeeTable(props) {
         console.log(userProfile)
         setCompany(userProfile.company);
         setShop(userProfile.shop); //go to shop.id later 
+        console.log(company);
       });
       
       AmplifyAPI.getShops().then(result => {
@@ -39,6 +42,9 @@ function EmployeeTable(props) {
       })
 
       setRows(props.companyTableData)
+      setUserType(props.userType)
+
+      
   }, []); 
 
     const baseURL = API_BASE_URL.concat("/users/")
@@ -56,7 +62,9 @@ function EmployeeTable(props) {
 
         let userTypeOfNewUser = null;
         if (props.userType === "Administrator") {
+          
           userTypeOfNewUser = "Supervisor";
+          
         } else {
           userTypeOfNewUser = "Employee"
         }
@@ -80,6 +88,8 @@ function EmployeeTable(props) {
         }
         // console.log("shop!! " + newShop)
         
+        setUserType(userTypeOfNewUser);
+
         const newUser = { 
           "name": newRow.name,
           "company": newCompany,
@@ -178,6 +188,15 @@ function EmployeeTable(props) {
         clickToSelectAndEditCell: true
       };
 
+      const addEmployee = [ {
+        value: 'Employee',
+        text: 'Employee'
+      }];
+
+      const addSupervisor = [ {
+        value: 'Supervisor',
+        text: 'Supervisor'
+      }];
     return (
         <div>
             <Container fluid>
@@ -185,6 +204,9 @@ function EmployeeTable(props) {
                 <Col>
                     <Card className="card-my">
                         <Card.Title as="h4">Employee Information</Card.Title>
+                        <div>
+                        {props.userType === "Supervisor" ? <div>Company:  {company}</div> : null}
+                        </div>
                     </Card>
                 </Col>
             </Row>
@@ -196,13 +218,21 @@ function EmployeeTable(props) {
     blurToSave: true,
      afterSaveCell: onAfterSaveCell
    } }>
+
               <TableHeaderColumn dataField="name" dataSort={true}>Name</TableHeaderColumn>
               {props.userType === "Administrator" || props.userType === "Prof" ? 
               <TableHeaderColumn dataField="shopId" dataSort={true}>Shop ID</TableHeaderColumn> : null}
               {/* {props.userType === "Administrator" || props.userType === "Prof" ? 
               <TableHeaderColumn dataField="company" dataSort={true} dataFormat={priceFormatter}>Company</TableHeaderColumn> : null} */}
+               
+//               <TableHeaderColumn dataField="company" editable={ { type: 'select', readOnly: true, options: { values:  [ {
+//                 value: company,
+//                 text: company
+//               }]}}} dataSort={true} dataFormat={priceFormatter} searchPlaceholder={company}>Company</TableHeaderColumn> : null}
               <TableHeaderColumn dataField="email" isKey={true} dataAlign="center" dataSort={true}>Email</TableHeaderColumn>
-              <TableHeaderColumn dataField="userType" editable={false} dataAlign="center" dataSort={true}>User Type</TableHeaderColumn>
+              {userType === "Administrator" ?
+              <TableHeaderColumn dataField="userType"  editable={ { type: 'select', readOnly: true, options: { values:  addSupervisor}}} dataAlign="center" dataSort={true}>User Type</TableHeaderColumn> : 
+              <TableHeaderColumn dataField="userType"  editable={ { type: 'select', readOnly: true, options: { values:  addEmployee}}} dataAlign="center" dataSort={true}>User Type</TableHeaderColumn> }
               <TableHeaderColumn dataField="vaccinationStatus" dataAlign="center" dataSort={true}>Vaccination Status</TableHeaderColumn>
               <TableHeaderColumn dataField="swabTestResult" dataAlign="center" dataSort={true}>Swab Test Result</TableHeaderColumn>
               <TableHeaderColumn dataField="fetStatus" dataAlign="center" dataSort={true}>FET Status</TableHeaderColumn>
@@ -211,7 +241,7 @@ function EmployeeTable(props) {
             </Container>
         </div>
     )
-
+    // placeholder = "HELLO" searchplaceholder = {props.userType === "Administrator" ? "Supervisor" : "Employee"}
 }
 
 export default EmployeeTable;
