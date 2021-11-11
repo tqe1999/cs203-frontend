@@ -48,22 +48,26 @@ function FootfallData() {
             setFootfallData(response.data.list.slice(48, 60));
             setLastUpdateDate(response.data.lastUpdated);
             setAverages(response.data.averages)
-            console.log(response)
+            // console.log(response)
         });
 
         //get user details 
         getUser().then(userProfile => {
-            console.log(userProfile.shop.shopType);
-            const shop = userProfile.shop.shopType
+            console.log(userProfile)
+            let shop = null
+            if (userProfile.shop !== null) {
+                shop = userProfile.shop.shopType
+            }
 
-            //0=restaurant, 1=fastfoodoutlet, 2=caterer, 3=other
-            setShopType("Cafes, Food Courts and Other Eating Places")
+            //0=restaurant, 1=fastfoodoutlet, 2=caterer, 3=other, else null
             if (shop === "restaurant") {
                 setShopType("Restaurants")
             } else if (shop === "fastfoodoutlet") {
                 setShopType("Fast Food Outlets")
             } else if (shop === "caterer") {
                 setShopType("Caterers")
+            } else if (shop === "other") {
+                setShopType("Cafes, Food Courts and Other Eating Places")
             }
         });
     }, [isChanged]);
@@ -135,6 +139,8 @@ function FootfallData() {
     return (
     <>
         <Container fluid>
+        {shopType !== null ? 
+        <div>
             <Row>
             <Col>
                 <Card className="card-my">
@@ -244,7 +250,18 @@ function FootfallData() {
                 </Card>
             </Col>
             </Row>
+            </div>
+            : null}
 
+            {shopType === null ? 
+            <Row>
+            <Col>
+                <Card className="card-my">
+                    <Card.Title as="h4">Overall Data</Card.Title>
+                </Card>
+            </Col>
+            </Row>
+            : null}
 
             <Row>
             <Col md="12">

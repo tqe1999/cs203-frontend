@@ -39,6 +39,7 @@ function Dashboard() {
   //measures
   useEffect(() => {
     AmplifyAPI.getUser().then(userProfile => {
+      if (userProfile.shop !== null) {
       axios.get(measuresURL + "/" + userProfile.shop.shopType).then((response) => {
         const data = response.data;
         setDineInSize(data.dineInSize);
@@ -48,7 +49,7 @@ function Dashboard() {
         setClosingTime(data.closingTime)
         setPhase(data.phase)
       })
-      
+      }
     })
   }, []);
 
@@ -65,7 +66,9 @@ function Dashboard() {
   return (
     <>
       <Container fluid>
-      <Row>
+        {phase !== null ?
+        <div>
+        <Row>
             <Col>
                 <Card className="card-my">
                     <Card.Title as="h4">Current Measures</Card.Title>
@@ -141,6 +144,9 @@ function Dashboard() {
             </Card>
           </Col>
         </Row>
+        </div>
+        : null}
+
         <Row>
             <Col>
                 <Card className="card-my">

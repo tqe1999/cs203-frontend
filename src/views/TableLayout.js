@@ -40,12 +40,12 @@ export default function TableLayout() {
           type: 'heatmap'
         },
         dataLabels: {
-          enabled: false,
+          enabled: true,
         },
         colors: ['#008FFB'],
-        // title: {
-        //   text: 'Recommended table arrangement'
-        // }
+        title: {
+          text: 'Key for table size: width.height'
+        }
       });
 
     const [tableWidth, setTableWidth] = useState(DEFAULT_SIZE);
