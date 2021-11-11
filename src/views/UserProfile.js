@@ -202,7 +202,7 @@ function User() {
                     <img
                       alt="..."
                       className="avatar border-gray"
-                      src={require("assets/img/faces/face-3.jpg").default}
+                      src={require("assets/img/faces/face-0.jpg").default}
                     ></img>
                     <h5 className="title">{userProfile.name}</h5>
                   </a>
@@ -221,7 +221,7 @@ function User() {
                   </Button>
                 </div>
               </Card.Body>
-              <hr></hr>
+              {/* <hr></hr>
               <div className="button-container mr-auto ml-auto">
                 <Button
                   className="btn-simple btn-icon"
@@ -247,7 +247,7 @@ function User() {
                 >
                   <i className="fab fa-google-plus-square"></i>
                 </Button>
-              </div>
+              </div> */}
             </Card>
           </Col>
         </Row>
