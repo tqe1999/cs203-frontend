@@ -51,13 +51,15 @@ function NewsInput () {
         setTitle("")
         setUrl("")
         setDate("")
+        setImageUrl("")
 
         const append = wordCount > 256 ? "..." : ""
         AmplifyAPI.addNewsArticle({
             title : title,
             description : description.substring(0, 257) + append,
             date : new Date(date),
-            url : url
+            url : url,
+            imageUrl : imageUrl
         })
         .then(function (response) {
             setMessage("News Article successfully added!")
@@ -94,7 +96,7 @@ function NewsInput () {
                     </Col>
                   </Row>
                   <Row>
-                    <Col className="pr-1" md="3">
+                    <Col className="pr-1" md="4">
                       <Form.Group>
                         <label>Date</label>
                         <Form.Control
@@ -106,7 +108,7 @@ function NewsInput () {
                         ></Form.Control>
                       </Form.Group>
                     </Col>
-                    <Col className="px-1" md="9">
+                    <Col className="px-1" md="4">
                       <Form.Group>
                         <label>URL</label>
                         <Form.Control
@@ -115,6 +117,19 @@ function NewsInput () {
                           type="text"
                           onChange={
                             (e) => setUrl(e.target.value)
+                          }
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                    <Col className="px-1" md="4">
+                      <Form.Group>
+                        <label>Image URL</label>
+                        <Form.Control
+                          value={imageUrl}
+                          placeholder="Input your Image URL here"
+                          type="text"
+                          onChange={
+                            (e) => setImageUrl(e.target.value)
                           }
                         ></Form.Control>
                       </Form.Group>
