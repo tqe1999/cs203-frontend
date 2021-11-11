@@ -225,10 +225,10 @@ function EmployeeTable(props) {
               {/* {props.userType === "Administrator" || props.userType === "Prof" ? 
               <TableHeaderColumn dataField="company" dataSort={true} dataFormat={priceFormatter}>Company</TableHeaderColumn> : null} */}
                
-//               <TableHeaderColumn dataField="company" editable={ { type: 'select', readOnly: true, options: { values:  [ {
-//                 value: company,
-//                 text: company
-//               }]}}} dataSort={true} dataFormat={priceFormatter} searchPlaceholder={company}>Company</TableHeaderColumn> : null}
+               {/* <TableHeaderColumn dataField="company" editable={ { type: 'select', readOnly: true, options: { values:  [ {
+                 value: company,
+                 text: company
+               }]}}} dataSort={true} dataFormat={priceFormatter} searchPlaceholder={company}>Company</TableHeaderColumn> : null} */}
               <TableHeaderColumn dataField="email" isKey={true} dataAlign="center" dataSort={true}>Email</TableHeaderColumn>
               {userType === "Administrator" ?
               <TableHeaderColumn dataField="userType"  editable={ { type: 'select', readOnly: true, options: { values:  addSupervisor}}} dataAlign="center" dataSort={true}>User Type</TableHeaderColumn> : 
