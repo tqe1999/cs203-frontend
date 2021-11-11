@@ -91,15 +91,15 @@ function Sidebar({ color, image, routes }) {
             }
             console.log(userType)
             console.log(prop.name);
-            if (userType === "Employee" && ((prop.name === "Supervisor") || (prop.name === "Measures & News") || (prop.name === "Employees") || (prop.name === "Shops"))) {
+            if (userType === "Employee" && ((prop.name === "Supervisor Mgmt") || (prop.name === "Measures & News") || (prop.name === "Employee Mgmt") || (prop.name === "Shop Management"))) {
               return null;
             }
 
-            if (userType === "Supervisor" && ((prop.name === "Supervisor") || (prop.name === "Measures & News") || (prop.name === "Shops"))) {
+            if (userType === "Supervisor" && ((prop.name === "Supervisor Mgmt") || (prop.name === "Measures & News") || (prop.name === "Shop Management"))) {
               return null;
             }
 
-            if (userType === "Admin" && ((prop.name === "Employees"))) {
+            if (userType === "Admin" && ((prop.name === "Employee Mgmt"))) {
               return null;
             }
 
