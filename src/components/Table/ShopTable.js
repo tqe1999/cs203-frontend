@@ -113,8 +113,8 @@ const ShopTable = (props) => {
     blurToSave: true,
      afterSaveCell: onAfterSaveCell
    } }>
-                <TableHeaderColumn dataField="id" dataSort={true}>ID</TableHeaderColumn>
-                <TableHeaderColumn dataField="name" dataSort={true} isKey={true}>Name</TableHeaderColumn>
+                <TableHeaderColumn dataField="id" dataSort={true} isKey={true}>ID</TableHeaderColumn>
+                <TableHeaderColumn dataField="name" dataSort={true}>Name</TableHeaderColumn>
                 <TableHeaderColumn dataField="shopType" dataSort={true}>Shop Type</TableHeaderColumn>
                 <TableHeaderColumn dataField="area" dataSort={true}>Area</TableHeaderColumn>
                 <TableHeaderColumn dataField="numTables" dataSort={true}>Number of Tables</TableHeaderColumn>

@@ -185,10 +185,36 @@ export async function updateShop(shopName, updatedShop) {
   return API.put(apiName, path, myInit);
 }
 
-export async function getEmployeesUnderCompany(company) {
-  console.log("AmplifyAPI: getEmployeesUnderCompany()");
+// export async function getEmployeesUnderCompany(company) {
+//   console.log("AmplifyAPI: getEmployeesUnderCompany()");
+//   const apiName = 'backend-api';
+//   const path = '/users/supervisor/' + company;
+//   const myInit = {
+//     headers: {
+//       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
+//     },
+//   };
+
+//   return API.get(apiName, path, myInit);
+// }
+
+// export async function getEmployeesAndAdminsUnderCompany(company) {
+//   console.log("AmplifyAPI: getEmployeesAndAdminsUnderCompany()");
+//   const apiName = 'backend-api';
+//   const path = '/users/administrator/' + company;
+//   const myInit = {
+//     headers: {
+//       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
+//     },
+//   };
+
+//   return API.get(apiName, path, myInit);
+// }
+
+export async function getByShopIdAndAuthorities(id, authorities) {
+  console.log("AmplifyAPI: getByShopIdAndAuthorities()");
   const apiName = 'backend-api';
-  const path = '/users/supervisor/' + company;
+  const path = '/users/id/' + id + '/authorities/' + authorities;
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -198,10 +224,10 @@ export async function getEmployeesUnderCompany(company) {
   return API.get(apiName, path, myInit);
 }
 
-export async function getEmployeesAndAdminsUnderCompany(company) {
-  console.log("AmplifyAPI: getEmployeesAndAdminsUnderCompany()");
+export async function getByAuthorities(authorities) {
+  console.log("AmplifyAPI: getByAuthorities()");
   const apiName = 'backend-api';
-  const path = '/users/administrator/' + company;
+  const path = '/users/authorities/' + authorities;
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
