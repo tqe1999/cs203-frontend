@@ -55,7 +55,6 @@ export default function TableLayout() {
     const [tableLength, setTableLength] = useState(DEFAULT_SIZE)
 
     const handleSubmit = (e) => {
-        console.log("HELLO")
     
         e.preventDefault();
         setFirstTime(false);
@@ -108,6 +107,10 @@ export default function TableLayout() {
 
     }
 
+    const textCenter = {
+      textAlign: "center",
+  };
+
     
 
     return (
@@ -116,9 +119,10 @@ export default function TableLayout() {
             <Row>
                 <Col>
                     <Card className="card-my">
-                        <Card.Title as="h4">{firstTime || series !== null ? <div>Kindly fill up the configuration of your restaurant
-                 </div>: <div>Your restaurant does not have enough space. Try with less tables. </div>}</Card.Title>
                       <Card.Title as="h4">Provide outlet information</Card.Title>
+                    </Card>
+                    <Card className="card-my">
+                      <Card.Title as="h4">Please round all figures to integers. The table width and length should be a whole number between 1 and 9.</Card.Title>
                     </Card>
                 </Col>
             </Row>
@@ -147,7 +151,7 @@ export default function TableLayout() {
                         <label>Length of shop (in metres)</label>
                         <Form.Control
                           defaultValue=""
-                          placeholder="Shop Height"
+                          placeholder="Shop Length"
                           type="number"
                           value={lengthOfShop}
                         onChange={e => setLengthOfShop(e.target.value)}
@@ -165,6 +169,7 @@ export default function TableLayout() {
                           value={widthOfTable}
                         onChange={e => setWidthOfTable(e.target.value)}
                         min="1"
+                        max = "9"
                         ></Form.Control>
                       </Form.Group>
                     </Col>
@@ -172,12 +177,14 @@ export default function TableLayout() {
                       <Form.Group>
                       <label>Length of each table (in metres)</label>
                         <Form.Control
-                          placeholder="Table Height"
+                          placeholder="Table Length"
                           type="number"
                           required
                           value={lengthOfTable}
                         onChange={e => setLengthOfTable(e.target.value)}
                         min="1"
+                        max = "9"
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
                         ></Form.Control>
                       </Form.Group>
                     </Col>
@@ -213,6 +220,7 @@ export default function TableLayout() {
           </Col>
           
         </Row>
+        <p style={textCenter}>
         {series !== null ? 
             <div>
               <Row>
@@ -234,6 +242,9 @@ export default function TableLayout() {
               </div>
             </div>
            : null}
+           
+           {firstTime || series !== null ? null: <Card.Title as="h4">Your restaurant does not have enough space. Try with less tables. </Card.Title>}
+                 </p>
       </Container>
 
 
