@@ -47,18 +47,18 @@ function NewsInput () {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        setDescription("")
-        setTitle("")
-        setUrl("")
-        setDate("")
-        setImageUrl("")
+        const newDescription  = description == null     ? "" : description;
+        const newDate         = date == null            ? Date.now() : date;
+        const newUrl          = url == null             ? "" : 
+                                url.startsWith("http")  ? url :
+                                "http://" + url;
+        const ellipsisAppend  = wordCount > 256 ? "..." : ""
 
-        const append = wordCount > 256 ? "..." : ""
         AmplifyAPI.addNewsArticle({
             title : title,
-            description : description.substring(0, 257) + append,
-            date : new Date(date),
-            url : url,
+            description : newDescription.substring(0, 257) + ellipsisAppend,
+            date : new Date(newDate),
+            url : newUrl,
             imageUrl : imageUrl
         })
         .then(function (response) {
