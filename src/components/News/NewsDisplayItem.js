@@ -39,9 +39,11 @@ const NewsDisplayItem = props => {
                     <div className="news-description">
                         {props.description}
                     </div>
-                    <a className="news-link" href={newsUrl}>
-                        &#128279; Link to news article
-                    </a>
+                    { props.url &&
+                        <a className="news-link" href={newsUrl} target="_blank">
+                            &#128279; Link to news article
+                        </a>
+                    }
                 </Card.Body>
                 <Card.Footer>
                     <hr/>
