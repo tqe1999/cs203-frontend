@@ -31,12 +31,12 @@ function Sidebar({ color, image, routes }) {
     return location.pathname.indexOf(routeName) > -1 ? "active" : "";
   };
 
-  const [userType, setUserType] = useState();
+  const [authority, setAuthority] = useState();
 
   useEffect(() => {
 
     AmplifyAPI.getUser().then(userProfile => {
-      setUserType(userProfile.userType);
+      setAuthority(userProfile.authorities[0].authority);
     });
     
   }, []); 
@@ -89,17 +89,17 @@ function Sidebar({ color, image, routes }) {
               </li>
               )
             }
-            console.log(userType)
+            console.log(authority)
             console.log(prop.name);
-            if (userType === "Employee" && ((prop.name === "Supervisor Mgmt") || (prop.name === "Measures & News") || (prop.name === "Employee Mgmt") || (prop.name === "Shop Management"))) {
+            if (authority === "ROLE_EMPLOYEE" && ((prop.name === "Supervisor Mgmt") || (prop.name === "Measures & News") || (prop.name === "Employee Mgmt") || (prop.name === "Shop Management"))) {
               return null;
             }
 
-            if (userType === "Supervisor" && ((prop.name === "Supervisor Mgmt") || (prop.name === "Measures & News") || (prop.name === "Shop Management"))) {
+            if (authority === "ROLE_SUPERVISOR" && ((prop.name === "Supervisor Mgmt") || (prop.name === "Measures & News") || (prop.name === "Shop Management"))) {
               return null;
             }
 
-            if (userType === "Admin" && ((prop.name === "Employee Mgmt"))) {
+            if (authority === "ROLE_ADMIN" && ((prop.name === "Employee Mgmt"))) {
               return null;
             }
 

@@ -21,6 +21,7 @@ function User() {
   const [ telegramHandle, setTelegramHandle ] = useState(null);
   const [ telegramSignUpToken, setTelegramSignUpToken ] = useState(null);
   const [ userProfile, setUserProfile ] = useState(new Map());
+  const [ shopName, setShopName ] = useState(null)
 
   //for the Modal box 
   const [ showModal, setShowModal ] = useState(false)
@@ -35,6 +36,10 @@ function User() {
       setName(userProfile.name);
       setTelegramSignUpToken(userProfile.telegramSignUpToken);
       //setTelegramHandle(userProfile.telegramHandle);
+
+      if (userProfile.shop !== null) {
+        setShopName(userProfile.shop.name)
+      }
     });
   }, [])
   
@@ -149,10 +154,10 @@ function User() {
                   <Row>
                     <Col className="pr-1" md="5">
                       <Form.Group>
-                        <label>Company</label>
+                        <label>Shop Name</label>
                         <Form.Control
                           disabled
-                          value={userProfile.company}
+                          value={shopName}
                           defaultValue="-"
                           type="text"
                         ></Form.Control>
