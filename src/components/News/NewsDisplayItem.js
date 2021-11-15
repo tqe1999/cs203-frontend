@@ -20,6 +20,7 @@ import {
 
 import './news-list.css';
 
+/** function displays one news article */
 const NewsDisplayItem = props => {
     const date = new Date(props.date[0], props.date[1] - 1, props.date[2]).toDateString()
 

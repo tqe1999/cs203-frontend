@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 
+/** function returns read only rows for measures */
 const ReadOnlyRow = ({ item, i, handleEditClick }) => {
   return (
     <tr key={i}>

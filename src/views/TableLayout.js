@@ -16,9 +16,8 @@ import {
     Col,
   } from "react-bootstrap";
 
-
+/** function returns table layout page, which allows users to key in the dimensions of the shop and tables to obtain an optimal arrangement */
 export default function TableLayout() {
-    const baseURL = API_BASE_URL.concat("/tablelayout/")
     const DEFAULT_SIZE = 750
 
     const [series, setSeries] = useState(null);
@@ -82,11 +81,7 @@ export default function TableLayout() {
         AmplifyAPI.addTableLayout(shopConfiguration)
         .then((result) => {
 
-          console.log(result);
-
           let tableData = result;
-
-          
 
           const resultant = []
 

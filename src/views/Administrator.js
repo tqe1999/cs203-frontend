@@ -14,6 +14,7 @@ import EmployeeTable from "../components/Table/EmployeeTable.js";
 import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
 import * as AmplifyAuth from "../amplify-cognito/AmplifyAuth";
 
+/** function allows administrators to view the list of all supervisors from all shops. administrators can also create, update or delete supervisors */
 function Administrator() {
   const [companyTableData, setCompanyTableData] = useState(null);
   let tableData = []
@@ -35,7 +36,6 @@ function Administrator() {
             tableData.push(data)
           }
           setCompanyTableData(tableData)
-          console.log(tableData)
         });
       });
       

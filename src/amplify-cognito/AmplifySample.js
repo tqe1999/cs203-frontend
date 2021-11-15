@@ -13,7 +13,7 @@ class AmplifySample extends Component {
                 <button onClick={() => AmplifyAPI.testAPI()}>Always Works</button>
                 <button onClick={() => AmplifyAPI.testAuthenticatedAPI()}>Authenticated Works</button>
                 <button onClick={() => AmplifyAuth.returnIdToken().then(token => {
-                    console.log(token);
+                    // console.log(token);
                 })}>Print Info</button>
             </div>
         );

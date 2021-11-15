@@ -16,6 +16,7 @@ import {
   Modal,
 } from "react-bootstrap";
 
+/** function displays the user's profile. it allows the user to edit some personal information */
 function User() {
   const [ name, setName ] = useState(null);
   const [ telegramHandle, setTelegramHandle ] = useState(null);
@@ -30,7 +31,6 @@ function User() {
   // Called only upon the first render
   useEffect(() => {
     AmplifyAPI.getUser().then(userProfile => {
-      console.log(userProfile);
       
       setUserProfile(userProfile);
       setName(userProfile.name);
@@ -46,10 +46,9 @@ function User() {
   // Called when button "Update Profile" is clicked
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submit: Update Profile");
     
     AmplifyAPI.updateUserProfile(name, telegramHandle).then(userProfile => {
-      console.log(userProfile);
+      // console.log(userProfile);
     });
 
     setMessage("Profile successfully updated!")

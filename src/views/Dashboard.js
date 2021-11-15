@@ -22,6 +22,7 @@ import NewsDisplayList from "components/News/NewsDisplayList";
 import { API_BASE_URL } from "../assets/constants/apiConstants"
 import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
 
+/** function displays the news articles for all users, but displays current covid measures for supervisors and employees only */
 function Dashboard() {
 
   const [dineInSize, setDineInSize] = useState(null);
@@ -55,10 +56,7 @@ function Dashboard() {
 
   //news
   useEffect(() => {
-    console.log("enters useEffect news")
     axios.get(newsURL).then((response) => {
-      console.log("DISPLAYING NEWS ARTICLES~~")
-      console.log(response.data)
       setNewsArticles(response.data)
     })
   }, [])

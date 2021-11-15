@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import "../assets/css/Landing.css";
 import * as AmplifyAuth from "../amplify-cognito/AmplifyAuth.js";
 
+/** function returns our landing page */
 function Landing() {
   return (
     <div className="landing">

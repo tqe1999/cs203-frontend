@@ -15,6 +15,7 @@ import EmployeeTable from "../components/Table/EmployeeTable.js";
 import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
 import * as AmplifyAuth from "../amplify-cognito/AmplifyAuth";
 
+/** function allows supervisors to view the list of all employees from their shop. supervisors can also create, update or delete employees */
 function Supervisor() {
   const [companyTableData, setCompanyTableData] = useState(null);
   const [shopName, setShopName] = useState(null)

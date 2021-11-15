@@ -1,6 +1,7 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
 
+/** this function returns the row for updating measures */
 const EditableRow = ({ editFormData, handleEditFormChange, handleCancelClick }) => {
   return (
     <tr>
