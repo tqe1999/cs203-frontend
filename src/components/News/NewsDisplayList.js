@@ -20,9 +20,9 @@ import {
 import './news-list.css';
 import NewsDisplayItem from "./NewsDisplayItem";
 
+/** function displays a list of 5 news articles */
 const NewsDisplayList = props => {
     const newsArticles = props.articles
-    console.log(newsArticles)
     
     if (newsArticles.length === 0) {
       return (

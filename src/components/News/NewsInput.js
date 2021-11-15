@@ -22,6 +22,7 @@ import {
 
 import { API_BASE_URL } from "../../assets/constants/apiConstants";
 
+/** function allows users to input their own news */
 function NewsInput () {
 
     //NewsArticleInput
@@ -37,8 +38,6 @@ function NewsInput () {
     //for the Modal box 
     const [ showModal, setShowModal ] = useState(false)
     const [ message, setMessage ] = useState(null)
-
-    const baseURL = API_BASE_URL.concat("/newsArticle")
 
     const handleKeyPress = (e) => {
         setWordCount(e.target.value.length)

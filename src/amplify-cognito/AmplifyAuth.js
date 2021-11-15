@@ -4,34 +4,29 @@ import Amplify, { Auth, Hub, API } from 'aws-amplify'
 
 /** federatedSignIn() directs the user to Cognito Hosted UI sign-in */
 export async function federatedSignIn() {
-    console.log("AmplifyAuth: federatedSignIn()");
     Auth.federatedSignIn();
 }
 
 /** signOut() signs the user out */
 export async function signOut() {
-    console.log("AmplifyAuth: signOut()");
     Auth.signOut();
 }
 
 /** returnIdToken() returns the AWS Cognito idToken */
 export async function returnIdToken() {
-    console.log("AmplifyAuth: returnIdToken()");
     const idToken = (await Auth.currentSession()).getIdToken().getJwtToken();
     return idToken;
 }
 
 /** getCurrentEmail() returns the email of current user */
 export async function getCurrentEmail() {
-    console.log("AmplifyAuth: getCurrentEmail()");
     const user = (await Auth.currentAuthenticatedUser());
     const email = user.attributes.email;
     return email;
 }
 
+/** creates cognito account with an email */
 export async function createCognitoAccount(email) {
-    console.log("AmplifyAuth: createCognitoAccount");
-
     const { user } = await Auth.signUp({
         username: email,
         password: generateRandomPassword(),
@@ -41,6 +36,7 @@ export async function createCognitoAccount(email) {
     });
 }
 
+/** generates a random password before the user resets it */
 function generateRandomPassword() {
     let length = 16,
         charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",

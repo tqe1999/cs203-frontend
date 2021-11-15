@@ -18,7 +18,7 @@ import {
 
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
-
+/** function displays table of employees or supervisors. it also allows users to add, update and delete displayed users */
 function EmployeeTable(props) {
     const [rows, setRows] = useState([{}])
     const [shop, setShop] = useState(null); 
@@ -29,7 +29,6 @@ function EmployeeTable(props) {
     useEffect(() => {
 
       AmplifyAPI.getUser().then(userProfile => {
-        console.log(userProfile)
         setShop(userProfile.shop); //go to shop.id later 
         setAuthority(userProfile.authorities[0].authority)
       });
@@ -41,9 +40,6 @@ function EmployeeTable(props) {
 
       setRows(props.companyTableData)
   }, []); 
-
-  console.log(shops)
-  console.log(shopNames)
 
       const selectRow = {
         mode: 'checkbox' //radio or checkbox
@@ -71,11 +67,8 @@ function EmployeeTable(props) {
           "authorities": newRow.authority,
         };
 
-        // console.log(newUser)
-
         AmplifyAPI.addNewUser(newUser)
         .then((result) => {
-          console.log(result);
 
           const item = {
             name: newRow.name,
@@ -133,12 +126,10 @@ function EmployeeTable(props) {
             "authorities": updatedRow.authority,
           };
 
-          console.log(updatedUser)
-
           //make api call here
           AmplifyAPI.updateUser(updatedRow.email, updatedUser)
           .then((result) => {
-            console.log(result);
+            // console.log(result);
           });
       }
 

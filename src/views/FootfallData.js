@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import ChartistGraph from "react-chartist";
 import axios from 'axios'
-import useDidMountEffect from "assets/UseDidMountEffect";
 import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
 
 // react-bootstrap components
@@ -24,7 +23,7 @@ import {
 import { API_BASE_URL } from "../assets/constants/apiConstants";
 import { getUser, getUserInfo } from "../amplify-cognito/AmplifyAPI.js"
 
-
+/** function displays footfall data from singstat API. it only displays recommendations for employee and supervisors */
 function FootfallData() {
 
     const [resp, setResp] = useState([])
@@ -42,18 +41,15 @@ function FootfallData() {
     let average = 0, foodAmt = 0, serviceStaff = 0, kitchenStaff = 0;
 
     useEffect(() => {
-        console.log("EXECUTED useEffect 1")
         axios.get(baseURL).then((response) => {
             setResp(response.data.list)
             setFootfallData(response.data.list.slice(48, 60));
             setLastUpdateDate(response.data.lastUpdated);
             setAverages(response.data.averages)
-            // console.log(response)
         });
 
         //get user details 
         getUser().then(userProfile => {
-            console.log(userProfile)
             let shop = null
             if (userProfile.shop !== null) {
                 shop = userProfile.shop.shopType
@@ -73,8 +69,6 @@ function FootfallData() {
     }, [isChanged]);
 
     if (footfallData) {
-        console.log("EXECUTED if footfalldata")
-        // console.log(footfallData)
         const length = footfallData.length
 
         for (let i = 0; i < length; i++) {
@@ -96,8 +90,6 @@ function FootfallData() {
     }
 
     if (shopType && averages) {
-        console.log("EXECUTED if shopType")
-
         //0=restaurant, 1=fastfoodoutlet, 2=caterer, 3=other
         let i = 3
         if (shopType === "Restaurants") {
@@ -118,7 +110,6 @@ function FootfallData() {
         AmplifyAPI.updateFootFallData();
         setChanged(!isChanged)
         setFootfallData(null)
-        console.log("EXECUTED post")
     }
 
     const setOneYear = () => {

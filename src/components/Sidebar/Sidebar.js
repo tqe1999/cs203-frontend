@@ -89,8 +89,6 @@ function Sidebar({ color, image, routes }) {
               </li>
               )
             }
-            console.log(authority)
-            console.log(prop.name);
             if (authority === "ROLE_EMPLOYEE" && ((prop.name === "Supervisor Mgmt") || (prop.name === "Measures & News") || (prop.name === "Employee Mgmt") || (prop.name === "Shop Management"))) {
               return null;
             }
