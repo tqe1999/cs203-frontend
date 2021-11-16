@@ -14,9 +14,9 @@ import ShopTable from "../components/Table/ShopTable.js";
 import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
 import * as AmplifyAuth from "../amplify-cognito/AmplifyAuth";
 
+/** function allows administrators to view the list of shops. administrators can also create, update or delete shops */
 const Shop = () => {
     const [shopTableData, setShopTableData] = useState(null)
-    const shopURL = API_BASE_URL.concat("/shops") 
 
     useEffect(() => {
       AmplifyAPI.getShops().then(result => {

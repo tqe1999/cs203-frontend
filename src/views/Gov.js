@@ -21,6 +21,7 @@ import {
 
 import { API_BASE_URL } from "../assets/constants/apiConstants";
 
+/** function displays all configured current measures. it also allows user to input news articles. this page is only visible to administrators */
 function Gov() {
   const [measuresTableData, setMeasuresTableData] = useState(null);
 
@@ -44,7 +45,6 @@ function Gov() {
         },
       })
       .then((result) => {
-        console.log(result);
         setMeasuresTableData(result.data);
       });
   }, []);
@@ -81,7 +81,7 @@ function Gov() {
 
     AmplifyAPI.updateMeasures(editedMeasures)
     .then((result) => {
-      console.log(result);
+      // console.log(result);
     });
 
     const newMeasuresTableData = [...measuresTableData];

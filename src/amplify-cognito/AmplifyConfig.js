@@ -14,11 +14,11 @@ class AmplifyConfig extends Component {
         Hub.listen('auth', ({ payload: { event, data } }) => {
             switch (event) {
                 case 'signIn':
-                    console.log('sign in', event, data)
+                    // console.log('sign in', event, data)
                     // this.setState({ user: data })
                     break
                 case 'signOut':
-                    console.log('sign out')
+                    // console.log('sign out')
                     // this.setState({ user: null })
                     break
             }

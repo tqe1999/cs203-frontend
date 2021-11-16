@@ -20,6 +20,7 @@ import {
 
 import './news-list.css';
 
+/** function displays one news article */
 const NewsDisplayItem = props => {
     const date = new Date(props.date[0], props.date[1] - 1, props.date[2]).toDateString()
 
@@ -39,9 +40,11 @@ const NewsDisplayItem = props => {
                     <div className="news-description">
                         {props.description}
                     </div>
-                    <a className="news-link" href={newsUrl}>
-                        &#128279; Link to news article
-                    </a>
+                    { props.url &&
+                        <a className="news-link" href={newsUrl} target="_blank">
+                            &#128279; Link to news article
+                        </a>
+                    }
                 </Card.Body>
                 <Card.Footer>
                     <hr/>

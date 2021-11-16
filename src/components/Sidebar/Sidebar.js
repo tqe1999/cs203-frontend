@@ -31,12 +31,12 @@ function Sidebar({ color, image, routes }) {
     return location.pathname.indexOf(routeName) > -1 ? "active" : "";
   };
 
-  const [userType, setUserType] = useState();
+  const [authority, setAuthority] = useState();
 
   useEffect(() => {
 
-    AmplifyAPI.getUserProfile().then(userProfile => {
-      setUserType(userProfile.userType);
+    AmplifyAPI.getUser().then(userProfile => {
+      setAuthority(userProfile.authorities[0].authority);
     });
     
   }, []); 
@@ -56,22 +56,51 @@ function Sidebar({ color, image, routes }) {
           >
             <div className="logo-img">
               <img
-                src={require("assets/img/reactlogo.png").default}
+                src={require("assets/img/covfeedlogo.png").default}
                 alt="..."
               />
             </div>
           </a>
           <a className="simple-text" href="http://www.creative-tim.com">
-            Covid F&B
+            Covfeed
           </a>
         </div>
         <Nav>
           {routes.map((prop, key) => {
-            if ((prop.name === "Supervisor" && userType !== "Supervisor") || (prop.name === "Administrator" && userType !== "Admin") || (prop.name === "Gov" && userType !== "Admin" || (prop.name === "Shop" && userType !== "Admin"))) {
-              if (userType !== "Prof") {
-                return null;
-              }
+            if (prop.name === "Logout"){
+              return (
+                <li
+                className={
+                  prop.upgrade
+                    ? "active active-pro"
+                    : activeRoute(prop.layout + prop.path)
+                }
+                key={key}
+              >
+                <NavLink
+                  to={prop.layout + prop.path}
+                  className="nav-link"
+                  activeClassName="active"
+                  onClick={(e) => AmplifyAuth.signOut()}
+                >
+                  <i className={prop.icon} />
+                  <p>{prop.name}</p>
+                </NavLink>
+              </li>
+              )
             }
+            if (authority === "ROLE_EMPLOYEE" && ((prop.name === "Supervisor Mgmt") || (prop.name === "Measures & News") || (prop.name === "Employee Mgmt") || (prop.name === "Shop Management"))) {
+              return null;
+            }
+
+            if (authority === "ROLE_SUPERVISOR" && ((prop.name === "Supervisor Mgmt") || (prop.name === "Measures & News") || (prop.name === "Shop Management"))) {
+              return null;
+            }
+
+            if (authority === "ROLE_ADMIN" && ((prop.name === "Employee Mgmt"))) {
+              return null;
+            }
+
             if (!prop.redirect)
               return (
                 <li

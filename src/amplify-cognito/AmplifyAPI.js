@@ -5,7 +5,6 @@ import * as AmplifyAuth from "./AmplifyAuth";
 
 /** testAPI() calls backend API endpoint that does not require authentication */
 export function testAPI() {
-    console.log("AmplifyAPI: testAPI()");
     const apiName = 'backend-api';
     const path = '/cognito/all-allow';
     API.get(apiName, path).then(response => {
@@ -17,7 +16,6 @@ export function testAPI() {
 
 /** testAPI() calls backend API endpoint that requires authentication */
 export async function testAuthenticatedAPI() {
-    console.log("AmplifyAPI: testAuthenticatedAPI()");
     const apiName = 'backend-api';
     const path = '/cognito/only-authenticated';
     const myInit = { 
@@ -41,11 +39,11 @@ export async function getUserInfo() {
     return user.attributes.email;
 }
 
-export async function getUserProfile() {
-    console.log("AmplifyAPI: getUserProfile()");
+/** gets user details for the current logged in user */
+export async function getUser() {
     const apiName = 'backend-api';
     const email = await AmplifyAuth.getCurrentEmail();
-    const path = '/users/email/' + email;
+    const path = '/users/' + email;
     const myInit = {
       headers: {
         Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -55,8 +53,8 @@ export async function getUserProfile() {
     return API.get(apiName, path, myInit);
 }
 
+/** adds new user */
 export async function addUser(email) {
-    console.log("AmplifyAPI: addUser()");
     const apiName = 'backend-api';
     const path = '/users';
     const myInit = {
@@ -71,8 +69,8 @@ export async function addUser(email) {
     return API.post(apiName, path, myInit);
 }
 
+/** update user profile */
 export async function updateUserProfile(name, telegramHandle) {
-    console.log("AmplifyAPI: updateUserProfile()");
     const apiName = 'backend-api';
     const email = await AmplifyAuth.getCurrentEmail();
     const path = '/users/email/' + email;
@@ -89,8 +87,8 @@ export async function updateUserProfile(name, telegramHandle) {
     return API.put(apiName, path, myInit);
 }
 
+/** adds news articles */
 export async function addNewsArticle(newArticle) {
-  console.log("AmplifyAPI: addNewsArticle()");
   const apiName = 'backend-api';
   const path = '/newsArticle';
   const myInit = {
@@ -103,10 +101,10 @@ export async function addNewsArticle(newArticle) {
   return API.post(apiName, path, myInit);
 }
 
+/** add new user (supervisor or employee) */
 export async function addNewUser(newUser) {
-  console.log("AmplifyAPI: addNewUser()");
   const apiName = 'backend-api';
-  const path = '/employees';
+  const path = '/users';
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -117,10 +115,10 @@ export async function addNewUser(newUser) {
   return API.post(apiName, path, myInit);
 }
 
+/** deletes user  */
 export async function deleteUser(email) {
-  console.log("AmplifyAPI: deleteUser()");
   const apiName = 'backend-api';
-  const path = '/employees/' + email;
+  const path = '/users/' + email;
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -130,10 +128,10 @@ export async function deleteUser(email) {
   return API.del(apiName, path, myInit);
 }
 
+/** updates user */
 export async function updateUser(email, updatedUser) {
-  console.log("AmplifyAPI: updateUser()");
   const apiName = 'backend-api';
-  const path = '/employees/' + email;
+  const path = '/users/' + email;
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -144,8 +142,8 @@ export async function updateUser(email, updatedUser) {
   return API.put(apiName, path, myInit);
 }
 
+/** adds shop */
 export async function addShop(newShop) {
-  console.log("AmplifyAPI: addShop()");
   const apiName = 'backend-api';
   const path = '/shops';
   const myInit = {
@@ -158,10 +156,10 @@ export async function addShop(newShop) {
   return API.post(apiName, path, myInit);
 }
 
-export async function deleteShop(shopName) {
-  console.log("AmplifyAPI: deleteShop()");
+/** deletes shop */
+export async function deleteShop(shopID) {
   const apiName = 'backend-api';
-  const path = '/shops/' + shopName;
+  const path = '/shops/' + shopID;
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -171,10 +169,10 @@ export async function deleteShop(shopName) {
   return API.del(apiName, path, myInit);
 }
 
-export async function updateShop(shopName, updatedShop) {
-  console.log("AmplifyAPI: updateShop()");
+/** updates existing shop */
+export async function updateShop(shopID, updatedShop) {
   const apiName = 'backend-api';
-  const path = '/shops/' + shopName;
+  const path = '/shops/' + shopID;
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -185,10 +183,10 @@ export async function updateShop(shopName, updatedShop) {
   return API.put(apiName, path, myInit);
 }
 
-export async function getEmployeesUnderCompany(company) {
-  console.log("AmplifyAPI: getEmployeesUnderCompany()");
+/** get users by the shop they work at and authority type */
+export async function getByShopIdAndAuthorities(id, authorities) {
   const apiName = 'backend-api';
-  const path = '/employees/' + company;
+  const path = '/users/id/' + id + '/authorities/' + authorities;
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -198,10 +196,10 @@ export async function getEmployeesUnderCompany(company) {
   return API.get(apiName, path, myInit);
 }
 
-export async function getEmployeesAndAdminsUnderCompany(company) {
-  console.log("AmplifyAPI: getEmployeesAndAdminsUnderCompany()");
+/** gets users by authority type */
+export async function getByAuthorities(authorities) {
   const apiName = 'backend-api';
-  const path = '/employees/administrator/' + company;
+  const path = '/users/authorities/' + authorities;
   const myInit = {
     headers: {
       Authorization: `Bearer ${await AmplifyAuth.returnIdToken()}`,
@@ -211,8 +209,8 @@ export async function getEmployeesAndAdminsUnderCompany(company) {
   return API.get(apiName, path, myInit);
 }
 
+/** update footfall data */
 export async function updateFootFallData() {
-  console.log("AmplifyAPI: updateFootFallData()");
   const apiName = 'backend-api';
   const path = '/footfallData';
   const myInit = {
@@ -224,8 +222,8 @@ export async function updateFootFallData() {
   return API.post(apiName, path, myInit);
 }
 
+/** updates measures */
 export async function updateMeasures(updatedMeasures) {
-  console.log("AmplifyAPI: updateMeasures()");
   const apiName = 'backend-api';
   const path = '/measures';
   const myInit = {
@@ -238,8 +236,8 @@ export async function updateMeasures(updatedMeasures) {
   return API.put(apiName, path, myInit);
 }
 
+/** gets shops */
 export async function getShops() {
-  console.log("AmplifyAPI: getShops()");
   const apiName = 'backend-api';
   const path = '/shops';
   const myInit = {
@@ -251,8 +249,8 @@ export async function getShops() {
   return API.get(apiName, path, myInit);
 }
 
+/** posts table layout request */
 export async function addTableLayout(shopConfiguration) {
-  console.log("AmplifyAPI: addTableLayout()");
   const apiName = 'backend-api';
   const path = '/tablelayout/';
   const myInit = {

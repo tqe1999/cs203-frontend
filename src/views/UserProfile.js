@@ -16,10 +16,13 @@ import {
   Modal,
 } from "react-bootstrap";
 
+/** function displays the user's profile. it allows the user to edit some personal information */
 function User() {
   const [ name, setName ] = useState(null);
   const [ telegramHandle, setTelegramHandle ] = useState(null);
+  const [ telegramSignUpToken, setTelegramSignUpToken ] = useState(null);
   const [ userProfile, setUserProfile ] = useState(new Map());
+  const [ shopName, setShopName ] = useState(null)
 
   //for the Modal box 
   const [ showModal, setShowModal ] = useState(false)
@@ -27,22 +30,25 @@ function User() {
   
   // Called only upon the first render
   useEffect(() => {
-    AmplifyAPI.getUserProfile().then(userProfile => {
-      console.log(userProfile);
+    AmplifyAPI.getUser().then(userProfile => {
       
       setUserProfile(userProfile);
       setName(userProfile.name);
-      setTelegramHandle(userProfile.telegramHandle);
+      setTelegramSignUpToken(userProfile.telegramSignUpToken);
+      //setTelegramHandle(userProfile.telegramHandle);
+
+      if (userProfile.shop !== null) {
+        setShopName(userProfile.shop.name)
+      }
     });
   }, [])
   
   // Called when button "Update Profile" is clicked
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submit: Update Profile");
     
     AmplifyAPI.updateUserProfile(name, telegramHandle).then(userProfile => {
-      console.log(userProfile);
+      // console.log(userProfile);
     });
 
     setMessage("Profile successfully updated!")
@@ -71,7 +77,7 @@ function User() {
                 <Card.Title as="h4">Edit Profile</Card.Title>
               </Card.Header>
               <Card.Body>
-                <Form onSubmit = {handleSubmit}>
+                <Form onSubmit={handleSubmit}>
                   <Row>
                     <Col className="pr-1" md="4">
                       <Form.Group>
@@ -80,13 +86,11 @@ function User() {
                           value={name}
                           defaultValue="-"
                           type="text"
-                          onChange={
-                            (e) => setName(e.target.value)
-                          }
+                          onChange={(e) => setName(e.target.value)}
                         ></Form.Control>
                       </Form.Group>
                     </Col>
-                    <Col className="pr-1" md="4">
+                    {/*<Col className="pr-1" md="4">
                       <Form.Group>
                         <label>Telegram Handle, e.g. @____</label>
                         <Form.Control
@@ -98,7 +102,7 @@ function User() {
                           }
                         ></Form.Control>
                       </Form.Group>
-                    </Col>
+                        </Col>*/}
                     <Col className="pl-1" md="4">
                       <Form.Group>
                         <label>User Type</label>
@@ -149,10 +153,10 @@ function User() {
                   <Row>
                     <Col className="pr-1" md="5">
                       <Form.Group>
-                        <label>Company</label>
+                        <label>Shop Name</label>
                         <Form.Control
                           disabled
-                          value={userProfile.company}
+                          value={shopName}
                           defaultValue="-"
                           type="text"
                         ></Form.Control>
@@ -179,6 +183,7 @@ function User() {
                   >
                     Update Profile
                   </Button>
+
                   <div className="clearfix"></div>
                 </Form>
               </Card.Body>
@@ -195,21 +200,32 @@ function User() {
                   }
                 ></img>
               </div>
-              <Card.Body>
+              <Card.Body style={{ "align-item": "center" }}>
                 <div className="author">
                   <a href="#pablo" onClick={(e) => e.preventDefault()}>
                     <img
                       alt="..."
                       className="avatar border-gray"
-                      src={require("assets/img/faces/face-3.jpg").default}
+                      src={require("assets/img/faces/face-0.jpg").default}
                     ></img>
                     <h5 className="title">{userProfile.name}</h5>
                   </a>
                   <p className="description">{userProfile.email}</p>
-                  <p className="description">{userProfile.telegramHandle}</p>
+                  {/*<p className="description">{userProfile.telegramHandle}</p>*/}
+                </div>
+                <div style={{ display: "flex", "justify-content": "center" }}>
+                  <Button
+                    href={"https://telegram.me/Covid19_FnB_Bot?start="+telegramSignUpToken}
+                    target="_blank"
+                    className="btn-fill btn-sm pull-right"
+                    type="button"
+                    variant="info"
+                  >
+                    Connect Telegram
+                  </Button>
                 </div>
               </Card.Body>
-              <hr></hr>
+              {/* <hr></hr>
               <div className="button-container mr-auto ml-auto">
                 <Button
                   className="btn-simple btn-icon"
@@ -235,7 +251,7 @@ function User() {
                 >
                   <i className="fab fa-google-plus-square"></i>
                 </Button>
-              </div>
+              </div> */}
             </Card>
           </Col>
         </Row>

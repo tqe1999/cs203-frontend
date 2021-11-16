@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
+import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth";
 
 // react-bootstrap components
 import {
@@ -17,10 +18,9 @@ import {
 import { API_BASE_URL } from "../../assets/constants/apiConstants";
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
+/** function displays table of shops. it also allows users to add, update and delete shops */
 const ShopTable = (props) => {
     const [rows, setRows] = useState([{}])
-    
-    const shopURL = API_BASE_URL.concat("/shops")
 
     useEffect(() => {
         setRows(props.shopTableData)
@@ -41,16 +41,16 @@ const ShopTable = (props) => {
             sizeTables : newRow.sizeTables
         })
         .then((result) => {
-            console.log(result);
+            window.location.reload();
 
             const item = {
+                id : "loading",
                 name : newRow.name,
                 shopType : newRow.shopType,
                 area : newRow.area,
                 numTables : newRow.numTables,
                 sizeTables : newRow.sizeTables
             };
-            console.log(item)
 
             setRows([...rows, item]);
         })
@@ -60,30 +60,28 @@ const ShopTable = (props) => {
         let temp = [...rows]
 
         for (let i = 0; i < rowsData.length; i++) {
+            console.log(rowsData[i])
             AmplifyAPI.deleteShop(rowsData[i])
             .then((result) => {
-                console.log(result)
 
                 temp = temp.filter((row) => {
-                    return row.name !== rowsData[i];
+                    return row.id !== rowsData[i];
                 });
-
                 setRows(temp)
             })
         }
-
     }
 
     const onAfterSaveCell = (value) => {
         let newRow = value;
-        AmplifyAPI.updateShop(newRow.name, {
+        AmplifyAPI.updateShop(newRow.id, {
             name : newRow.name,
             shopType : newRow.shopType,
             area : newRow.area,
             numTables : newRow.numTables,
             sizeTables : newRow.sizeTables
         }).then((result) => {
-            console.log(result);
+            // console.log(result);
         })
     }
 
@@ -92,6 +90,8 @@ const ShopTable = (props) => {
         onDeleteRow: onDeleteRow, 
         clickToSelectAndEditCell: true
     }
+
+    const shopTypes = ["restaurant", "fastfoodoutlet", "caterer", "other"];
 
     return (
         <div>
@@ -110,8 +110,9 @@ const ShopTable = (props) => {
     blurToSave: true,
      afterSaveCell: onAfterSaveCell
    } }>
-                <TableHeaderColumn dataField="name" dataSort={true} isKey={true}>Name</TableHeaderColumn>
-                <TableHeaderColumn dataField="shopType" dataSort={true}>Shop Type</TableHeaderColumn>
+                <TableHeaderColumn dataField="id" dataSort={true} isKey={true} editable={false}>ID (Assigned)</TableHeaderColumn>
+                <TableHeaderColumn dataField="name" dataSort={true}>Name</TableHeaderColumn>
+                <TableHeaderColumn dataField="shopType" editable={ { type: 'select', readOnly: false, options: { values:  shopTypes}}} dataAlign="center" dataSort={true}>Shop Type</TableHeaderColumn>
                 <TableHeaderColumn dataField="area" dataSort={true}>Area</TableHeaderColumn>
                 <TableHeaderColumn dataField="numTables" dataSort={true}>Number of Tables</TableHeaderColumn>
                 <TableHeaderColumn dataField="sizeTables" dataSort={true}>Size of Tables</TableHeaderColumn>

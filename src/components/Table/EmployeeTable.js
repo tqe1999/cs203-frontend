@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as AmplifyAPI from "../../amplify-cognito/AmplifyAPI";
+import * as AmplifyAuth from "../../amplify-cognito/AmplifyAuth";
+
 
 // react-bootstrap components
 import {
@@ -14,28 +16,30 @@ import {
   Col,
 } from "react-bootstrap";
 
-import { API_BASE_URL } from "../../assets/constants/apiConstants";
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
-
+/** function displays table of employees or supervisors. it also allows users to add, update and delete displayed users */
 function EmployeeTable(props) {
     const [rows, setRows] = useState([{}])
-    const [company, setCompany] = useState(null);
+    const [shop, setShop] = useState(null); 
+    const [shops, setShops] = useState([])
+    const [shopNames, setShopNames] = useState([])
+    const [authority, setAuthority] = useState(null)
 
     useEffect(() => {
 
-      AmplifyAPI.getUserProfile().then(userProfile => {
-        setCompany(userProfile.company);
+      AmplifyAPI.getUser().then(userProfile => {
+        setShop(userProfile.shop); //go to shop.id later 
+        setAuthority(userProfile.authorities[0].authority)
       });
       
+      AmplifyAPI.getShops().then(result => {
+        setShops(result)
+        setShopNames(result.map(e =>  e.name))
+      })
+
       setRows(props.companyTableData)
   }, []); 
-
-    const baseURL = API_BASE_URL.concat("/employees/")
-
-      const priceFormatter = (cell, row) => {
-        return '<i class="glyphicon glyphicon-usd"></i> ' + cell;
-      }
 
       const selectRow = {
         mode: 'checkbox' //radio or checkbox
@@ -44,40 +48,43 @@ function EmployeeTable(props) {
       const onAddRow = (row) => {
         let newRow = row;
 
-        let userTypeOfNewUser = null;
-        if (props.userType === "Administrator") {
-          userTypeOfNewUser = "Supervisor";
-        } else {
-          userTypeOfNewUser = "Employee"
+        let newShop = shop
+        if (shop === null) {
+          for (let i = 0; i < shops.length; i++) {
+            if (shops[i].name == newRow.shopName) {
+              newShop = shops[i]
+            }
+          }
         }
 
         const newUser = { 
           "name": newRow.name,
-          "company": company,
+          "shop": newShop,
           "email": newRow.email,
-          "userType": userTypeOfNewUser,
           "vaccinationStatus": newRow.vaccinationStatus,
           "swabTestResult": newRow.swabTestResult,
           "fetStatus": newRow.fetStatus,
+          "authorities": newRow.authority,
         };
 
         AmplifyAPI.addNewUser(newUser)
         .then((result) => {
-          console.log(result);
 
           const item = {
             name: newRow.name,
             email: newRow.email,
-            company: company,
-            userType: userTypeOfNewUser,
+            shopName: newShop.name,
             vaccinationStatus: newRow.vaccinationStatus,
             swabTestResult: newRow.swabTestResult,
             fetStatus: newRow.fetStatus, 
+            authority: newRow.authority,
           };
           setRows(
             rows => [...rows, item]
           );
         });
+
+        AmplifyAuth.createCognitoAccount(newRow.email);
       }
 
       const onDeleteRow = (rowsData) => {
@@ -98,26 +105,32 @@ function EmployeeTable(props) {
       }
 
       const onAfterSaveCell = (value) => {
-        console.log(value);
         let updatedRow = value;
+
+        let newShop = shop
+        if (shop === null) {
+          for (let i = 0; i < shops.length; i++) {
+            if (shops[i].name == updatedRow.shopName) {
+              newShop = shops[i]
+            }
+          }
+        }
+
           const updatedUser = { 
             "name": updatedRow.name,
-            "company": company,
+            "shop": newShop,
             "email": updatedRow.email,
-            "userType": updatedRow.userType,
             "vaccinationStatus": updatedRow.vaccinationStatus,
             "swabTestResult": updatedRow.swabTestResult,
             "fetStatus": updatedRow.fetStatus,
+            "authorities": updatedRow.authority,
           };
-
-
 
           //make api call here
           AmplifyAPI.updateUser(updatedRow.email, updatedUser)
           .then((result) => {
-            console.log(result);
+            // console.log(result);
           });
-
       }
 
       const options = {
@@ -126,17 +139,19 @@ function EmployeeTable(props) {
         clickToSelectAndEditCell: true
       };
 
+      const addEmployee = [ {
+        value: 'ROLE_EMPLOYEE',
+        text: 'ROLE_EMPLOYEE'
+      }];
+
+      const addSupervisor = [ {
+        value: 'ROLE_SUPERVISOR',
+        text: 'ROLE_SUPERVISOR'
+      }];
+      
     return (
         <div>
             <Container fluid>
-            <Row>
-                <Col>
-                    <Card className="card-my">
-                        <Card.Title as="h4">Employee Information</Card.Title>
-                    </Card>
-                </Col>
-            </Row>
-            
             <div className="row clearfix">
             <BootstrapTable data={rows} options = {options} striped={true} hover={true} insertRow deleteRow selectRow = {selectRow} pagination search
   multiColumnSearch columnFilter exportCSV  cellEdit={ {
@@ -144,11 +159,16 @@ function EmployeeTable(props) {
     blurToSave: true,
      afterSaveCell: onAfterSaveCell
    } }>
+
               <TableHeaderColumn dataField="name" dataSort={true}>Name</TableHeaderColumn>
-              {props.userType === "Administrator" || props.userType === "Prof" ? 
-              <TableHeaderColumn dataField="company" editable={false} dataSort={true} dataFormat={priceFormatter}>Company</TableHeaderColumn> : null}
+              {/* {authority === "ROLE_ADMIN" || authority === "ROLE_PROF" ? 
+              <TableHeaderColumn dataField="shopId" dataSort={true}>Shop ID</TableHeaderColumn> : null} */}
+              {authority === "ROLE_ADMIN" || authority === "ROLE_PROF" ? 
+              <TableHeaderColumn dataField="shopName" editable={ { type: 'select', readOnly: false, options: { values:  shopNames}}} dataAlign="center" dataSort={true}>Shop Name</TableHeaderColumn> : null}
               <TableHeaderColumn dataField="email" isKey={true} dataAlign="center" dataSort={true}>Email</TableHeaderColumn>
-              <TableHeaderColumn dataField="userType" editable={false} dataAlign="center" dataSort={true}>User Type</TableHeaderColumn>
+              {authority === "ROLE_ADMIN" ?
+              <TableHeaderColumn dataField="authority"  editable={ { type: 'select', readOnly: true, options: { values:  addSupervisor}}} dataAlign="center" dataSort={true}>Authority</TableHeaderColumn> : 
+              <TableHeaderColumn dataField="authority"  editable={ { type: 'select', readOnly: true, options: { values:  addEmployee}}} dataAlign="center" dataSort={true}>Authority</TableHeaderColumn> }
               <TableHeaderColumn dataField="vaccinationStatus" dataAlign="center" dataSort={true}>Vaccination Status</TableHeaderColumn>
               <TableHeaderColumn dataField="swabTestResult" dataAlign="center" dataSort={true}>Swab Test Result</TableHeaderColumn>
               <TableHeaderColumn dataField="fetStatus" dataAlign="center" dataSort={true}>FET Status</TableHeaderColumn>
@@ -157,7 +177,7 @@ function EmployeeTable(props) {
             </Container>
         </div>
     )
-
+    // placeholder = "HELLO" searchplaceholder = {props.userType === "Administrator" ? "Supervisor" : "Employee"}
 }
 
 export default EmployeeTable;

@@ -22,6 +22,7 @@ import {
 
 import { API_BASE_URL } from "../../assets/constants/apiConstants";
 
+/** function allows users to input their own news */
 function NewsInput () {
 
     //NewsArticleInput
@@ -38,8 +39,6 @@ function NewsInput () {
     const [ showModal, setShowModal ] = useState(false)
     const [ message, setMessage ] = useState(null)
 
-    const baseURL = API_BASE_URL.concat("/newsArticle")
-
     const handleKeyPress = (e) => {
         setWordCount(e.target.value.length)
     }
@@ -47,17 +46,19 @@ function NewsInput () {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        setDescription("")
-        setTitle("")
-        setUrl("")
-        setDate("")
+        const newDescription  = description == null     ? "" : description;
+        const newDate         = date == null            ? Date.now() : date;
+        const newUrl          = url == null             ? "" : 
+                                url.startsWith("http")  ? url :
+                                "http://" + url;
+        const ellipsisAppend  = wordCount > 256 ? "..." : ""
 
-        const append = wordCount > 256 ? "..." : ""
         AmplifyAPI.addNewsArticle({
             title : title,
-            description : description.substring(0, 257) + append,
-            date : new Date(date),
-            url : url
+            description : newDescription.substring(0, 257) + ellipsisAppend,
+            date : new Date(newDate),
+            url : newUrl,
+            imageUrl : imageUrl
         })
         .then(function (response) {
             setMessage("News Article successfully added!")
@@ -94,7 +95,7 @@ function NewsInput () {
                     </Col>
                   </Row>
                   <Row>
-                    <Col className="pr-1" md="3">
+                    <Col className="pr-1" md="4">
                       <Form.Group>
                         <label>Date</label>
                         <Form.Control
@@ -106,7 +107,7 @@ function NewsInput () {
                         ></Form.Control>
                       </Form.Group>
                     </Col>
-                    <Col className="px-1" md="9">
+                    <Col className="px-1" md="4">
                       <Form.Group>
                         <label>URL</label>
                         <Form.Control
@@ -115,6 +116,19 @@ function NewsInput () {
                           type="text"
                           onChange={
                             (e) => setUrl(e.target.value)
+                          }
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                    <Col className="px-1" md="4">
+                      <Form.Group>
+                        <label>Image URL</label>
+                        <Form.Control
+                          value={imageUrl}
+                          placeholder="Input your Image URL here"
+                          type="text"
+                          onChange={
+                            (e) => setImageUrl(e.target.value)
                           }
                         ></Form.Control>
                       </Form.Group>

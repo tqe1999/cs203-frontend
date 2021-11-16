@@ -22,6 +22,7 @@ import NewsDisplayList from "components/News/NewsDisplayList";
 import { API_BASE_URL } from "../assets/constants/apiConstants"
 import * as AmplifyAPI from "../amplify-cognito/AmplifyAPI";
 
+/** function displays the news articles for all users, but displays current covid measures for supervisors and employees only */
 function Dashboard() {
 
   const [dineInSize, setDineInSize] = useState(null);
@@ -38,7 +39,8 @@ function Dashboard() {
 
   //measures
   useEffect(() => {
-    AmplifyAPI.getUserProfile().then(userProfile => {
+    AmplifyAPI.getUser().then(userProfile => {
+      if (userProfile.shop !== null) {
       axios.get(measuresURL + "/" + userProfile.shop.shopType).then((response) => {
         const data = response.data;
         setDineInSize(data.dineInSize);
@@ -48,16 +50,13 @@ function Dashboard() {
         setClosingTime(data.closingTime)
         setPhase(data.phase)
       })
-      
+      }
     })
   }, []);
 
   //news
   useEffect(() => {
-    console.log("enters useEffect news")
     axios.get(newsURL).then((response) => {
-      console.log("DISPLAYING NEWS ARTICLES~~")
-      console.log(response.data)
       setNewsArticles(response.data)
     })
   }, [])
@@ -65,7 +64,9 @@ function Dashboard() {
   return (
     <>
       <Container fluid>
-      <Row>
+        {phase !== null ?
+        <div>
+        <Row>
             <Col>
                 <Card className="card-my">
                     <Card.Title as="h4">Current Measures</Card.Title>
@@ -141,6 +142,9 @@ function Dashboard() {
             </Card>
           </Col>
         </Row>
+        </div>
+        : null}
+
         <Row>
             <Col>
                 <Card className="card-my">
